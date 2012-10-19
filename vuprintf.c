@@ -39,7 +39,6 @@
  *
  */
 #include <stdlib.h>
-#include <stdbool.h>
 #include <stdarg.h>
 #include <string.h>
 #include <stdint.h>
@@ -266,10 +265,10 @@ vuprintf (int (*write_char) (int), const char *format, va_list args)
   char *char_p;
   char character;
   int radix;
-  bool have_wp_value = false;
-  bool have_precision = false;
-  bool is_zero = false;
-  bool is_negative = false;
+  char have_wp_value = 0;
+  char have_precision = 0;
+  char is_zero = 0;
+  char is_negative = 0;
   union {
     int16_t i16;
     intptr_t ptr;
@@ -293,7 +292,7 @@ vuprintf (int (*write_char) (int), const char *format, va_list args)
       if (character == '%') {
         width = wp_value = 0;
         memset (&flags, 0, sizeof (flags));
-        have_wp_value = have_precision = is_zero = is_negative = false;
+        have_wp_value = have_precision = is_zero = is_negative = 0;
         specifier = format - 1;
         mode = FORMATING;
       } else {
@@ -312,28 +311,28 @@ write_character:
 
           /*  alternate form flag */
         case '#':
-          flags.is_alternate_form = true;
+          flags.is_alternate_form = 1;
           break;
 
 #if __MSP430LIBC_PRINTF_INT20__
           /*  20-bit integer follows */
         case A20_MODIFIER:
-          flags.is_long20 = true;
+          flags.is_long20 = 1;
           break;
 #endif
           /*  interpret next number as long integer */
         case 'l':
 #if __MSP430LIBC_PRINTF_INT64__
           if (flags.is_long32) {
-            flags.is_long32 = false;
-            flags.is_long64 = true;
+            flags.is_long32 = 0;
+            flags.is_long64 = 1;
           } else {
 #endif /* __MSP430LIBC_PRINTF_INT64__ */
 #if __MSP430LIBC_PRINTF_INT32__
             if (flags.is_long32) {
               goto bad_format;
             }
-            flags.is_long32 = true;
+            flags.is_long32 = 1;
 #else /* __MSP430LIBC_PRINTF_INT32__ */
             goto bad_format;
 #endif /* __MSP430LIBC_PRINTF_INT32__ */
@@ -344,7 +343,7 @@ write_character:
 
           /*  left align instead of right align */
         case '-':
-          flags.left_align = true;
+          flags.left_align = 1;
           break;
 
           /*  emit a + before a positive number */
@@ -365,9 +364,9 @@ write_character:
           if (have_wp_value) {
             width = wp_value;
             wp_value = 0;
-            have_wp_value = false;
+            have_wp_value = 0;
           }
-          have_precision = true;
+          have_precision = 1;
           break;
           /*  fetch length from argument list instead of the format */
           /*  string itself */
@@ -379,10 +378,10 @@ write_character:
           } else if (have_precision) {
             wp_value = 0;
           } else {
-            flags.left_align = true;
+            flags.left_align = 1;
             wp_value = -val;
           }
-          have_wp_value = true;
+          have_wp_value = 1;
           break;
         }
 
@@ -409,7 +408,7 @@ write_character:
         case '9':
           wp_value *= 10;
           wp_value += character - '0';
-          have_wp_value = true;
+          have_wp_value = 1;
           break;
 
           /*  placeholder for one character */
@@ -431,7 +430,7 @@ emit_string:
           /* Note: Zero-padding on strings is undefined; it
            * is legitimate to zero-pad */
           if (have_precision) {
-            flags.truncate_precision = true;
+            flags.truncate_precision = 1;
             flags.precision = wp_value;
           } else if (have_wp_value) {
             width = wp_value;
@@ -455,7 +454,7 @@ emit_string:
 
           /*  placeholder for hexadecimal output */
         case 'X':
-          flags.uppercase = true;
+          flags.uppercase = 1;
           /*@fallthrough@ */
         case 'x':
           radix = 16;
@@ -469,7 +468,7 @@ emit_string:
           /*  placeholder for signed numbers */
         case 'd':
         case 'i':
-          flags.is_signed = true;
+          flags.is_signed = 1;
           /*@fallthrough@ */
           /*  placeholder for unsigned numbers */
         case 'u':
@@ -508,9 +507,9 @@ emit_number:
           /*  only non-zero numbers get hex/octal alternate form */
           if (flags.is_alternate_form && !is_zero) {
             if (radix == 16) {
-              flags.emit_hex_prefix = true;
+              flags.emit_hex_prefix = 1;
             } else if (radix == 8) {
-              flags.emit_octal_prefix = true;
+              flags.emit_octal_prefix = 1;
             }
           }
           if (flags.is_signed && is_negative) {
@@ -580,7 +579,7 @@ emit_number:
           if (have_precision) {
             int number_width = buffer + sizeof (buffer) - char_p - 2;
             if (number_width < wp_value) {
-              flags.zero_pad_precision = true;
+              flags.zero_pad_precision = 1;
               flags.precision = wp_value - number_width;
             }
           } else if (have_wp_value) {
