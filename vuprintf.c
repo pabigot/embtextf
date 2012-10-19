@@ -43,10 +43,6 @@
 #include <string.h>
 #include <stdint.h>
 
-#ifndef CMPRINTF_ENABLE_SHORT
-#define CMPRINTF_ENABLE_SHORT 0
-#endif /* CMPRINTF_ENABLE_SHORT */
-
 #ifndef CMPRINTF_ENABLE_INTPTR
 #define CMPRINTF_ENABLE_INTPTR 0
 #endif /* CMPRINTF_ENABLE_INTPTR */
@@ -64,26 +60,23 @@
  * Saves memory and parameters when compacted in a bit field.
  */
 typedef struct {
-#if CMPRINTF_ENABLE_SHORT - 0
-  unsigned int is_short:1;
-#endif /* CMPRINTF_ENABLE_SHORT */
 #if CMPRINTF_ENABLE_LONG - 0
-  unsigned int is_long:1;
+  unsigned int is_long:1;            /**< emit as long */
 #endif /* CMPRINTF_ENABLE_LONG */
 #if CMPRINTF_ENABLE_LONGLONG - 0
-  unsigned int is_longlong:1;
+  unsigned int is_longlong:1;        /**< emit as long long */
 #endif /* CMPRINTF_ENABLE_LONGLONG */
-  unsigned int is_signed:1;		/**<  process a signed number */
-  unsigned int is_alternate_form:1;	/**<  alternate output */
-  unsigned int left_align:1;		/**<  if != 0 pad on right side, else on left side */
-  unsigned int emit_octal_prefix:1;	/**<  emit a prefix 0 */
-  unsigned int emit_hex_prefix:1;	/**<  emit a prefix 0x */
-  unsigned int fill_zero:1;		/**<  pad left with zero instead of space */
-  unsigned int uppercase:1;		/**<  print hex digits in upper case */
-  unsigned int zero_pad_precision:1;	/**<  add precision zeros before text */
-  unsigned int truncate_precision:1;	/**<  limit text to precision characters */
-  char sign_char;		/**<  character to emit as sign (NUL no emit) */
-  uint8_t precision;		/**<  value related to format precision specifier */
+  unsigned int is_signed:1;          /**< process a signed number */
+  unsigned int is_alternate_form:1;  /**< alternate output */
+  unsigned int left_align:1;         /**< if != 0 pad on right side, else on left side */
+  unsigned int emit_octal_prefix:1;  /**< emit a prefix 0 */
+  unsigned int emit_hex_prefix:1;    /**< emit a prefix 0x */
+  unsigned int fill_zero:1;          /**< pad left with zero instead of space */
+  unsigned int uppercase:1;          /**< print hex digits in upper case */
+  unsigned int zero_pad_precision:1; /**< add precision zeros before text */
+  unsigned int truncate_precision:1; /**< limit text to precision characters */
+  char sign_char;                    /**< character to emit as sign (NUL no emit) */
+  uint8_t precision;                 /**< value related to format precision specifier */
 } flags_t;
 
 /** Maximum number of characters in any (numeric) prefix.  The only
@@ -302,7 +295,7 @@ vuprintf (int (*write_char) (int), const char *format, va_list args)
     long long int lli;
 #endif /* CMPRINTF_ENABLE_LONGLONG */
   } number;
-  char buffer[MAX_FORMAT_LENGTH];	/*  used to print numbers */
+  char buffer[MAX_FORMAT_LENGTH];       /*  used to print numbers */
 
   while ((character = *format++)) {
     /*  test and save character */
@@ -327,7 +320,7 @@ write_character:
       switch (character) {
           /*  output '%' itself */
         case '%':
-          goto write_character;	/*  character is already the % */
+          goto write_character; /*  character is already the % */
 
           /*  alternate form flag */
         case '#':
@@ -544,17 +537,17 @@ emit_number:
 
           /*  divide and save digits, fill from the lowest */
           /*  significant digit */
-#define CONVERT_LOOP(_unsigned, _number)				\
-	      do							\
-		{							\
-		  int digit = (_unsigned) _number % radix;		\
-		  if (digit < 10)					\
-		    *char_p-- = digit + '0';				\
-		  else							\
-		    *char_p-- = digit + (flags.uppercase ? ('A' - 10) : ('a' - 10)); \
-		  _number = ((_unsigned) _number) / radix;		\
-		}							\
-	      while ((_unsigned) _number > 0)
+#define CONVERT_LOOP(_unsigned, _number)                                \
+          do                                                            \
+            {                                                           \
+              int digit = (_unsigned) _number % radix;                  \
+              if (digit < 10)                                           \
+                *char_p-- = digit + '0';                                \
+              else                                                      \
+                *char_p-- = digit + (flags.uppercase ? ('A' - 10) : ('a' - 10)); \
+              _number = ((_unsigned) _number) / radix;                  \
+            }                                                           \
+          while ((_unsigned) _number > 0)
 
 #if CMPRINTF_ENABLE_LONGLONG - 0
           if (flags.is_longlong) {
