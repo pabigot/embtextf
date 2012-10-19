@@ -48,12 +48,12 @@
  * Saves memory and parameters when compacted in a bit field.
  */
 typedef struct {
-#if __MSP430LIBC_PRINTF_INT32__ || __MSP430LIBC_PRINTF_INT64__
+#if (CMPRINTF_ENABLE_INT32 - 0) || (CMPRINTF_ENABLE_INT64 - 0)
   unsigned int is_long32:1;		/**<  process a 32-bit integer */
-#endif				/* __MSP430LIBC_PRINTF_INT32__ */
-#if __MSP430LIBC_PRINTF_INT64__
+#endif				/* CMPRINTF_ENABLE_INT32 */
+#if CMPRINTF_ENABLE_INT64 - 0
   unsigned int is_long64:1;		/**<  process a 64-bit integer */
-#endif				/* __MSP430LIBC_PRINTF_INT64__ */
+#endif				/* CMPRINTF_ENABLE_INT64 */
   unsigned int is_signed:1;		/**<  process a signed number */
   unsigned int is_alternate_form:1;	/**<  alternate output */
   unsigned int left_align:1;		/**<  if != 0 pad on right side, else on left side */
@@ -75,13 +75,13 @@ typedef struct {
  * and EOS but excluding prefix.  The longest representation will be
  * in octal, so assume one char for every three bits in the
  * representation. */
-#if __MSP430LIBC_PRINTF_INT64__
+#if CMPRINTF_ENABLE_INT64 - 0
 #define MAX_FORMAT_LENGTH (((64 + 2) / 3) + 1 + 1)
-#elif __MSP430LIBC_PRINTF_INT32__
+#elif CMPRINTF_ENABLE_INT32 - 0
 #define MAX_FORMAT_LENGTH (((32 + 2) / 3) + 1 + 1)
-#else /* __MSP430LIBC_PRINTF_INT*__ */
+#else /* CMPRINTF_ENABLE_INT* */
 #define MAX_FORMAT_LENGTH (((16 + 2) / 3) + 1 + 1)
-#endif /* __MSP430LIBC_PRINTF_INT*__ */
+#endif /* CMPRINTF_ENABLE_INT* */
 
 /**
  * Helper function to generate anything that precedes leading zeros.
@@ -258,12 +258,12 @@ vuprintf (int (*write_char) (int), const char *format, va_list args)
   union {
     int16_t i16;
     intptr_t ptr;
-#if __MSP430LIBC_PRINTF_INT32__
+#if CMPRINTF_ENABLE_INT32 - 0
     int32_t i32;
-#endif				/* __MSP430LIBC_PRINTF_INT32__ */
-#if __MSP430LIBC_PRINTF_INT64__
+#endif				/* CMPRINTF_ENABLE_INT32 */
+#if CMPRINTF_ENABLE_INT64 - 0
     int64_t i64;
-#endif				/* __MSP430LIBC_PRINTF_INT64__ */
+#endif				/* CMPRINTF_ENABLE_INT64 */
   } number;
   char buffer[MAX_FORMAT_LENGTH];	/*  used to print numbers */
 
@@ -299,23 +299,23 @@ write_character:
 
           /*  interpret next number as long integer */
         case 'l':
-#if __MSP430LIBC_PRINTF_INT64__
+#if CMPRINTF_ENABLE_INT64 - 0
           if (flags.is_long32) {
             flags.is_long32 = 0;
             flags.is_long64 = 1;
           } else {
-#endif /* __MSP430LIBC_PRINTF_INT64__ */
-#if __MSP430LIBC_PRINTF_INT32__
+#endif /* CMPRINTF_ENABLE_INT64 */
+#if CMPRINTF_ENABLE_INT32 - 0
             if (flags.is_long32) {
               goto bad_format;
             }
             flags.is_long32 = 1;
-#else /* __MSP430LIBC_PRINTF_INT32__ */
+#else /* CMPRINTF_ENABLE_INT32 */
             goto bad_format;
-#endif /* __MSP430LIBC_PRINTF_INT32__ */
-#if __MSP430LIBC_PRINTF_INT64__
+#endif /* CMPRINTF_ENABLE_INT32 */
+#if CMPRINTF_ENABLE_INT64 - 0
           }
-#endif /* __MSP430LIBC_PRINTF_INT64__ */
+#endif /* CMPRINTF_ENABLE_INT64 */
           break;
 
           /*  left align instead of right align */
@@ -452,20 +452,20 @@ emit_string:
           radix = 10;
           /*  label for number outputs including argument fetching */
 fetch_number:
-#if __MSP430LIBC_PRINTF_INT64__
+#if CMPRINTF_ENABLE_INT64 - 0
           if (flags.is_long64) {
             number.i64 = va_arg (args, int64_t);
             is_zero = (number.i64 == 0);
             is_negative = (number.i64 < 0);
           } else
-#endif /* __MSP430LIBC_PRINTF_INT64__ */
-#if __MSP430LIBC_PRINTF_INT32__
+#endif /* CMPRINTF_ENABLE_INT64 */
+#if CMPRINTF_ENABLE_INT32 - 0
             if (flags.is_long32) {
               number.i32 = va_arg (args, int32_t);
               is_zero = (number.i32 == 0);
               is_negative = (number.i32 < 0);
             } else
-#endif /* __MSP430LIBC_PRINTF_INT32__ */
+#endif /* CMPRINTF_ENABLE_INT32 */
             {
               number.i16 = va_arg (args, int16_t);
               is_zero = (number.i16 == 0);
@@ -485,16 +485,16 @@ emit_number:
           if (flags.is_signed && is_negative) {
             /*  save sign for radix 10 conversion */
             flags.sign_char = '-';
-#if __MSP430LIBC_PRINTF_INT64__
+#if CMPRINTF_ENABLE_INT64 - 0
             if (flags.is_long64) {
               number.i64 = -number.i64;
             } else
-#endif /* __MSP430LIBC_PRINTF_INT64__ */
-#if __MSP430LIBC_PRINTF_INT32__
+#endif /* CMPRINTF_ENABLE_INT64 */
+#if CMPRINTF_ENABLE_INT32 - 0
               if (flags.is_long32) {
                 number.i32 = -number.i32;
               } else
-#endif /* __MSP430LIBC_PRINTF_INT32__ */
+#endif /* CMPRINTF_ENABLE_INT32 */
                 number.i16 = -number.i16;
           }
 
@@ -516,16 +516,16 @@ emit_number:
 		}							\
 	      while ((_unsigned) _number > 0)
 
-#if __MSP430LIBC_PRINTF_INT64__
+#if CMPRINTF_ENABLE_INT64 - 0
           if (flags.is_long64) {
             CONVERT_LOOP (uint64_t, number.i64);
           } else
-#endif /* __MSP430LIBC_PRINTF_INT64__ */
-#if __MSP430LIBC_PRINTF_INT32__
+#endif /* CMPRINTF_ENABLE_INT64 */
+#if CMPRINTF_ENABLE_INT32 - 0
             if (flags.is_long32) {
               CONVERT_LOOP (uint32_t, number.i32);
             } else
-#endif /* __MSP430LIBC_PRINTF_INT32__ */
+#endif /* CMPRINTF_ENABLE_INT32 */
               CONVERT_LOOP (uint16_t, number.i16);
 
 #undef CONVERT_LOOP
