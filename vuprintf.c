@@ -54,25 +54,25 @@
  */
 typedef struct {
 #if __MSP430X__
-  unsigned int is_long20:1;		///< process a 20-bit integer
+  unsigned int is_long20:1;		/**<  process a 20-bit integer */
 #endif /* __MSP430X__ */
 #if __MSP430LIBC_PRINTF_INT32__ || __MSP430LIBC_PRINTF_INT64__
-  unsigned int is_long32:1;		///< process a 32-bit integer
+  unsigned int is_long32:1;		/**<  process a 32-bit integer */
 #endif				/* __MSP430LIBC_PRINTF_INT32__ */
 #if __MSP430LIBC_PRINTF_INT64__
-  unsigned int is_long64:1;		///< process a 64-bit integer
+  unsigned int is_long64:1;		/**<  process a 64-bit integer */
 #endif				/* __MSP430LIBC_PRINTF_INT64__ */
-  unsigned int is_signed:1;		///< process a signed number
-  unsigned int is_alternate_form:1;	///< alternate output
-  unsigned int left_align:1;		///< if != 0 pad on right side, else on left side
-  unsigned int emit_octal_prefix:1;	///< emit a prefix 0
-  unsigned int emit_hex_prefix:1;	///< emit a prefix 0x
-  unsigned int fill_zero:1;		///< pad left with zero instead of space
-  unsigned int uppercase:1;		///< print hex digits in upper case
-  unsigned int zero_pad_precision:1;	///< add precision zeros before text
-  unsigned int truncate_precision:1;	///< limit text to precision characters
-  char sign_char;		///< character to emit as sign (NUL no emit)
-  uint8_t precision;		///< value related to format precision specifier
+  unsigned int is_signed:1;		/**<  process a signed number */
+  unsigned int is_alternate_form:1;	/**<  alternate output */
+  unsigned int left_align:1;		/**<  if != 0 pad on right side, else on left side */
+  unsigned int emit_octal_prefix:1;	/**<  emit a prefix 0 */
+  unsigned int emit_hex_prefix:1;	/**<  emit a prefix 0x */
+  unsigned int fill_zero:1;		/**<  pad left with zero instead of space */
+  unsigned int uppercase:1;		/**<  print hex digits in upper case */
+  unsigned int zero_pad_precision:1;	/**<  add precision zeros before text */
+  unsigned int truncate_precision:1;	/**<  limit text to precision characters */
+  char sign_char;		/**<  character to emit as sign (NUL no emit) */
+  uint8_t precision;		/**<  value related to format precision specifier */
 } flags_t;
 
 /** Maximum number of characters in any (numeric) prefix.  The only
@@ -143,19 +143,19 @@ print_field (int (*write_char) (int), const char *char_p, unsigned int width,
     truncate_precision = UINT16_MAX;
   }
 
-  // if right aligned, pad
+  /*  if right aligned, pad */
   if (!flags.left_align) {
     char leading_fill = ' ';
     unsigned int len = strlen (char_p);
 
-    // Account for the prefix we'll write
+    /*  Account for the prefix we'll write */
     if (prefix_len <= width) {
       width -= prefix_len;
     } else {
       width = 0;
     }
 
-    // Account for leading zeros required by a numeric precision specifier
+    /*  Account for leading zeros required by a numeric precision specifier */
     if (flags.zero_pad_precision) {
       if (flags.precision <= width) {
         width -= flags.precision;
@@ -164,12 +164,12 @@ print_field (int (*write_char) (int), const char *char_p, unsigned int width,
       }
     }
 
-    // Account for short writes of strings due to precision specifier
+    /*  Account for short writes of strings due to precision specifier */
     if (truncate_precision < len) {
       len = truncate_precision;
     }
 
-    // emit numeric prefix prior to padded zeros
+    /*  emit numeric prefix prior to padded zeros */
     if (flags.fill_zero) {
       leading_fill = '0';
       character_count += prefix_len;
@@ -185,13 +185,13 @@ print_field (int (*write_char) (int), const char *char_p, unsigned int width,
     }
   }
 
-  // emit any unemitted prefix
+  /*  emit any unemitted prefix */
   while (prefix_idx < prefix_len) {
     character_count++;
     write_char (prefix_buffer[prefix_idx++]);
   }
 
-  // emit zeros to meet precision requirements
+  /*  emit zeros to meet precision requirements */
   if (flags.zero_pad_precision) {
     while (flags.precision--) {
       write_char ('0');
@@ -199,18 +199,18 @@ print_field (int (*write_char) (int), const char *char_p, unsigned int width,
     }
   }
 
-  // output the buffer contents up to the maximum length
+  /*  output the buffer contents up to the maximum length */
   while (*char_p && truncate_precision--) {
     write_char (*char_p);
     char_p++;
     character_count++;
   }
-  // if left aligned, pad
+  /*  if left aligned, pad */
   while (character_count < width) {
     write_char (' ');
     character_count++;
   }
-  // return how many characters have been output
+  /*  return how many characters have been output */
   return character_count;
 }
 
@@ -283,13 +283,13 @@ vuprintf (int (*write_char) (int), const char *format, va_list args)
     int64_t i64;
 #endif				/* __MSP430LIBC_PRINTF_INT64__ */
   } number;
-  char buffer[MAX_FORMAT_LENGTH];	// used to print numbers
+  char buffer[MAX_FORMAT_LENGTH];	/*  used to print numbers */
 
   while ((character = *format++)) {
-    // test and save character
+    /*  test and save character */
     if (mode == DIRECT) {
-      // output characters from the format string directly, except the
-      // '%' sign which changes the mode
+      /*  output characters from the format string directly, except the */
+      /*  '%' sign which changes the mode */
       if (character == '%') {
         width = wp_value = 0;
         memset (&flags, 0, sizeof (flags));
@@ -303,25 +303,25 @@ write_character:
         mode = DIRECT;
       }
     } else {
-      //FORMATING
-      // process format characters
+      /* FORMATING */
+      /*  process format characters */
       switch (character) {
-          // output '%' itself
+          /*  output '%' itself */
         case '%':
-          goto write_character;	// character is already the %
+          goto write_character;	/*  character is already the % */
 
-          // alternate form flag
+          /*  alternate form flag */
         case '#':
           flags.is_alternate_form = true;
           break;
 
 #if __MSP430LIBC_PRINTF_INT20__
-          // 20-bit integer follows
+          /*  20-bit integer follows */
         case A20_MODIFIER:
           flags.is_long20 = true;
           break;
 #endif
-          // interpret next number as long integer
+          /*  interpret next number as long integer */
         case 'l':
 #if __MSP430LIBC_PRINTF_INT64__
           if (flags.is_long32) {
@@ -342,26 +342,26 @@ write_character:
 #endif /* __MSP430LIBC_PRINTF_INT64__ */
           break;
 
-          // left align instead of right align
+          /*  left align instead of right align */
         case '-':
           flags.left_align = true;
           break;
 
-          // emit a + before a positive number
+          /*  emit a + before a positive number */
         case '+':
           flags.sign_char = '+';
           break;
 
-          // emit a space before a positive number
+          /*  emit a space before a positive number */
         case ' ':
-          // + overrides space as a flag character
+          /*  + overrides space as a flag character */
           if ('+' != flags.sign_char) {
             flags.sign_char = ' ';
           }
           break;
 
         case '.':
-          // explicit precision is present
+          /*  explicit precision is present */
           if (have_wp_value) {
             width = wp_value;
             wp_value = 0;
@@ -369,8 +369,8 @@ write_character:
           }
           have_precision = true;
           break;
-          // fetch length from argument list instead of the format
-          // string itself
+          /*  fetch length from argument list instead of the format */
+          /*  string itself */
         case '*': {
           int val = va_arg (args, int);
 
@@ -386,13 +386,13 @@ write_character:
           break;
         }
 
-        // format field width. zero needs special treatment
-        // as when it occurs as first number it is the
-        // flag to pad with zeroes instead of spaces
+        /*  format field width. zero needs special treatment */
+        /*  as when it occurs as first number it is the */
+        /*  flag to pad with zeroes instead of spaces */
         case '0':
-          // a leading zero means filling with zeros
-          // it must be a leading zero if 'width' is zero
-          // otherwise it is in a number as in "10"
+          /*  a leading zero means filling with zeros */
+          /*  it must be a leading zero if 'width' is zero */
+          /*  otherwise it is in a number as in "10" */
           if (wp_value == 0 && !have_precision) {
             flags.fill_zero = !flags.left_align;
             break;
@@ -412,7 +412,7 @@ write_character:
           have_wp_value = true;
           break;
 
-          // placeholder for one character
+          /*  placeholder for one character */
         case 'c':
           character = va_arg (args, int);
           if (! have_precision && ! have_wp_value) {
@@ -423,8 +423,8 @@ write_character:
           buffer[1] = 0;
           goto emit_string;
 
-          // placeholder for arbitrary length null terminated
-          // string
+          /*  placeholder for arbitrary length null terminated */
+          /*  string */
         case 's':
           char_p = va_arg (args, char *);
 emit_string:
@@ -443,9 +443,9 @@ emit_string:
           mode = DIRECT;
           break;
 
-          // placeholder for an address
-          // addresses are automatically in alternate form and
-          // hexadecimal.
+          /*  placeholder for an address */
+          /*  addresses are automatically in alternate form and */
+          /*  hexadecimal. */
         case 'p':
           number.ptr = (intptr_t) va_arg (args, void *);
           number.ptr &= UINTPTR_MAX;
@@ -453,7 +453,7 @@ emit_string:
           flags.is_alternate_form = (0 != number.ptr);
           goto emit_number;
 
-          // placeholder for hexadecimal output
+          /*  placeholder for hexadecimal output */
         case 'X':
           flags.uppercase = true;
           /*@fallthrough@ */
@@ -461,20 +461,20 @@ emit_string:
           radix = 16;
           goto fetch_number;
 
-          // placeholder for octal output
+          /*  placeholder for octal output */
         case 'o':
           radix = 8;
           goto fetch_number;
 
-          // placeholder for signed numbers
+          /*  placeholder for signed numbers */
         case 'd':
         case 'i':
           flags.is_signed = true;
           /*@fallthrough@ */
-          // placeholder for unsigned numbers
+          /*  placeholder for unsigned numbers */
         case 'u':
           radix = 10;
-          // label for number outputs including argument fetching
+          /*  label for number outputs including argument fetching */
 fetch_number:
 #if __MSP430LIBC_PRINTF_INT64__
           if (flags.is_long64) {
@@ -502,10 +502,10 @@ fetch_number:
                 is_zero = (number.i16 == 0);
                 is_negative = (number.i16 < 0);
               }
-          // label for number outputs excluding argument fetching
-          // 'number' already contains the value
+          /*  label for number outputs excluding argument fetching */
+          /*  'number' already contains the value */
 emit_number:
-          // only non-zero numbers get hex/octal alternate form
+          /*  only non-zero numbers get hex/octal alternate form */
           if (flags.is_alternate_form && !is_zero) {
             if (radix == 16) {
               flags.emit_hex_prefix = true;
@@ -514,7 +514,7 @@ emit_number:
             }
           }
           if (flags.is_signed && is_negative) {
-            // save sign for radix 10 conversion
+            /*  save sign for radix 10 conversion */
             flags.sign_char = '-';
 #if __MSP430LIBC_PRINTF_INT64__
             if (flags.is_long64) {
@@ -534,12 +534,12 @@ emit_number:
                   number.i16 = -number.i16;
           }
 
-          // go to the end of the buffer and null terminate
+          /*  go to the end of the buffer and null terminate */
           char_p = &buffer[sizeof (buffer) - 1];
           *char_p-- = '\0';
 
-          // divide and save digits, fill from the lowest
-          // significant digit
+          /*  divide and save digits, fill from the lowest */
+          /*  significant digit */
 #define CONVERT_LOOP(_unsigned, _number)				\
 	      do							\
 		{							\
@@ -571,12 +571,12 @@ emit_number:
 
 #undef CONVERT_LOOP
 
-          // only decimal numbers get signs
+          /*  only decimal numbers get signs */
           if (radix != 10) {
             flags.sign_char = 0;
           }
 
-          // write padded result
+          /*  write padded result */
           if (have_precision) {
             int number_width = buffer + sizeof (buffer) - char_p - 2;
             if (number_width < wp_value) {
