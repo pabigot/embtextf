@@ -43,18 +43,11 @@
 #include <string.h>
 #include <stdint.h>
 
-/** Format modifier indicating following int should be treated as a
- * 20-bit value */
-#define A20_MODIFIER '\x8a'
-
 /**
  * Internal state tracking.
  * Saves memory and parameters when compacted in a bit field.
  */
 typedef struct {
-#if __MSP430X__
-  unsigned int is_long20:1;		/**<  process a 20-bit integer */
-#endif /* __MSP430X__ */
 #if __MSP430LIBC_PRINTF_INT32__ || __MSP430LIBC_PRINTF_INT64__
   unsigned int is_long32:1;		/**<  process a 32-bit integer */
 #endif				/* __MSP430LIBC_PRINTF_INT32__ */
@@ -78,10 +71,6 @@ typedef struct {
  * prefix at the moment is "0x". */
 #define MAX_PREFIX_CHARS 2
 
-#ifndef __MSP430LIBC_PRINTF_INT20__
-#define __MSP430LIBC_PRINTF_INT20__ __MSP430X__ - 0
-#endif /* __MSP430LIBC_PRINTF_INT20__ */
-
 /** Maximum number of characters for formatted numbers, including sign
  * and EOS but excluding prefix.  The longest representation will be
  * in octal, so assume one char for every three bits in the
@@ -90,8 +79,6 @@ typedef struct {
 #define MAX_FORMAT_LENGTH (((64 + 2) / 3) + 1 + 1)
 #elif __MSP430LIBC_PRINTF_INT32__
 #define MAX_FORMAT_LENGTH (((32 + 2) / 3) + 1 + 1)
-#elif __MSP430_LIBC_PRINTF_INT20__
-#define MAX_FORMAT_LENGTH (((20 + 2) / 3) + 1 + 1)
 #else /* __MSP430LIBC_PRINTF_INT*__ */
 #define MAX_FORMAT_LENGTH (((16 + 2) / 3) + 1 + 1)
 #endif /* __MSP430LIBC_PRINTF_INT*__ */
@@ -230,7 +217,6 @@ print_field (int (*write_char) (int), const char *char_p, unsigned int width,
  *
  * Supported flags:
  * - '#'  use alternate form.
- * - '\x8a' use a20 (20-bit) instead of int (160-bit) for numbers (IF __MSP430X__)
  * - 'l'  use long (32-bit) instead of int (16-bit) for numbers (IF CONFIGURED)
  * - 'll' use long long (64-bit) for numbers (IF CONFIGURED)
  * - '-'  align left
@@ -272,9 +258,6 @@ vuprintf (int (*write_char) (int), const char *format, va_list args)
   union {
     int16_t i16;
     intptr_t ptr;
-#if __MSP430LIBC_PRINTF_INT20__
-    int20_t i20;
-#endif /* __MSP430X__ */
 #if __MSP430LIBC_PRINTF_INT32__
     int32_t i32;
 #endif				/* __MSP430LIBC_PRINTF_INT32__ */
@@ -314,12 +297,6 @@ write_character:
           flags.is_alternate_form = 1;
           break;
 
-#if __MSP430LIBC_PRINTF_INT20__
-          /*  20-bit integer follows */
-        case A20_MODIFIER:
-          flags.is_long20 = 1;
-          break;
-#endif
           /*  interpret next number as long integer */
         case 'l':
 #if __MSP430LIBC_PRINTF_INT64__
@@ -489,18 +466,11 @@ fetch_number:
               is_negative = (number.i32 < 0);
             } else
 #endif /* __MSP430LIBC_PRINTF_INT32__ */
-#if __MSP430LIBC_PRINTF_INT20__
-              if (flags.is_long20) {
-                number.i20 = va_arg (args, int20_t);
-                is_zero = (number.i20 == 0);
-                is_negative = (number.i20 < 0);
-              } else
-#endif /* __MSP430LIBC_PRINTF_INT20__ */
-              {
-                number.i16 = va_arg (args, int16_t);
-                is_zero = (number.i16 == 0);
-                is_negative = (number.i16 < 0);
-              }
+            {
+              number.i16 = va_arg (args, int16_t);
+              is_zero = (number.i16 == 0);
+              is_negative = (number.i16 < 0);
+            }
           /*  label for number outputs excluding argument fetching */
           /*  'number' already contains the value */
 emit_number:
@@ -525,12 +495,7 @@ emit_number:
                 number.i32 = -number.i32;
               } else
 #endif /* __MSP430LIBC_PRINTF_INT32__ */
-#if __MSP430LIBC_PRINTF_INT20__
-                if (flags.is_long20) {
-                  number.i20 = -number.i20;
-                } else
-#endif /* __MSP430LIBC_PRINTF_INT20__ */
-                  number.i16 = -number.i16;
+                number.i16 = -number.i16;
           }
 
           /*  go to the end of the buffer and null terminate */
@@ -561,12 +526,7 @@ emit_number:
               CONVERT_LOOP (uint32_t, number.i32);
             } else
 #endif /* __MSP430LIBC_PRINTF_INT32__ */
-#if __MSP430LIBC_PRINTF_INT20__
-              if (flags.is_long20) {
-                CONVERT_LOOP (uint20_t, number.i20);
-              } else
-#endif /* __MSP430LIBC_PRINTF_INT20__ */
-                CONVERT_LOOP (uint16_t, number.i16);
+              CONVERT_LOOP (uint16_t, number.i16);
 
 #undef CONVERT_LOOP
 
