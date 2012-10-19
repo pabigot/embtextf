@@ -43,17 +43,36 @@
 #include <string.h>
 #include <stdint.h>
 
+#ifndef CMPRINTF_ENABLE_SHORT
+#define CMPRINTF_ENABLE_SHORT 0
+#endif /* CMPRINTF_ENABLE_SHORT */
+
+#ifndef CMPRINTF_ENABLE_INTPTR
+#define CMPRINTF_ENABLE_INTPTR 0
+#endif /* CMPRINTF_ENABLE_INTPTR */
+
+#ifndef CMPRINTF_ENABLE_LONG
+#define CMPRINTF_ENABLE_LONG 0
+#endif /* CMPRINTF_ENABLE_LONG */
+
+#ifndef CMPRINTF_ENABLE_LONGLONG
+#define CMPRINTF_ENABLE_LONGLONG 0
+#endif /* CMPRINTF_ENABLE_LONGLONG */
+
 /**
  * Internal state tracking.
  * Saves memory and parameters when compacted in a bit field.
  */
 typedef struct {
-#if (CMPRINTF_ENABLE_INT32 - 0) || (CMPRINTF_ENABLE_INT64 - 0)
-  unsigned int is_long32:1;		/**<  process a 32-bit integer */
-#endif				/* CMPRINTF_ENABLE_INT32 */
-#if CMPRINTF_ENABLE_INT64 - 0
-  unsigned int is_long64:1;		/**<  process a 64-bit integer */
-#endif				/* CMPRINTF_ENABLE_INT64 */
+#if CMPRINTF_ENABLE_SHORT - 0
+  unsigned int is_short:1;
+#endif /* CMPRINTF_ENABLE_SHORT */
+#if CMPRINTF_ENABLE_LONG - 0
+  unsigned int is_long:1;
+#endif /* CMPRINTF_ENABLE_LONG */
+#if CMPRINTF_ENABLE_LONGLONG - 0
+  unsigned int is_longlong:1
+#endif /* CMPRINTF_ENABLE_LONGLONG */
   unsigned int is_signed:1;		/**<  process a signed number */
   unsigned int is_alternate_form:1;	/**<  alternate output */
   unsigned int left_align:1;		/**<  if != 0 pad on right side, else on left side */
@@ -71,17 +90,29 @@ typedef struct {
  * prefix at the moment is "0x". */
 #define MAX_PREFIX_CHARS 2
 
+/** Size of the largest integer type, in octets.  We know short <= int
+ * <= long <= long long. */
+#if CMPRINTF_ENABLE_LONGLONG - 0
+#define SIZEOF_LARGEINT sizeof(long long int)
+#elif CMPRINTF_ENABLE_LONG - 0
+#define SIZEOF_LARGEINT sizeof(long int)
+#else /* CMPRINTF_ENABLE_LONG */
+#define SIZEOF_LARGEINT sizeof(int)
+#endif /* CMPRINTF_ENABLE_* */
+
+/** If intptr_t is enabled, its size.  We have no idea where it lies
+ * relative to other integral types. */
+#if CMPRINTF_ENABLE_INTPTR - 0
+#define SIZEOF_INTPTR sizeof(intptr_t)
+#else /* CMPRINTF_ENABLE_INTPTR */
+#define SIZEOF_INTPTR 0
+#endif /* CMPRINTF_ENABLE_INTPTR */
+
 /** Maximum number of characters for formatted numbers, including sign
  * and EOS but excluding prefix.  The longest representation will be
  * in octal, so assume one char for every three bits in the
  * representation. */
-#if CMPRINTF_ENABLE_INT64 - 0
-#define MAX_FORMAT_LENGTH (((64 + 2) / 3) + 1 + 1)
-#elif CMPRINTF_ENABLE_INT32 - 0
-#define MAX_FORMAT_LENGTH (((32 + 2) / 3) + 1 + 1)
-#else /* CMPRINTF_ENABLE_INT* */
-#define MAX_FORMAT_LENGTH (((16 + 2) / 3) + 1 + 1)
-#endif /* CMPRINTF_ENABLE_INT* */
+#define MAX_FORMAT_LENGTH ((((8 * ((SIZEOF_LARGEINT > SIZEOF_INTPTR) ? SIZEOF_LARGEINT : SIZEOF_INTPTR)) + 2) / 3) + 1 + 1)
 
 /**
  * Helper function to generate anything that precedes leading zeros.
@@ -126,7 +157,7 @@ print_field (int (*write_char) (int), const char *char_p, unsigned int width,
   int prefix_len = build_numeric_prefix (prefix_buffer, flags);
 
   if (!flags.truncate_precision) {
-    truncate_precision = UINT16_MAX;
+    truncate_precision = (unsigned int)-1;
   }
 
   /*  if right aligned, pad */
@@ -256,14 +287,16 @@ vuprintf (int (*write_char) (int), const char *format, va_list args)
   char is_zero = 0;
   char is_negative = 0;
   union {
-    int16_t i16;
+    int i;
+#if CMPRINTF_ENABLE_INTPTR - 0
     intptr_t ptr;
-#if CMPRINTF_ENABLE_INT32 - 0
-    int32_t i32;
-#endif				/* CMPRINTF_ENABLE_INT32 */
-#if CMPRINTF_ENABLE_INT64 - 0
-    int64_t i64;
-#endif				/* CMPRINTF_ENABLE_INT64 */
+#endif /* CMPRINTF_ENABLE_INTPTR */
+#if CMPRINTF_ENABLE_LONG - 0
+    long int li;
+#endif /* CMPRINTF_ENABLE_LONG */
+#if CMPRINTF_ENABLE_LONGLONG - 0
+    long long int lli;
+#endif /* CMPRINTF_ENABLE_LONGLONG */
   } number;
   char buffer[MAX_FORMAT_LENGTH];	/*  used to print numbers */
 
@@ -299,23 +332,23 @@ write_character:
 
           /*  interpret next number as long integer */
         case 'l':
-#if CMPRINTF_ENABLE_INT64 - 0
-          if (flags.is_long32) {
-            flags.is_long32 = 0;
-            flags.is_long64 = 1;
+#if CMPRINTF_ENABLE_LONGLONG - 0
+          if (flags.is_long) {
+            flags.is_long = 0;
+            flags.is_longlong = 1;
           } else {
-#endif /* CMPRINTF_ENABLE_INT64 */
-#if CMPRINTF_ENABLE_INT32 - 0
-            if (flags.is_long32) {
+#endif /* CMPRINTF_ENABLE_LONGLONG */
+#if CMPRINTF_ENABLE_LONG - 0
+            if (flags.is_long) {
               goto bad_format;
             }
-            flags.is_long32 = 1;
-#else /* CMPRINTF_ENABLE_INT32 */
+            flags.is_long = 1;
+#else /* CMPRINTF_ENABLE_LONG */
             goto bad_format;
-#endif /* CMPRINTF_ENABLE_INT32 */
-#if CMPRINTF_ENABLE_INT64 - 0
+#endif /* CMPRINTF_ENABLE_LONG */
+#if CMPRINTF_ENABLE_LONGLONG - 0
           }
-#endif /* CMPRINTF_ENABLE_INT64 */
+#endif /* CMPRINTF_ENABLE_LONGLONG */
           break;
 
           /*  left align instead of right align */
@@ -419,6 +452,7 @@ emit_string:
           mode = DIRECT;
           break;
 
+#if CMPRINTF_ENABLE_INTPTR - 0
           /*  placeholder for an address */
           /*  addresses are automatically in alternate form and */
           /*  hexadecimal. */
@@ -428,6 +462,7 @@ emit_string:
           radix = 16;
           flags.is_alternate_form = (0 != number.ptr);
           goto emit_number;
+#endif /* CMPRINTF_ENABLE_INTPTR */
 
           /*  placeholder for hexadecimal output */
         case 'X':
@@ -452,27 +487,28 @@ emit_string:
           radix = 10;
           /*  label for number outputs including argument fetching */
 fetch_number:
-#if CMPRINTF_ENABLE_INT64 - 0
-          if (flags.is_long64) {
-            number.i64 = va_arg (args, int64_t);
-            is_zero = (number.i64 == 0);
-            is_negative = (number.i64 < 0);
+#if CMPRINTF_ENABLE_LONGLONG - 0
+          if (flags.is_longlong) {
+            number.lli = va_arg (args, int64_t);
+            is_zero = (number.lli == 0);
+            is_negative = (number.lli < 0);
           } else
-#endif /* CMPRINTF_ENABLE_INT64 */
-#if CMPRINTF_ENABLE_INT32 - 0
-            if (flags.is_long32) {
-              number.i32 = va_arg (args, int32_t);
-              is_zero = (number.i32 == 0);
-              is_negative = (number.i32 < 0);
+#endif /* CMPRINTF_ENABLE_LONGLONG */
+#if CMPRINTF_ENABLE_LONG - 0
+            if (flags.is_long) {
+              number.li = va_arg (args, int32_t);
+              is_zero = (number.li == 0);
+              is_negative = (number.li < 0);
             } else
-#endif /* CMPRINTF_ENABLE_INT32 */
+#endif /* CMPRINTF_ENABLE_LONG */
             {
-              number.i16 = va_arg (args, int16_t);
-              is_zero = (number.i16 == 0);
-              is_negative = (number.i16 < 0);
+              number.i = va_arg (args, int);
+              is_zero = (number.i == 0);
+              is_negative = (number.i < 0);
             }
           /*  label for number outputs excluding argument fetching */
           /*  'number' already contains the value */
+          goto emit_number;
 emit_number:
           /*  only non-zero numbers get hex/octal alternate form */
           if (flags.is_alternate_form && !is_zero) {
@@ -485,17 +521,17 @@ emit_number:
           if (flags.is_signed && is_negative) {
             /*  save sign for radix 10 conversion */
             flags.sign_char = '-';
-#if CMPRINTF_ENABLE_INT64 - 0
-            if (flags.is_long64) {
-              number.i64 = -number.i64;
+#if CMPRINTF_ENABLE_LONGLONG - 0
+            if (flags.is_longlong) {
+              number.lli = -number.lli;
             } else
-#endif /* CMPRINTF_ENABLE_INT64 */
-#if CMPRINTF_ENABLE_INT32 - 0
-              if (flags.is_long32) {
-                number.i32 = -number.i32;
+#endif /* CMPRINTF_ENABLE_LONGLONG */
+#if CMPRINTF_ENABLE_LONG - 0
+              if (flags.is_long) {
+                number.li = -number.li;
               } else
-#endif /* CMPRINTF_ENABLE_INT32 */
-                number.i16 = -number.i16;
+#endif /* CMPRINTF_ENABLE_LONG */
+                number.i = -number.i;
           }
 
           /*  go to the end of the buffer and null terminate */
@@ -516,17 +552,17 @@ emit_number:
 		}							\
 	      while ((_unsigned) _number > 0)
 
-#if CMPRINTF_ENABLE_INT64 - 0
-          if (flags.is_long64) {
-            CONVERT_LOOP (uint64_t, number.i64);
+#if CMPRINTF_ENABLE_LONGLONG - 0
+          if (flags.is_longlong) {
+            CONVERT_LOOP (unsigned long long int, number.lli);
           } else
-#endif /* CMPRINTF_ENABLE_INT64 */
-#if CMPRINTF_ENABLE_INT32 - 0
-            if (flags.is_long32) {
-              CONVERT_LOOP (uint32_t, number.i32);
+#endif /* CMPRINTF_ENABLE_LONGLONG */
+#if CMPRINTF_ENABLE_LONG - 0
+            if (flags.is_long) {
+              CONVERT_LOOP (unsigned long int, number.li);
             } else
-#endif /* CMPRINTF_ENABLE_INT32 */
-              CONVERT_LOOP (uint16_t, number.i16);
+#endif /* CMPRINTF_ENABLE_LONG */
+              CONVERT_LOOP (unsigned int, number.i);
 
 #undef CONVERT_LOOP
 
