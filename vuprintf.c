@@ -54,23 +54,23 @@
  */
 typedef struct {
 #if __MSP430X__
-  uint8_t is_long20:1;		///< process a 20-bit integer
+  unsigned int is_long20:1;		///< process a 20-bit integer
 #endif /* __MSP430X__ */
 #if __MSP430LIBC_PRINTF_INT32__ || __MSP430LIBC_PRINTF_INT64__
-  uint8_t is_long32:1;		///< process a 32-bit integer
+  unsigned int is_long32:1;		///< process a 32-bit integer
 #endif				/* __MSP430LIBC_PRINTF_INT32__ */
 #if __MSP430LIBC_PRINTF_INT64__
-  uint8_t is_long64:1;		///< process a 64-bit integer
+  unsigned int is_long64:1;		///< process a 64-bit integer
 #endif				/* __MSP430LIBC_PRINTF_INT64__ */
-  uint8_t is_signed:1;		///< process a signed number
-  uint8_t is_alternate_form:1;	///< alternate output
-  uint8_t left_align:1;		///< if != 0 pad on right side, else on left side
-  uint8_t emit_octal_prefix:1;	///< emit a prefix 0
-  uint8_t emit_hex_prefix:1;	///< emit a prefix 0x
-  uint8_t fill_zero:1;		///< pad left with zero instead of space
-  uint8_t uppercase:1;		///< print hex digits in upper case
-  uint8_t zero_pad_precision:1;	///< add precision zeros before text
-  uint8_t truncate_precision:1;	///< limit text to precision characters
+  unsigned int is_signed:1;		///< process a signed number
+  unsigned int is_alternate_form:1;	///< alternate output
+  unsigned int left_align:1;		///< if != 0 pad on right side, else on left side
+  unsigned int emit_octal_prefix:1;	///< emit a prefix 0
+  unsigned int emit_hex_prefix:1;	///< emit a prefix 0x
+  unsigned int fill_zero:1;		///< pad left with zero instead of space
+  unsigned int uppercase:1;		///< print hex digits in upper case
+  unsigned int zero_pad_precision:1;	///< add precision zeros before text
+  unsigned int truncate_precision:1;	///< limit text to precision characters
   char sign_char;		///< character to emit as sign (NUL no emit)
   uint8_t precision;		///< value related to format precision specifier
 } flags_t;
