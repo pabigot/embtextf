@@ -79,8 +79,8 @@ typedef struct {
   uint8_t precision;                 /**< value related to format precision specifier */
 } flags_t;
 
-/** Maximum number of characters in any (numeric) prefix.  The only
- * prefix at the moment is "0x". */
+/** Maximum number of characters in any (numeric) prefix.  That would
+ * be "0x". */
 #define MAX_PREFIX_CHARS 2
 
 /** Size of the largest integer type, in octets.  We know short <= int
@@ -147,7 +147,7 @@ print_field (int (*write_char) (int), const char *char_p, unsigned int width,
   char prefix_buffer[MAX_PREFIX_CHARS];
   int prefix_idx = 0;
   unsigned int truncate_precision;
-  int prefix_len = build_numeric_prefix (prefix_buffer, flags);
+  int prefix_len = build_numeric_prefix(prefix_buffer, flags);
 
   /* Set the number of characters of precision we should output.  If
    * truncation by precision is not specified, use -1 as an
@@ -160,7 +160,7 @@ print_field (int (*write_char) (int), const char *char_p, unsigned int width,
   /*  if right aligned, pad */
   if (!flags.left_align) {
     char leading_fill = ' ';
-    unsigned int len = strlen (char_p);
+    unsigned int len = strlen(char_p);
 
     /*  Account for the prefix we'll write */
     if (prefix_len <= width) {
@@ -188,12 +188,12 @@ print_field (int (*write_char) (int), const char *char_p, unsigned int width,
       leading_fill = '0';
       character_count += prefix_len;
       while (prefix_idx < prefix_len) {
-        write_char (prefix_buffer[prefix_idx++]);
+        write_char(prefix_buffer[prefix_idx++]);
       }
     }
 
     while (len < width) {
-      write_char (leading_fill);
+      write_char(leading_fill);
       character_count++;
       len++;
     }
@@ -202,26 +202,26 @@ print_field (int (*write_char) (int), const char *char_p, unsigned int width,
   /*  emit any unemitted prefix */
   while (prefix_idx < prefix_len) {
     character_count++;
-    write_char (prefix_buffer[prefix_idx++]);
+    write_char(prefix_buffer[prefix_idx++]);
   }
 
   /*  emit zeros to meet precision requirements */
   if (flags.zero_pad_precision) {
     while (flags.precision--) {
-      write_char ('0');
+      write_char('0');
       character_count++;
     }
   }
 
   /*  output the buffer contents up to the maximum length */
   while (*char_p && truncate_precision--) {
-    write_char (*char_p);
+    write_char(*char_p);
     char_p++;
     character_count++;
   }
   /*  if left aligned, pad */
   while (character_count < width) {
-    write_char (' ');
+    write_char(' ');
     character_count++;
   }
   /*  return how many characters have been output */
@@ -245,8 +245,8 @@ print_field (int (*write_char) (int), const char *char_p, unsigned int width,
  *
  * Supported flags:
  * - '#'  use alternate form.
- * - 'l'  use long (32-bit) instead of int (16-bit) for numbers (IF CONFIGURED)
- * - 'll' use long long (64-bit) for numbers (IF CONFIGURED)
+ * - 'l'  use long instead of int for numbers (IF CONFIGURED)
+ * - 'll' use long long for numbers (IF CONFIGURED)
  * - '-'  align left
  * - ' '  prefix non-negative numbers with single space
  * - '+'  prefix non-negative numbers with plus
@@ -304,13 +304,13 @@ vuprintf (int (*write_char) (int), const char *format, va_list args)
       /*  '%' sign which changes the mode */
       if (character == '%') {
         width = wp_value = 0;
-        memset (&flags, 0, sizeof (flags));
+        memset(&flags, 0, sizeof(flags));
         have_wp_value = have_precision = is_zero = is_negative = 0;
         specifier = format - 1;
         mode = FORMATING;
       } else {
 write_character:
-        write_char (character);
+        write_char(character);
         character_count++;
         mode = DIRECT;
       }
@@ -378,7 +378,7 @@ write_character:
           /*  fetch length from argument list instead of the format */
           /*  string itself */
         case '*': {
-          int val = va_arg (args, int);
+          int val = va_arg(args, int);
 
           if (val >= 0) {
             wp_value = val;
@@ -420,7 +420,7 @@ write_character:
 
           /*  placeholder for one character */
         case 'c':
-          character = va_arg (args, int);
+          character = va_arg(args, int);
           if (! have_precision && ! have_wp_value) {
             goto write_character;
           }
@@ -432,7 +432,7 @@ write_character:
           /*  placeholder for arbitrary length null terminated */
           /*  string */
         case 's':
-          char_p = va_arg (args, char *);
+          char_p = va_arg(args, char *);
 emit_string:
           /* Note: Zero-padding on strings is undefined; it
            * is legitimate to zero-pad */
@@ -442,10 +442,9 @@ emit_string:
           } else if (have_wp_value) {
             width = wp_value;
           }
-          character_count += print_field (write_char,
-                                          (char_p !=
-                                           NULL) ? char_p : "(null)",
-                                          width, flags);
+          character_count += print_field(write_char,
+                                         (char_p != NULL) ? char_p : "(null)",
+                                         width, flags);
           mode = DIRECT;
           break;
 
@@ -454,7 +453,7 @@ emit_string:
           /*  addresses are automatically in alternate form and */
           /*  hexadecimal. */
         case 'p':
-          number.ptr = (intptr_t) va_arg (args, void *);
+          number.ptr = (intptr_t) va_arg(args, void *);
           number.ptr &= UINTPTR_MAX;
           radix = 16;
           flags.is_alternate_form = (0 != number.ptr);
@@ -486,20 +485,20 @@ emit_string:
 fetch_number:
 #if CMPRINTF_ENABLE_LONGLONG - 0
           if (flags.is_longlong) {
-            number.lli = va_arg (args, long long int);
+            number.lli = va_arg(args, long long int);
             is_zero = (number.lli == 0);
             is_negative = (number.lli < 0);
           } else
 #endif /* CMPRINTF_ENABLE_LONGLONG */
 #if CMPRINTF_ENABLE_LONG - 0
             if (flags.is_long) {
-              number.li = va_arg (args, long int);
+              number.li = va_arg(args, long int);
               is_zero = (number.li == 0);
               is_negative = (number.li < 0);
             } else
 #endif /* CMPRINTF_ENABLE_LONG */
             {
-              number.i = va_arg (args, int);
+              number.i = va_arg(args, int);
               is_zero = (number.i == 0);
               is_negative = (number.i < 0);
             }
@@ -532,7 +531,7 @@ emit_number:
           }
 
           /*  go to the end of the buffer and null terminate */
-          char_p = &buffer[sizeof (buffer) - 1];
+          char_p = &buffer[sizeof(buffer) - 1];
           *char_p-- = '\0';
 
           /*  divide and save digits, fill from the lowest */
@@ -551,15 +550,15 @@ emit_number:
 
 #if CMPRINTF_ENABLE_LONGLONG - 0
           if (flags.is_longlong) {
-            CONVERT_LOOP (unsigned long long int, number.lli);
+            CONVERT_LOOP(unsigned long long int, number.lli);
           } else
 #endif /* CMPRINTF_ENABLE_LONGLONG */
 #if CMPRINTF_ENABLE_LONG - 0
             if (flags.is_long) {
-              CONVERT_LOOP (unsigned long int, number.li);
+              CONVERT_LOOP(unsigned long int, number.li);
             } else
 #endif /* CMPRINTF_ENABLE_LONG */
-              CONVERT_LOOP (unsigned int, number.i);
+              CONVERT_LOOP(unsigned int, number.i);
 
 #undef CONVERT_LOOP
 
@@ -570,7 +569,7 @@ emit_number:
 
           /*  write padded result */
           if (have_precision) {
-            int number_width = buffer + sizeof (buffer) - char_p - 2;
+            int number_width = buffer + sizeof(buffer) - char_p - 2;
             if (number_width < wp_value) {
               flags.zero_pad_precision = 1;
               flags.precision = wp_value - number_width;
@@ -578,15 +577,14 @@ emit_number:
           } else if (have_wp_value) {
             width = wp_value;
           }
-          character_count += print_field (write_char,
-                                          1 + char_p, width, flags);
+          character_count += print_field(write_char, 1 + char_p, width, flags);
           mode = DIRECT;
           break;
 
         default:
 bad_format:
           while (specifier < format) {
-            write_char (*specifier++);
+            write_char(*specifier++);
             ++character_count;
           }
           mode = DIRECT;
