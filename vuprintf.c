@@ -71,7 +71,7 @@ typedef struct {
   unsigned int is_long:1;
 #endif /* CMPRINTF_ENABLE_LONG */
 #if CMPRINTF_ENABLE_LONGLONG - 0
-  unsigned int is_longlong:1
+  unsigned int is_longlong:1;
 #endif /* CMPRINTF_ENABLE_LONGLONG */
   unsigned int is_signed:1;		/**<  process a signed number */
   unsigned int is_alternate_form:1;	/**<  alternate output */
@@ -153,9 +153,13 @@ print_field (int (*write_char) (int), const char *char_p, unsigned int width,
   int character_count = 0;
   char prefix_buffer[MAX_PREFIX_CHARS];
   int prefix_idx = 0;
-  unsigned int truncate_precision = flags.precision;
+  unsigned int truncate_precision;
   int prefix_len = build_numeric_prefix (prefix_buffer, flags);
 
+  /* Set the number of characters of precision we should output.  If
+   * truncation by precision is not specified, use -1 as an
+   * approximation of "infinity". */
+  truncate_precision = flags.precision;
   if (!flags.truncate_precision) {
     truncate_precision = (unsigned int)-1;
   }
@@ -489,14 +493,14 @@ emit_string:
 fetch_number:
 #if CMPRINTF_ENABLE_LONGLONG - 0
           if (flags.is_longlong) {
-            number.lli = va_arg (args, int64_t);
+            number.lli = va_arg (args, long long int);
             is_zero = (number.lli == 0);
             is_negative = (number.lli < 0);
           } else
 #endif /* CMPRINTF_ENABLE_LONGLONG */
 #if CMPRINTF_ENABLE_LONG - 0
             if (flags.is_long) {
-              number.li = va_arg (args, int32_t);
+              number.li = va_arg (args, long int);
               is_zero = (number.li == 0);
               is_negative = (number.li < 0);
             } else
