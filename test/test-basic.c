@@ -90,10 +90,10 @@ test_int_m127 (void)
   CU_ASSERT_STRING_EQUAL(expected, buffer);
 }
 
+#if EMBTEXTF_VUPRINTF_ENABLE_LONG - 0
 void
 test_long (void)
 {
-#if EMBTEXTF_VUPRINTF_ENABLE_LONG - 0
   long int v = 0;
   int rc;
   const char * const expected = "1 2 3 4";
@@ -102,15 +102,14 @@ test_long (void)
   rc = uprintf(storeBuffer, "%ld %lx %lu %li", v+1,v+2,v+3,v+4);
   CU_ASSERT_EQUAL(rc, strlen(expected));
   CU_ASSERT_STRING_EQUAL(expected, buffer);
-#else /* EMBTEXTF_VUPRINTF_ENABLE_LONG */
   CU_FAIL("LONG not supported");
-#endif /* EMBTEXTF_VUPRINTF_ENABLE_LONG */
 }
+#endif /* EMBTEXTF_VUPRINTF_ENABLE_LONG */
 
+#if EMBTEXTF_VUPRINTF_ENABLE_LONGLONG - 0
 void
 test_longlong (void)
 {
-#if EMBTEXTF_VUPRINTF_ENABLE_LONGLONG - 0
   long long int v = 0;
   int rc;
   const char * const expected = "1 2 3 4";
@@ -119,10 +118,9 @@ test_longlong (void)
   rc = uprintf(storeBuffer, "%lld %llx %llu %lli", v+1, v+2, v+3, v+4);
   CU_ASSERT_EQUAL(rc, strlen(expected));
   CU_ASSERT_STRING_EQUAL(expected, buffer);
-#else /* EMBTEXTF_VUPRINTF_ENABLE_LONGLONG */
   CU_FAIL("LONG_LONG not supported");
-#endif /* EMBTEXTF_VUPRINTF_ENABLE_LONGLONG */
 }
+#endif /* EMBTEXTF_VUPRINTF_ENABLE_LONGLONG */
 
 #define TEST0(EXPECTED,FMT)                     \
   do {                                          \
@@ -142,7 +140,7 @@ test_longlong (void)
     rc = uprintf(storeBuffer, FMT, ## __VA_ARGS__);             \
     CU_ASSERT_EQUAL(rc, strlen(expected));                      \
     if (strcmp(buffer, expected)) {                             \
-      printf("\nGot '%s'\nExp '%s'\n", buffer, expected);       \
+      printf("\n%s:%u : With '%s' exp '%s' got '%s'\n", __FILE__, __LINE__, FMT, expected, buffer); \
     }                                                           \
     CU_ASSERT_STRING_EQUAL(buffer, expected);                   \
   } while(0)
@@ -181,9 +179,12 @@ test_basic (void)
   TEST("    ab", "%*x", 6, 0xab);
   TEST("ab    ", "%*x", -6, 0xab);
   TEST("  a string", "%10s", "a string");
+#if EMBTEXTF_VUPRINTF_ENABLE_INTPTR - 0
   TEST("0", "%p", NULL);
+#endif /* EMBTEXTF_VUPRINTF_ENABLE_INTPTR */
   TEST("   r", "%4c", 'r');
   TEST("l   ", "%-4c", 'l');
+#if EMBTEXTF_VUPRINTF_ENABLE_PRECISION - 0
   /* Precision */
   TEST("0012", "%.4d", 12);
   TEST("  0012", "%6.4d", 12);
@@ -216,10 +217,11 @@ test_basic (void)
   TEST("123", "%.d", 123);
   TEST("1", "%.d", 1);
   TEST("0", "%.d", 0);
-
   TEST("'    mno' 'mnopq'", "'%7.3s' '%s'", "mnopq", "mnopq");
+#endif /* EMBTEXTF_VUPRINTF_ENABLE_PRECISION */
 }
 
+#if EMBTEXTF_VUPRINTF_ENABLE_PRECISION - 0
 void
 test_strprec (void)
 {
@@ -230,6 +232,7 @@ test_strprec (void)
   TEST("  abc", "%5.3s", "abcd");
   TEST("  abc", "%5.3s", "abcde");
 }
+#endif /* EMBTEXTF_VUPRINTF_ENABLE_PRECISION */
 
 int
 main (int argc,
@@ -245,10 +248,16 @@ main (int argc,
     { "char", test_char },
     { "int 127", test_int_127 },
     { "int -127", test_int_m127 },
+#if EMBTEXTF_VUPRINTF_ENABLE_LONG - 0
     { "long", test_long },
+#endif /* EMBTEXTF_VUPRINTF_ENABLE_LONG */
+#if EMBTEXTF_VUPRINTF_ENABLE_LONGLONG - 0
     { "long long", test_longlong },
+#endif /* EMBTEXTF_VUPRINTF_ENABLE_LONGLONG */
     { "basic", test_basic },
+#if EMBTEXTF_VUPRINTF_ENABLE_PRECISION - 0
     { "strprec", test_strprec },
+#endif /* EMBTEXTF_VUPRINTF_ENABLE_PRECISION */
   };
   const int ntests = sizeof(tests) / sizeof(*tests);
   int i;

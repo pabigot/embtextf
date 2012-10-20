@@ -48,6 +48,10 @@ typedef int (* vuprintf_emitchar_fn) (int);
 #define EMBTEXTF_VUPRINTF_ENABLE_LONGLONG 0
 #endif /* EMBTEXTF_VUPRINTF_ENABLE_LONGLONG */
 
+#ifndef EMBTEXTF_VUPRINTF_ENABLE_PRECISION
+#define EMBTEXTF_VUPRINTF_ENABLE_PRECISION 0
+#endif /* EMBTEXTF_VUPRINTF_ENABLE_PRECISION */
+
 int vuprintf (vuprintf_emitchar_fn write_char, const char *format, va_list args);
 
 int uprintf (vuprintf_emitchar_fn emit_char, const char *fmt, ...);

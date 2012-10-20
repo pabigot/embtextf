@@ -63,10 +63,14 @@ typedef struct {
   unsigned int emit_hex_prefix:1;    /**< emit a prefix 0x */
   unsigned int fill_zero:1;          /**< pad left with zero instead of space */
   unsigned int uppercase:1;          /**< print hex digits in upper case */
+#if EMBTEXTF_VUPRINTF_ENABLE_PRECISION - 0
   unsigned int zero_pad_precision:1; /**< add precision zeros before text */
   unsigned int truncate_precision:1; /**< limit text to precision characters */
+#endif /* EMBTEXTF_VUPRINTF_ENABLE_PRECISION */
   char sign_char;                    /**< character to emit as sign (NUL no emit) */
+#if EMBTEXTF_VUPRINTF_ENABLE_PRECISION - 0
   uint8_t precision;                 /**< value related to format precision specifier */
+#endif /* EMBTEXTF_VUPRINTF_ENABLE_PRECISION */
 } flags_t;
 
 /** Maximum number of characters in any (numeric) prefix.  That would
@@ -136,9 +140,12 @@ print_field (vuprintf_emitchar_fn write_char, const char *char_p, unsigned int w
   int character_count = 0;
   char prefix_buffer[MAX_PREFIX_CHARS];
   int prefix_idx = 0;
+#if EMBTEXTF_VUPRINTF_ENABLE_PRECISION - 0
   unsigned int truncate_precision;
+#endif /* EMBTEXTF_VUPRINTF_ENABLE_PRECISION */
   int prefix_len = build_numeric_prefix(prefix_buffer, flags);
 
+#if EMBTEXTF_VUPRINTF_ENABLE_PRECISION - 0
   /* Set the number of characters of precision we should output.  If
    * truncation by precision is not specified, use -1 as an
    * approximation of "infinity". */
@@ -146,6 +153,7 @@ print_field (vuprintf_emitchar_fn write_char, const char *char_p, unsigned int w
   if (!flags.truncate_precision) {
     truncate_precision = (unsigned int)-1;
   }
+#endif /* EMBTEXTF_VUPRINTF_ENABLE_PRECISION */
 
   /*  if right aligned, pad */
   if (!flags.left_align) {
@@ -159,6 +167,7 @@ print_field (vuprintf_emitchar_fn write_char, const char *char_p, unsigned int w
       width = 0;
     }
 
+#if EMBTEXTF_VUPRINTF_ENABLE_PRECISION - 0
     /*  Account for leading zeros required by a numeric precision specifier */
     if (flags.zero_pad_precision) {
       if (flags.precision <= width) {
@@ -172,6 +181,7 @@ print_field (vuprintf_emitchar_fn write_char, const char *char_p, unsigned int w
     if (truncate_precision < len) {
       len = truncate_precision;
     }
+#endif /* EMBTEXTF_VUPRINTF_ENABLE_PRECISION */
 
     /*  emit numeric prefix prior to padded zeros */
     if (flags.fill_zero) {
@@ -195,6 +205,7 @@ print_field (vuprintf_emitchar_fn write_char, const char *char_p, unsigned int w
     write_char(prefix_buffer[prefix_idx++]);
   }
 
+#if EMBTEXTF_VUPRINTF_ENABLE_PRECISION - 0
   /*  emit zeros to meet precision requirements */
   if (flags.zero_pad_precision) {
     while (flags.precision--) {
@@ -202,9 +213,14 @@ print_field (vuprintf_emitchar_fn write_char, const char *char_p, unsigned int w
       character_count++;
     }
   }
+#endif /* EMBTEXTF_VUPRINTF_ENABLE_PRECISION */
 
   /*  output the buffer contents up to the maximum length */
-  while (*char_p && truncate_precision--) {
+  while (*char_p
+#if EMBTEXTF_VUPRINTF_ENABLE_PRECISION - 0
+         && truncate_precision--
+#endif /* EMBTEXTF_VUPRINTF_ENABLE_PRECISION */
+         ) {
     write_char(*char_p);
     char_p++;
     character_count++;
@@ -269,7 +285,9 @@ vuprintf (vuprintf_emitchar_fn write_char, const char *format, va_list args)
   char character;
   int radix;
   char have_wp_value = 0;
+#if EMBTEXTF_VUPRINTF_ENABLE_PRECISION - 0
   char have_precision = 0;
+#endif /* EMBTEXTF_VUPRINTF_ENABLE_PRECISION */
   char is_zero = 0;
   char is_negative = 0;
   union {
@@ -294,7 +312,10 @@ vuprintf (vuprintf_emitchar_fn write_char, const char *format, va_list args)
       if (character == '%') {
         width = wp_value = 0;
         memset(&flags, 0, sizeof(flags));
-        have_wp_value = have_precision = is_zero = is_negative = 0;
+        have_wp_value = is_zero = is_negative = 0;
+#if EMBTEXTF_VUPRINTF_ENABLE_PRECISION - 0
+        have_precision = 0;
+#endif /* EMBTEXTF_VUPRINTF_ENABLE_PRECISION */
         specifier = format - 1;
         mode = FORMATING;
       } else {
@@ -355,6 +376,7 @@ write_character:
           }
           break;
 
+#if EMBTEXTF_VUPRINTF_ENABLE_PRECISION - 0
         case '.':
           /*  explicit precision is present */
           if (have_wp_value) {
@@ -364,6 +386,7 @@ write_character:
           }
           have_precision = 1;
           break;
+#endif /* EMBTEXTF_VUPRINTF_ENABLE_PRECISION */
           /*  fetch length from argument list instead of the format */
           /*  string itself */
         case '*': {
@@ -371,8 +394,10 @@ write_character:
 
           if (val >= 0) {
             wp_value = val;
+#if EMBTEXTF_VUPRINTF_ENABLE_PRECISION - 0
           } else if (have_precision) {
             wp_value = 0;
+#endif /* EMBTEXTF_VUPRINTF_ENABLE_PRECISION */
           } else {
             flags.left_align = 1;
             wp_value = -val;
@@ -388,7 +413,11 @@ write_character:
           /*  a leading zero means filling with zeros */
           /*  it must be a leading zero if 'width' is zero */
           /*  otherwise it is in a number as in "10" */
-          if (wp_value == 0 && !have_precision) {
+          if (wp_value == 0
+#if EMBTEXTF_VUPRINTF_ENABLE_PRECISION - 0
+              && !have_precision
+#endif /* EMBTEXTF_VUPRINTF_ENABLE_PRECISION */
+              ) {
             flags.fill_zero = !flags.left_align;
             break;
           }
@@ -410,7 +439,11 @@ write_character:
           /*  placeholder for one character */
         case 'c':
           character = va_arg(args, int);
-          if (! have_precision && ! have_wp_value) {
+          if (! have_wp_value
+#if EMBTEXTF_VUPRINTF_ENABLE_PRECISION - 0
+              && ! have_precision
+#endif /* EMBTEXTF_VUPRINTF_ENABLE_PRECISION */
+              ) {
             goto write_character;
           }
           char_p = buffer;
@@ -425,10 +458,13 @@ write_character:
 emit_string:
           /* Note: Zero-padding on strings is undefined; it
            * is legitimate to zero-pad */
+#if EMBTEXTF_VUPRINTF_ENABLE_PRECISION - 0
           if (have_precision) {
             flags.truncate_precision = 1;
             flags.precision = wp_value;
-          } else if (have_wp_value) {
+          } else
+#endif /* EMBTEXTF_VUPRINTF_ENABLE_PRECISION */
+          if (have_wp_value) {
             width = wp_value;
           }
           character_count += print_field(write_char,
@@ -557,13 +593,16 @@ emit_number:
           }
 
           /*  write padded result */
+#if EMBTEXTF_VUPRINTF_ENABLE_PRECISION - 0
           if (have_precision) {
             int number_width = buffer + sizeof(buffer) - char_p - 2;
             if (number_width < wp_value) {
               flags.zero_pad_precision = 1;
               flags.precision = wp_value - number_width;
             }
-          } else if (have_wp_value) {
+          } else
+#endif /* EMBTEXTF_VUPRINTF_ENABLE_PRECISION */
+          if (have_wp_value) {
             width = wp_value;
           }
           character_count += print_field(write_char, 1 + char_p, width, flags);
