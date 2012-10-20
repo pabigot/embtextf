@@ -59,7 +59,9 @@ typedef struct {
   unsigned int is_signed:1;          /**< process a signed number */
   unsigned int is_alternate_form:1;  /**< alternate output */
   unsigned int left_align:1;         /**< if != 0 pad on right side, else on left side */
+#if EMBTEXTF_VUPRINTF_ENABLE_OCTAL - 0
   unsigned int emit_octal_prefix:1;  /**< emit a prefix 0 */
+#endif /* EMBTEXTF_VUPRINTF_ENABLE_OCTAL */
   unsigned int emit_hex_prefix:1;    /**< emit a prefix 0x */
   unsigned int fill_zero:1;          /**< pad left with zero instead of space */
   unsigned int uppercase:1;          /**< print hex digits in upper case */
@@ -95,11 +97,17 @@ typedef struct {
 #define SIZEOF_INTPTR 0
 #endif /* EMBTEXTF_VUPRINTF_ENABLE_INTPTR */
 
+#if EMBTEXTF_VUPRINTF_ENABLE_OCTAL - 0
+#define CHARS_FOR_SIZEOF(so_) ((CHAR_BIT * (so_) + 2) / 3)
+#else /* EMBTEXTF_VUPRINTF_ENABLE_OCTAL */
+#define CHARS_FOR_SIZEOF(so_) ((CHAR_BIT * (so_) + 2) / 3)
+#endif /* EMBTEXTF_VUPRINTF_ENABLE_OCTAL */
+
 /** Maximum number of characters for formatted numbers, including sign
  * and EOS but excluding prefix.  The longest representation will be
  * in octal, so assume one char for every three bits in the
  * representation. */
-#define MAX_FORMAT_LENGTH ((((CHAR_BIT * ((SIZEOF_LARGEINT > SIZEOF_INTPTR) ? SIZEOF_LARGEINT : SIZEOF_INTPTR)) + 2) / 3) + 1 + 1)
+#define MAX_FORMAT_LENGTH (CHARS_FOR_SIZEOF((SIZEOF_LARGEINT > SIZEOF_INTPTR) ? SIZEOF_LARGEINT : SIZEOF_INTPTR) + 1 + 1)
 
 /**
  * Helper function to generate anything that precedes leading zeros.
@@ -115,8 +123,10 @@ build_numeric_prefix (char *prefix_buffer, flags_t flags)
   if (flags.emit_hex_prefix) {
     *p++ = '0';
     *p++ = (flags.uppercase ? 'X' : 'x');
+#if EMBTEXTF_VUPRINTF_ENABLE_OCTAL - 0
   } else if (flags.emit_octal_prefix) {
     *p++ = '0';
+#endif /* EMBTEXTF_VUPRINTF_ENABLE_OCTAL */
   } else if (flags.sign_char) {
     *p++ = flags.sign_char;
   }
@@ -245,9 +255,9 @@ print_field (vuprintf_emitchar_fn write_char, const char *char_p, unsigned int w
  * - 'u'  int/long      unsigned decimal
  * - 'd'  int/long      signed decimal
  * - 'i'  int/long      signed decimal
- * - 'p'  pointer       pointer value is printed as "0xnnnn"
+ * - 'p'  pointer       pointer value is printed as "0xnnnn" (IF CONFIGURED)
  * - 'c'  char          single character
- * - 'o'  int/long      octal numbers
+ * - 'o'  int/long      octal numbers (IF CONFIGURED)
  *
  * Supported flags:
  * - '#'  use alternate form.
@@ -260,7 +270,7 @@ print_field (vuprintf_emitchar_fn write_char, const char *char_p, unsigned int w
  * - '*'  fetch width from the argument list (unsigned int)
  *
  * The field width (e.g. "%10s") can also be specified.
- * The field precision (e.g. "%10.3s" can also be specified.
+ * The field precision (e.g. "%10.3s" can also be specified (IF CONFIGURED)
  *
  * Unsupported are:
  * - float numbers (format char: e E f F g G a A)
@@ -485,7 +495,7 @@ emit_string:
           goto emit_number;
 #endif /* EMBTEXTF_VUPRINTF_ENABLE_INTPTR */
 
-          /*  placeholder for hexadecimal output */
+          /* hexadecimal output */
         case 'X':
           flags.uppercase = 1;
           /*@fallthrough@ */
@@ -493,17 +503,19 @@ emit_string:
           radix = 16;
           goto fetch_number;
 
-          /*  placeholder for octal output */
+#if EMBTEXTF_VUPRINTF_ENABLE_OCTAL - 0
+          /* octal output */
         case 'o':
           radix = 8;
           goto fetch_number;
+#endif /* EMBTEXTF_VUPRINTF_ENABLE_OCTAL */
 
-          /*  placeholder for signed numbers */
+          /* decimal signed numbers */
         case 'd':
         case 'i':
           flags.is_signed = 1;
           /*@fallthrough@ */
-          /*  placeholder for unsigned numbers */
+          /*  decimal unsigned numbers */
         case 'u':
           radix = 10;
           /*  label for number outputs including argument fetching */
@@ -535,8 +547,10 @@ emit_number:
           if (flags.is_alternate_form && !is_zero) {
             if (radix == 16) {
               flags.emit_hex_prefix = 1;
+#if EMBTEXTF_VUPRINTF_ENABLE_OCTAL - 0
             } else if (radix == 8) {
               flags.emit_octal_prefix = 1;
+#endif /* EMBTEXTF_VUPRINTF_ENABLE_OCTAL */
             }
           }
           if (flags.is_signed && is_negative) {

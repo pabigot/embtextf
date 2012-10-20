@@ -102,7 +102,6 @@ test_long (void)
   rc = uprintf(storeBuffer, "%ld %lx %lu %li", v+1,v+2,v+3,v+4);
   CU_ASSERT_EQUAL(rc, strlen(expected));
   CU_ASSERT_STRING_EQUAL(expected, buffer);
-  CU_FAIL("LONG not supported");
 }
 #endif /* EMBTEXTF_VUPRINTF_ENABLE_LONG */
 
@@ -118,7 +117,6 @@ test_longlong (void)
   rc = uprintf(storeBuffer, "%lld %llx %llu %lli", v+1, v+2, v+3, v+4);
   CU_ASSERT_EQUAL(rc, strlen(expected));
   CU_ASSERT_STRING_EQUAL(expected, buffer);
-  CU_FAIL("LONG_LONG not supported");
 }
 #endif /* EMBTEXTF_VUPRINTF_ENABLE_LONGLONG */
 
@@ -155,13 +153,17 @@ test_basic (void)
   TEST("4294967173", "%u", -123);
   TEST("ffffff85", "%x", -123);
   TEST("FFFFFF85", "%X", -123);
+#if EMBTEXTF_VUPRINTF_ENABLE_OCTAL - 0
   TEST("173", "%o", 123);
+#endif /* EMBTEXTF_VUPRINTF_ENABLE_OCTAL */
   TEST("a string", "%s", "a string");
   TEST("(null)", "%s", NULL);
   TEST("mno", "%c%c%c", 'm', 'n', 'o');
   /* Alternative representation */
+#if EMBTEXTF_VUPRINTF_ENABLE_OCTAL - 0
   TEST("0173", "%#o", 123);
   TEST("0", "%#o", 0);
+#endif /* EMBTEXTF_VUPRINTF_ENABLE_OCTAL */
   TEST("0xffffff85", "%#x", -123);
   /* Sign modifiers */
   TEST(" 12", "% d", 12);
