@@ -5,6 +5,10 @@ CC = $(CROSS_COMPILE)gcc
 AR = $(CROSS_COMPILE)ar
 CFLAGS = -Wall -Werror -ansi -std=c99 -pedantic $(OPTCFLAGS) $(CPPFLAGS)
 
+ifeq ($(ENABLE),1)
+CPPFLAGS += -DEMBTEXTF_VUPRINTF_ENABLE_LONG=1 -DEMBTEXTF_VUPRINTF_ENABLE_INTPTR=1 -DEMBTEXTF_VUPRINTF_ENABLE_LONGLONG=1
+endif
+
 SRC = src/vuprintf.c src/uprintf.c
 OBJ = $(SRC:.c=.o)
 DEP = $(SRC:.c=.d)

@@ -6,6 +6,10 @@ LDFLAGS = -L$(EMBTEXTF_ROOT)/
 LIBS = -lcunit -lembtextf
 CFLAGS = -Wall -Werror -ansi -std=c99 -pedantic $(CPPFLAGS) $(OPTCFLAGS)
 
+ifeq ($(ENABLE),1)
+CPPFLAGS += -DEMBTEXTF_VUPRINTF_ENABLE_LONG=1 -DEMBTEXTF_VUPRINTF_ENABLE_INTPTR=1 -DEMBTEXTF_VUPRINTF_ENABLE_LONGLONG=1
+endif
+
 SRC = test-basic.c
 OBJ = $(SRC:.c=.o)
 DEP = $(SRC:.c=.d)

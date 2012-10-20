@@ -1,6 +1,8 @@
 /** This file is in the public domain.
  *
- *
+ * Note: Expected results are for a 64-bit host where sizeof(int)=4
+ * and sizeof(long int)=8.
+ * 
  * @homepage http://github.com/pabigot/psml
  *
  */
@@ -64,6 +66,160 @@ test_char (void)
   CU_ASSERT_STRING_EQUAL(expected, buffer);
 }
 
+void
+test_int_127 (void)
+{
+  int rc;
+  const char * const expected = "127 7f 127 127";
+
+  resetBuffer(expected);
+  rc = uprintf(storeBuffer, "%d %x %u %i", 127, 127, 127, 127);
+  CU_ASSERT_EQUAL(rc, strlen(expected));
+  CU_ASSERT_STRING_EQUAL(expected, buffer);
+}
+
+void
+test_int_m127 (void)
+{
+  int rc;
+  const char * const expected = "-127 ffffff81 4294967169 -127";
+
+  resetBuffer(expected);
+  rc = uprintf(storeBuffer, "%d %x %u %i", -127, -127, -127, -127);
+  CU_ASSERT_EQUAL(rc, strlen(expected));
+  CU_ASSERT_STRING_EQUAL(expected, buffer);
+}
+
+void
+test_long (void)
+{
+#if EMBTEXTF_VUPRINTF_ENABLE_LONG - 0
+  long int v = 0;
+  int rc;
+  const char * const expected = "1 2 3 4";
+
+  resetBuffer(expected);
+  rc = uprintf(storeBuffer, "%ld %lx %lu %li", v+1,v+2,v+3,v+4);
+  CU_ASSERT_EQUAL(rc, strlen(expected));
+  CU_ASSERT_STRING_EQUAL(expected, buffer);
+#else /* EMBTEXTF_VUPRINTF_ENABLE_LONG */
+  CU_FAIL("LONG not supported");
+#endif /* EMBTEXTF_VUPRINTF_ENABLE_LONG */
+}
+
+void
+test_longlong (void)
+{
+#if EMBTEXTF_VUPRINTF_ENABLE_LONGLONG - 0
+  long long int v = 0;
+  int rc;
+  const char * const expected = "1 2 3 4";
+
+  resetBuffer(expected);
+  rc = uprintf(storeBuffer, "%lld %llx %llu %lli", v+1, v+2, v+3, v+4);
+  CU_ASSERT_EQUAL(rc, strlen(expected));
+  CU_ASSERT_STRING_EQUAL(expected, buffer);
+#else /* EMBTEXTF_VUPRINTF_ENABLE_LONGLONG */
+  CU_FAIL("LONG_LONG not supported");
+#endif /* EMBTEXTF_VUPRINTF_ENABLE_LONGLONG */
+}
+
+#define TEST0(EXPECTED,FMT)                     \
+  do {                                          \
+    int rc;                                     \
+    const char * const expected = EXPECTED;     \
+    resetBuffer(expected);                      \
+    rc = uprintf(storeBuffer, FMT);             \
+    CU_ASSERT_EQUAL(rc, strlen(expected));      \
+    CU_ASSERT_STRING_EQUAL(buffer, EXPECTED);   \
+  } while(0)
+
+#define TEST(EXPECTED,FMT,...)                                  \
+  do {                                                          \
+    int rc;                                                     \
+    const char * const expected = EXPECTED;                     \
+    resetBuffer(expected);                                      \
+    rc = uprintf(storeBuffer, FMT, ## __VA_ARGS__);             \
+    CU_ASSERT_EQUAL(rc, strlen(expected));                      \
+    if (strcmp(buffer, expected)) {                             \
+      printf("\nGot '%s'\nExp '%s'\n", buffer, expected);       \
+    }                                                           \
+    CU_ASSERT_STRING_EQUAL(buffer, expected);                   \
+  } while(0)
+
+void
+test_basic (void)
+{
+  /* Basics */
+  TEST0("Hello World", "Hello World");
+  TEST("1 and 2 and 3", "%d and %d and %d", 1, 2, 3);
+  TEST("-123", "%d", -123);
+  TEST("4294967173", "%u", -123);
+  TEST("ffffff85", "%x", -123);
+  TEST("FFFFFF85", "%X", -123);
+  TEST("173", "%o", 123);
+  TEST("a string", "%s", "a string");
+  TEST("(null)", "%s", NULL);
+  TEST("mno", "%c%c%c", 'm', 'n', 'o');
+  /* Alternative representation */
+  TEST("0173", "%#o", 123);
+  TEST("0", "%#o", 0);
+  TEST("0xffffff85", "%#x", -123);
+  /* Sign modifiers */
+  TEST(" 12", "% d", 12);
+  TEST("-12", "% d", -12);
+  TEST("+12", "%+d", 12);
+  TEST("-12", "%+d", -12);
+  /* Width */
+  TEST("-000000123", "%010d",-123);
+  TEST("-000000123", "%0*d", 10, -123);
+  TEST("      -123", "%10d", -123);
+  TEST("      -123", "%*d", 10, -123);
+  TEST("-123      ", "%-10d", -123);
+  TEST("ab    ", "%-6x", 0xab);
+  TEST("    ab", "%6x", 0xab);
+  TEST("    ab", "%*x", 6, 0xab);
+  TEST("ab    ", "%*x", -6, 0xab);
+  TEST("  a string", "%10s", "a string");
+  TEST("0", "%p", NULL);
+  TEST("   r", "%4c", 'r');
+  TEST("l   ", "%-4c", 'l');
+  /* Precision */
+  TEST("0012", "%.4d", 12);
+  TEST("  0012", "%6.4d", 12);
+  TEST("12345", "%4.2d", 12345);
+  TEST("12345", "%3.4d", 12345);
+  TEST("0ab   ", "%-6.3x", 0xab);
+  TEST("   0ab", "%6.3x", 0xab);
+  TEST("   0ab", "%*.3x", 6, 0xab);
+  TEST("0ab   ", "%*.3x", -6, 0xab);
+  TEST("0ab   ", "%0*.3x", -6, 0xab);
+  TEST("   0ab", "%6.*x", 3, 0xab);
+  TEST("   0ab", "%*.*x", 6, 3, 0xab);
+  TEST(" 0x0ab", "%#6.3x", 0xab);
+  TEST(" 0x0ab", "%#*.3x", 6, 0xab);
+  TEST(" 0x0ab", "%#6.*x", 3, 0xab);
+  TEST(" 0x0ab", "%#*.*x", 6, 3, 0xab);
+  TEST("mno", "%.3s", "mnopq");
+  //TEST("%.0-3s", "%.-3s", "mnopq");
+  TEST("mno", "%.*s", 3, "mnopq");
+  TEST0("%?", "%?");
+  TEST("%*.4? 2", "%*.4? %d", 1, 2);
+  TEST0("%", "%%");
+  TEST0("", "%");
+  TEST("    mno", "%7.3s", "mnopq");
+  TEST("    mno", "%*.3s", 7, "mnopq");
+  TEST("    mno", "%7.*s", 3, "mnopq");
+  TEST("    mno", "%*.*s", 7, 3, "mnopq");
+  TEST("(nu", "%.3s", NULL);
+  TEST("", "%.s", "mno");
+  TEST("123", "%.d", 123);
+  TEST("1", "%.d", 1);
+  TEST("0", "%.d", 0);
+
+  TEST("'    mno' 'mnopq'", "'%7.3s' '%s'", "mnopq", "mnopq");
+}
+
 int
 main (int argc,
       char* argv[])
@@ -76,6 +232,11 @@ main (int argc,
   } test_def;
   const test_def tests[] = {
     { "char", test_char },
+    { "int 127", test_int_127 },
+    { "int -127", test_int_m127 },
+    { "long", test_long },
+    { "long long", test_longlong },
+    { "basic", test_basic },
   };
   const int ntests = sizeof(tests) / sizeof(*tests);
   int i;
