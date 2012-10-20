@@ -42,6 +42,7 @@
 #include <stdarg.h>
 #include <string.h>
 #include <stdint.h>
+#include <limits.h>
 #include <embtextf/vuprintf.h>
 
 /**
@@ -94,7 +95,7 @@ typedef struct {
  * and EOS but excluding prefix.  The longest representation will be
  * in octal, so assume one char for every three bits in the
  * representation. */
-#define MAX_FORMAT_LENGTH ((((8 * ((SIZEOF_LARGEINT > SIZEOF_INTPTR) ? SIZEOF_LARGEINT : SIZEOF_INTPTR)) + 2) / 3) + 1 + 1)
+#define MAX_FORMAT_LENGTH ((((CHAR_BIT * ((SIZEOF_LARGEINT > SIZEOF_INTPTR) ? SIZEOF_LARGEINT : SIZEOF_INTPTR)) + 2) / 3) + 1 + 1)
 
 /**
  * Helper function to generate anything that precedes leading zeros.
