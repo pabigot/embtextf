@@ -57,12 +57,16 @@ typedef struct {
   unsigned int is_longlong:1;        /**< emit as long long */
 #endif /* EMBTEXTF_VUPRINTF_ENABLE_LONGLONG */
   unsigned int is_signed:1;          /**< process a signed number */
+#if EMBTEXTF_VUPRINTF_ENABLE_ALTERNATE_FORM - 0
   unsigned int is_alternate_form:1;  /**< alternate output */
+#endif /* EMBTEXTF_VUPRINTF_ENABLE_ALTERNATE_FORM */
   unsigned int left_align:1;         /**< if != 0 pad on right side, else on left side */
+#if EMBTEXTF_VUPRINTF_ENABLE_ALTERNATE_FORM - 0
 #if EMBTEXTF_VUPRINTF_ENABLE_OCTAL - 0
   unsigned int emit_octal_prefix:1;  /**< emit a prefix 0 */
 #endif /* EMBTEXTF_VUPRINTF_ENABLE_OCTAL */
   unsigned int emit_hex_prefix:1;    /**< emit a prefix 0x */
+#endif /* EMBTEXTF_VUPRINTF_ENABLE_ALTERNATE_FORM */
   unsigned int fill_zero:1;          /**< pad left with zero instead of space */
   unsigned int uppercase:1;          /**< print hex digits in upper case */
 #if EMBTEXTF_VUPRINTF_ENABLE_PRECISION - 0
@@ -120,6 +124,7 @@ static int
 build_numeric_prefix (char *prefix_buffer, flags_t flags)
 {
   char *p = prefix_buffer;
+#if EMBTEXTF_VUPRINTF_ENABLE_ALTERNATE_FORM - 0
   if (flags.emit_hex_prefix) {
     *p++ = '0';
     *p++ = (flags.uppercase ? 'X' : 'x');
@@ -127,7 +132,9 @@ build_numeric_prefix (char *prefix_buffer, flags_t flags)
   } else if (flags.emit_octal_prefix) {
     *p++ = '0';
 #endif /* EMBTEXTF_VUPRINTF_ENABLE_OCTAL */
-  } else if (flags.sign_char) {
+  } else
+#endif /* EMBTEXTF_VUPRINTF_ENABLE_ALTERNATE_FORM */
+  if (flags.sign_char) {
     *p++ = flags.sign_char;
   }
   return p - prefix_buffer;
@@ -260,7 +267,7 @@ print_field (vuprintf_emitchar_fn write_char, const char *char_p, unsigned int w
  * - 'o'  int/long      octal numbers (IF CONFIGURED)
  *
  * Supported flags:
- * - '#'  use alternate form.
+ * - '#'  use alternate form (IF CONFIGURED)
  * - 'l'  use long instead of int for numbers (IF CONFIGURED)
  * - 'll' use long long for numbers (IF CONFIGURED)
  * - '-'  align left
@@ -342,10 +349,12 @@ write_character:
         case '%':
           goto write_character; /*  character is already the % */
 
+#if EMBTEXTF_VUPRINTF_ENABLE_ALTERNATE_FORM - 0
           /*  alternate form flag */
         case '#':
           flags.is_alternate_form = 1;
           break;
+#endif /* EMBTEXTF_VUPRINTF_ENABLE_ALTERNATE_FORM */
 
           /*  interpret next number as long integer */
         case 'l':
@@ -491,7 +500,9 @@ emit_string:
           number.ptr = (intptr_t) va_arg(args, void *);
           number.ptr &= UINTPTR_MAX;
           radix = 16;
+#if EMBTEXTF_VUPRINTF_ENABLE_ALTERNATE_FORM - 0
           flags.is_alternate_form = (0 != number.ptr);
+#endif /* EMBTEXTF_VUPRINTF_ENABLE_ALTERNATE_FORM */
           goto emit_number;
 #endif /* EMBTEXTF_VUPRINTF_ENABLE_INTPTR */
 
@@ -543,6 +554,7 @@ fetch_number:
           /*  'number' already contains the value */
           goto emit_number;
 emit_number:
+#if EMBTEXTF_VUPRINTF_ENABLE_ALTERNATE_FORM - 0
           /*  only non-zero numbers get hex/octal alternate form */
           if (flags.is_alternate_form && !is_zero) {
             if (radix == 16) {
@@ -553,6 +565,7 @@ emit_number:
 #endif /* EMBTEXTF_VUPRINTF_ENABLE_OCTAL */
             }
           }
+#endif /* EMBTEXTF_VUPRINTF_ENABLE_ALTERNATE_FORM */
           if (flags.is_signed && is_negative) {
             /*  save sign for radix 10 conversion */
             flags.sign_char = '-';

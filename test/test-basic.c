@@ -159,12 +159,14 @@ test_basic (void)
   TEST("a string", "%s", "a string");
   TEST("(null)", "%s", NULL);
   TEST("mno", "%c%c%c", 'm', 'n', 'o');
+#if EMBTEXTF_VUPRINTF_ENABLE_ALTERNATE_FORM - 0
   /* Alternative representation */
 #if EMBTEXTF_VUPRINTF_ENABLE_OCTAL - 0
   TEST("0173", "%#o", 123);
   TEST("0", "%#o", 0);
 #endif /* EMBTEXTF_VUPRINTF_ENABLE_OCTAL */
   TEST("0xffffff85", "%#x", -123);
+#endif /* EMBTEXTF_VUPRINTF_ENABLE_ALTERNATE_FORM */
   /* Sign modifiers */
   TEST(" 12", "% d", 12);
   TEST("-12", "% d", -12);
