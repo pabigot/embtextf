@@ -244,9 +244,9 @@ print_field (vuprintf_emitchar_fn write_char, const char *char_p, unsigned int w
  * - '*'  fetch width from the argument list (unsigned int)
  *
  * The field width (e.g. "%10s") can also be specified.
+ * The field precision (e.g. "%10.3s" can also be specified.
  *
  * Unsupported are:
- * - Precision (e.g. "%.2s")
  * - float numbers (format char: e E f F g G a A)
  * - write-back character count ("%n")
  *

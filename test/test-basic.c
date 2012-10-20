@@ -220,6 +220,17 @@ test_basic (void)
   TEST("'    mno' 'mnopq'", "'%7.3s' '%s'", "mnopq", "mnopq");
 }
 
+void
+test_strprec (void)
+{
+  /* Basics */
+  TEST("    a", "%5.3s", "a");
+  TEST("   ab", "%5.3s", "ab");
+  TEST("  abc", "%5.3s", "abc");
+  TEST("  abc", "%5.3s", "abcd");
+  TEST("  abc", "%5.3s", "abcde");
+}
+
 int
 main (int argc,
       char* argv[])
@@ -237,6 +248,7 @@ main (int argc,
     { "long", test_long },
     { "long long", test_longlong },
     { "basic", test_basic },
+    { "strprec", test_strprec },
   };
   const int ntests = sizeof(tests) / sizeof(*tests);
   int i;
