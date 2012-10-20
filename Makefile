@@ -1,4 +1,4 @@
-EMBTEXTF_ROOT ?= /opt/libembtextf
+EMBTEXTF_ROOT ?= /opt/embtextf
 OPTCFLAGS = -g -O
 CPPFLAGS = -I$(EMBTEXTF_ROOT)/include
 CC = $(CROSS_COMPILE)gcc
