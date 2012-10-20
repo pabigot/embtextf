@@ -30,6 +30,9 @@
  */
 
 #ifndef EMBTEXTF_VUPRINTF_H
+#define EMBTEXTF_VUPRINTF_H
+
+#include <stdarg.h>
 
 typedef int (* vuprintf_emitchar_fn) (int);
 
@@ -45,5 +48,8 @@ typedef int (* vuprintf_emitchar_fn) (int);
 #define EMBTEXTF_VUPRINTF_ENABLE_LONGLONG 0
 #endif /* EMBTEXTF_VUPRINTF_ENABLE_LONGLONG */
 
-#define EMBTEXTF_VUPRINTF_H
+int vuprintf (vuprintf_emitchar_fn write_char, const char *format, va_list args);
+
+int uprintf (vuprintf_emitchar_fn emit_char, const char *fmt, ...);
+
 #endif /* EMBTEXTF_VUPRINTF_H */

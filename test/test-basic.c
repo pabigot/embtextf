@@ -9,11 +9,6 @@
 #include <CUnit/Basic.h>
 #include <stdio.h>
 
-void
-test_one (void)
-{
-}
-
 int init_suite (void)
 {
   return 0;
@@ -21,6 +16,52 @@ int init_suite (void)
 int clean_suite (void)
 {
   return 0;
+}
+
+char buffer[128];
+const char * const bufend = buffer + sizeof(buffer);
+const char * errp;
+char * bufp;
+const char * matchp;
+
+void
+resetBuffer (const char * match_str)
+{
+  errp = NULL;
+  bufp = buffer;
+  *bufp = 0;
+  if (match_str) {
+    matchp = match_str;
+  }
+}
+
+int
+storeBuffer (int c)
+{
+  if (matchp && ! errp) {
+    if (*matchp != c) {
+      errp = matchp;
+    } else {
+      ++matchp;
+    }
+  }
+  if ((bufp+1) < bufend) {
+    *bufp++ = c;
+  }
+  *bufp = 0;
+  return c;
+}
+
+void
+test_char (void)
+{
+  int rc;
+  const char * const expected = "'a' '3'";
+
+  resetBuffer(expected);
+  rc = uprintf(storeBuffer, "'%c' '%c'", 'a', '3');
+  CU_ASSERT_EQUAL(rc, strlen(expected));
+  CU_ASSERT_STRING_EQUAL(expected, buffer);
 }
 
 int
@@ -34,7 +75,7 @@ main (int argc,
     void (*fn) (void);
   } test_def;
   const test_def tests[] = {
-    { "one", test_one },
+    { "char", test_char },
   };
   const int ntests = sizeof(tests) / sizeof(*tests);
   int i;
@@ -52,7 +93,7 @@ main (int argc,
   }
 
   for (i = 0; i < ntests; ++i) {
-    const test_def* td = tests + i;
+    const test_def * td = tests + i;
     if (! (CU_add_test(suite, td->name, td->fn))) {
       fprintf(stderr, "CU_add_test(%s): %s\n", td->name, CU_get_error_msg());
       goto done_registry;

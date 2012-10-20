@@ -1,11 +1,11 @@
-EMBTEXTF_ROOT=/opt/libembtextf
+EMBTEXTF_ROOT ?= /opt/libembtextf
 OPTCFLAGS = -g -O
 CPPFLAGS = -I$(EMBTEXTF_ROOT)/include
 CC = $(CROSS_COMPILE)gcc
 AR = $(CROSS_COMPILE)ar
 CFLAGS = -Wall -Werror -ansi -std=c99 -pedantic $(OPTCFLAGS) $(CPPFLAGS)
 
-SRC = src/vuprintf.c
+SRC = src/vuprintf.c src/uprintf.c
 OBJ = $(SRC:.c=.o)
 DEP = $(SRC:.c=.d)
 
