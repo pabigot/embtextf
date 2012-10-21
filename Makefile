@@ -5,8 +5,8 @@ CC = $(CROSS_COMPILE)gcc
 AR = $(CROSS_COMPILE)ar
 CFLAGS = -Wall -Werror -ansi -std=c99 -pedantic $(OPTCFLAGS) $(CPPFLAGS)
 
-ifeq ($(ENABLE),1)
-CPPFLAGS += -DEMBTEXTF_VUPRINTF_ENABLE_ALL=1
+ifdef DEFAULT
+CPPFLAGS += -DEMBTEXTF_VUPRINTF_ENABLE_DEFAULT=$(DEFAULT)
 endif
 
 SRC = src/vuprintf.c src/uprintf.c

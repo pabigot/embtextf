@@ -52,9 +52,9 @@
 typedef struct {
 #if EMBTEXTF_VUPRINTF_ENABLE_LONG - 0
   unsigned int is_long:1;            /**< emit as long */
-#endif /* EMBTEXTF_VUPRINTF_ENABLE_LONG */
 #if EMBTEXTF_VUPRINTF_ENABLE_LONGLONG - 0
   unsigned int is_longlong:1;        /**< emit as long long */
+#endif /* EMBTEXTF_VUPRINTF_ENABLE_LONG */
 #endif /* EMBTEXTF_VUPRINTF_ENABLE_LONGLONG */
   unsigned int is_signed:1;          /**< process a signed number */
 #if EMBTEXTF_VUPRINTF_ENABLE_ALTERNATE_FORM - 0
@@ -314,10 +314,10 @@ vuprintf (vuprintf_emitchar_fn write_char, const char *format, va_list args)
 #endif /* EMBTEXTF_VUPRINTF_ENABLE_INTPTR */
 #if EMBTEXTF_VUPRINTF_ENABLE_LONG - 0
     long int li;
-#endif /* EMBTEXTF_VUPRINTF_ENABLE_LONG */
 #if EMBTEXTF_VUPRINTF_ENABLE_LONGLONG - 0
     long long int lli;
 #endif /* EMBTEXTF_VUPRINTF_ENABLE_LONGLONG */
+#endif /* EMBTEXTF_VUPRINTF_ENABLE_LONG */
   } number;
   char buffer[MAX_FORMAT_LENGTH];       /*  used to print numbers */
 
@@ -356,26 +356,25 @@ write_character:
           break;
 #endif /* EMBTEXTF_VUPRINTF_ENABLE_ALTERNATE_FORM */
 
+#if EMBTEXTF_VUPRINTF_ENABLE_LONG - 0
           /*  interpret next number as long integer */
         case 'l':
 #if EMBTEXTF_VUPRINTF_ENABLE_LONGLONG - 0
-          if (flags.is_long) {
+          if (flags.is_longlong) {
+            goto bad_format;
+          } else if (flags.is_long) {
             flags.is_long = 0;
             flags.is_longlong = 1;
-          } else {
+          } else
 #endif /* EMBTEXTF_VUPRINTF_ENABLE_LONGLONG */
-#if EMBTEXTF_VUPRINTF_ENABLE_LONG - 0
+          {
             if (flags.is_long) {
               goto bad_format;
             }
             flags.is_long = 1;
-#else /* EMBTEXTF_VUPRINTF_ENABLE_LONG */
-            goto bad_format;
-#endif /* EMBTEXTF_VUPRINTF_ENABLE_LONG */
-#if EMBTEXTF_VUPRINTF_ENABLE_LONGLONG - 0
           }
-#endif /* EMBTEXTF_VUPRINTF_ENABLE_LONGLONG */
           break;
+#endif /* EMBTEXTF_VUPRINTF_ENABLE_LONG */
 
           /*  left align instead of right align */
         case '-':
@@ -531,6 +530,7 @@ emit_string:
           radix = 10;
           /*  label for number outputs including argument fetching */
 fetch_number:
+#if EMBTEXTF_VUPRINTF_ENABLE_LONG - 0
 #if EMBTEXTF_VUPRINTF_ENABLE_LONGLONG - 0
           if (flags.is_longlong) {
             number.lli = va_arg(args, long long int);
@@ -538,7 +538,6 @@ fetch_number:
             is_negative = (number.lli < 0);
           } else
 #endif /* EMBTEXTF_VUPRINTF_ENABLE_LONGLONG */
-#if EMBTEXTF_VUPRINTF_ENABLE_LONG - 0
             if (flags.is_long) {
               number.li = va_arg(args, long int);
               is_zero = (number.li == 0);
@@ -569,12 +568,12 @@ emit_number:
           if (flags.is_signed && is_negative) {
             /*  save sign for radix 10 conversion */
             flags.sign_char = '-';
+#if EMBTEXTF_VUPRINTF_ENABLE_LONG - 0
 #if EMBTEXTF_VUPRINTF_ENABLE_LONGLONG - 0
             if (flags.is_longlong) {
               number.lli = -number.lli;
             } else
 #endif /* EMBTEXTF_VUPRINTF_ENABLE_LONGLONG */
-#if EMBTEXTF_VUPRINTF_ENABLE_LONG - 0
               if (flags.is_long) {
                 number.li = -number.li;
               } else
@@ -600,12 +599,12 @@ emit_number:
             }                                                           \
           while ((_unsigned) _number > 0)
 
+#if EMBTEXTF_VUPRINTF_ENABLE_LONG - 0
 #if EMBTEXTF_VUPRINTF_ENABLE_LONGLONG - 0
           if (flags.is_longlong) {
             CONVERT_LOOP(unsigned long long int, number.lli);
           } else
 #endif /* EMBTEXTF_VUPRINTF_ENABLE_LONGLONG */
-#if EMBTEXTF_VUPRINTF_ENABLE_LONG - 0
             if (flags.is_long) {
               CONVERT_LOOP(unsigned long int, number.li);
             } else
@@ -637,7 +636,9 @@ emit_number:
           break;
 
         default:
+#if EMBTEXTF_VUPRINTF_ENABLE_LONG - 0
 bad_format:
+#endif /* EMBTEXTF_VUPRINTF_ENABLE_LONG */
           while (specifier < format) {
             write_char(*specifier++);
             ++character_count;

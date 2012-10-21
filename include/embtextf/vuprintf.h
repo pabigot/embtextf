@@ -36,32 +36,61 @@
 
 typedef int (* vuprintf_emitchar_fn) (int);
 
-#ifndef EMBTEXTF_VUPRINTF_ENABLE_ALL
-#define EMBTEXTF_VUPRINTF_ENABLE_ALL 0
-#endif /* EMBTEXTF_VUPRINTF_ENABLE_ALL */
+#ifndef EMBTEXTF_VUPRINTF_ENABLE_DEFAULT
+/** Set to a preprocessor true value when the default for vuprintf
+ * features is to enable them.  Set to a preprocessor false value when
+ * the default for vuprintf features is to disable them. */
+#define EMBTEXTF_VUPRINTF_ENABLE_DEFAULT 1
+#endif /* EMBTEXTF_VUPRINTF_ENABLE_DEFAULT */
 
 #ifndef EMBTEXTF_VUPRINTF_ENABLE_INTPTR
-#define EMBTEXTF_VUPRINTF_ENABLE_INTPTR EMBTEXTF_VUPRINTF_ENABLE_ALL
+/** Set to a preprocessor true value to allow the @c %p conversion
+ * specification to support printing pointer values.  If false, the
+ * conversion specification will be passed through as text. */
+#define EMBTEXTF_VUPRINTF_ENABLE_INTPTR EMBTEXTF_VUPRINTF_ENABLE_DEFAULT
 #endif /* EMBTEXTF_VUPRINTF_ENABLE_INTPTR */
 
 #ifndef EMBTEXTF_VUPRINTF_ENABLE_LONG
-#define EMBTEXTF_VUPRINTF_ENABLE_LONG EMBTEXTF_VUPRINTF_ENABLE_ALL
+/** Set to a preprocessor true value to allow the @c l length modifier
+ * to be recognized supporting long integer parameters.  If false, the
+ * @c l length modifier will be unrecognized and its containing
+ * conversion specification passed through as text. */
+#define EMBTEXTF_VUPRINTF_ENABLE_LONG EMBTEXTF_VUPRINTF_ENABLE_DEFAULT
 #endif /* EMBTEXTF_VUPRINTF_ENABLE_LONG */
 
 #ifndef EMBTEXTF_VUPRINTF_ENABLE_LONGLONG
-#define EMBTEXTF_VUPRINTF_ENABLE_LONGLONG EMBTEXTF_VUPRINTF_ENABLE_ALL
+/** Set to a preprocessor true value to allow two @c l length
+ * modifiers to be recognized for a <c>long long</c> integer
+ * parameter.  If false, the second @c l length modifier will be
+ * unrecognized and its containing conversion specification passed
+ * through as text.
+ *
+ * @note Use of this option requires use of
+ * #EMBTEXTF_VUPRINTF_ENABLE_LONG. */
+#define EMBTEXTF_VUPRINTF_ENABLE_LONGLONG EMBTEXTF_VUPRINTF_ENABLE_DEFAULT
 #endif /* EMBTEXTF_VUPRINTF_ENABLE_LONGLONG */
 
 #ifndef EMBTEXTF_VUPRINTF_ENABLE_PRECISION
-#define EMBTEXTF_VUPRINTF_ENABLE_PRECISION EMBTEXTF_VUPRINTF_ENABLE_ALL
+/** Set to a preprocessor true value to allow precision to be
+ * recognized in conversion specifications.  If false, a precision
+ * specification will be unrecognized and its containing conversion
+ * specification passed through as text. */
+#define EMBTEXTF_VUPRINTF_ENABLE_PRECISION EMBTEXTF_VUPRINTF_ENABLE_DEFAULT
 #endif /* EMBTEXTF_VUPRINTF_ENABLE_PRECISION */
 
 #ifndef EMBTEXTF_VUPRINTF_ENABLE_OCTAL
-#define EMBTEXTF_VUPRINTF_ENABLE_OCTAL EMBTEXTF_VUPRINTF_ENABLE_ALL
+/** Set to a preprocessor true value to allow the @c %o conversion
+ * specifier to be recognized.  If false, an octal conversion
+ * specifier will be unrecognized and passed through as text. */
+#define EMBTEXTF_VUPRINTF_ENABLE_OCTAL EMBTEXTF_VUPRINTF_ENABLE_DEFAULT
 #endif /* EMBTEXTF_VUPRINTF_ENABLE_OCTAL */
 
 #ifndef EMBTEXTF_VUPRINTF_ENABLE_ALTERNATE_FORM
-#define EMBTEXTF_VUPRINTF_ENABLE_ALTERNATE_FORM EMBTEXTF_VUPRINTF_ENABLE_ALL
+/** Set to a preprocessor true value to allow the @c # alternate form
+ * flag to be recognized for @c x and @c o conversions.  If false, the
+ * alternate form flag will be unrecognized and its containing
+ * conversion specification passed through as text. */
+#define EMBTEXTF_VUPRINTF_ENABLE_ALTERNATE_FORM EMBTEXTF_VUPRINTF_ENABLE_DEFAULT
 #endif /* EMBTEXTF_VUPRINTF_ENABLE_ALTERNATE_FORM */
 
 int vuprintf (vuprintf_emitchar_fn write_char, const char *format, va_list args);

@@ -90,35 +90,45 @@ test_int_m127 (void)
   CU_ASSERT_STRING_EQUAL(expected, buffer);
 }
 
-#if EMBTEXTF_VUPRINTF_ENABLE_LONG - 0
 void
 test_long (void)
 {
   long int v = 0;
   int rc;
-  const char * const expected = "1 2 3 4";
+  const char * const fmt = "%ld %lx %lu %li";
+  const char * const expected =
+#if EMBTEXTF_VUPRINTF_ENABLE_LONG - 0
+    "1 2 3 4"
+#else /* EMBTEXTF_VUPRINTF_ENABLE_LONG */
+    fmt
+#endif /* EMBTEXTF_VUPRINTF_ENABLE_LONG */
+    ;
 
   resetBuffer(expected);
-  rc = uprintf(storeBuffer, "%ld %lx %lu %li", v+1,v+2,v+3,v+4);
+  rc = uprintf(storeBuffer, fmt, v+1,v+2,v+3,v+4);
   CU_ASSERT_EQUAL(rc, strlen(expected));
   CU_ASSERT_STRING_EQUAL(expected, buffer);
 }
-#endif /* EMBTEXTF_VUPRINTF_ENABLE_LONG */
 
-#if EMBTEXTF_VUPRINTF_ENABLE_LONGLONG - 0
 void
 test_longlong (void)
 {
   long long int v = 0;
   int rc;
-  const char * const expected = "1 2 3 4";
+  const char * const fmt = "%lld %llx %llu %lli";
+  const char * const expected = 
+#if EMBTEXTF_VUPRINTF_ENABLE_LONGLONG - 0
+    "1 2 3 4"
+#else /* EMBTEXTF_VUPRINTF_ENABLE_LONGLONG */
+    fmt
+#endif /* EMBTEXTF_VUPRINTF_ENABLE_LONGLONG */
+    ;
 
   resetBuffer(expected);
-  rc = uprintf(storeBuffer, "%lld %llx %llu %lli", v+1, v+2, v+3, v+4);
+  rc = uprintf(storeBuffer, fmt, v+1, v+2, v+3, v+4);
   CU_ASSERT_EQUAL(rc, strlen(expected));
   CU_ASSERT_STRING_EQUAL(expected, buffer);
 }
-#endif /* EMBTEXTF_VUPRINTF_ENABLE_LONGLONG */
 
 #define TEST0(EXPECTED,FMT)                     \
   do {                                          \
@@ -155,6 +165,8 @@ test_basic (void)
   TEST("FFFFFF85", "%X", -123);
 #if EMBTEXTF_VUPRINTF_ENABLE_OCTAL - 0
   TEST("173", "%o", 123);
+#else /* EMBTEXTF_VUPRINTF_ENABLE_OCTAL */
+  TEST("%o 123", "%o %d", 123);
 #endif /* EMBTEXTF_VUPRINTF_ENABLE_OCTAL */
   TEST("a string", "%s", "a string");
   TEST("(null)", "%s", NULL);
@@ -164,9 +176,17 @@ test_basic (void)
 #if EMBTEXTF_VUPRINTF_ENABLE_OCTAL - 0
   TEST("0173", "%#o", 123);
   TEST("0", "%#o", 0);
+#else /* EMBTEXTF_VUPRINTF_ENABLE_OCTAL */
+  TEST("%#o 123", "%#o %d", 123);
+  TEST("%#o 0", "%#o %d", 0);
 #endif /* EMBTEXTF_VUPRINTF_ENABLE_OCTAL */
   TEST("0xffffff85", "%#x", -123);
+#else /* EMBTEXTF_VUPRINTF_ENABLE_ALTERNATE_FORM */
+  TEST("%#o", "%#o", 123);
+  TEST("%#o", "%#o", 0);
+  TEST("%#x -123", "%#x %d", -123);
 #endif /* EMBTEXTF_VUPRINTF_ENABLE_ALTERNATE_FORM */
+
   /* Sign modifiers */
   TEST(" 12", "% d", 12);
   TEST("-12", "% d", -12);
@@ -185,6 +205,8 @@ test_basic (void)
   TEST("  a string", "%10s", "a string");
 #if EMBTEXTF_VUPRINTF_ENABLE_INTPTR - 0
   TEST("0", "%p", NULL);
+#else /* EMBTEXTF_VUPRINTF_ENABLE_INTPTR */
+  TEST("%p", "%p", NULL);
 #endif /* EMBTEXTF_VUPRINTF_ENABLE_INTPTR */
   TEST("   r", "%4c", 'r');
   TEST("l   ", "%-4c", 'l');
@@ -206,7 +228,6 @@ test_basic (void)
   TEST(" 0x0ab", "%#6.*x", 3, 0xab);
   TEST(" 0x0ab", "%#*.*x", 6, 3, 0xab);
   TEST("mno", "%.3s", "mnopq");
-  //TEST("%.0-3s", "%.-3s", "mnopq");
   TEST("mno", "%.*s", 3, "mnopq");
   TEST0("%?", "%?");
   TEST("%*.4? 2", "%*.4? %d", 1, 2);
@@ -222,21 +243,70 @@ test_basic (void)
   TEST("1", "%.d", 1);
   TEST("0", "%.d", 0);
   TEST("'    mno' 'mnopq'", "'%7.3s' '%s'", "mnopq", "mnopq");
+  /* This is arguably a bug reconstructing the format specifier. */
+  TEST("%.0-3s", "%.-3s", "mnopq");
+#else /* EMBTEXTF_VUPRINTF_ENABLE_PRECISION */
+  TEST("%.4d 12", "%.4d %d", 12);
+  TEST("%6.4d 12", "%6.4d %d", 12);
+  TEST("%4.2d 12345", "%4.2d %u", 12345);
+  TEST("%3.4d 12345", "%3.4d %u", 12345);
+  TEST("%-6.3x ab", "%-6.3x %x", 0xab);
+  TEST("%6.3x ab", "%6.3x %x", 0xab);
+  /* The 6 is consumed before the error can be detected */
+  TEST("%*.3x ab", "%*.3x %x", 6, 0xab);
+  TEST("%*.3x ab", "%*.3x %x", -6, 0xab);
+  TEST("%0*.3x ab", "%0*.3x %x", -6, 0xab);
+  TEST("%6.*x 3 ab", "%6.*x %d %x", 3, 0xab);
+  TEST("%*.*x 3 ab", "%*.*x %d %x", 6, 3, 0xab);
+  TEST("%#6.3x ab", "%#6.3x %x", 0xab);
+#if EMBTEXTF_VUPRINTF_ENABLE_ALTERNATE_FORM - 0
+  TEST("%#*.3x ab", "%#*.3x %x", 6, 0xab);
+  TEST("%#6.*x 3 ab", "%#6.*x %d %x", 3, 0xab);
+  TEST("%#*.*x 3 ab", "%#*.*x %d %x", 6, 3, 0xab);
+#else /* EMBTEXTF_VUPRINTF_ENABLE_ALTERNATE_FORM */
+  TEST("%#*.3x 6 ab", "%#*.3x %d %x", 6, 0xab);
+  TEST("%#6.*x 3 ab", "%#6.*x %d %x", 3, 0xab);
+  TEST("%#*.*x 6 3 ab", "%#*.*x %d %d %x", 6, 3, 0xab);
+#endif /* EMBTEXTF_VUPRINTF_ENABLE_ALTERNATE_FORM */
+  TEST("%.3s mnopq", "%.3s %s", "mnopq");
+  TEST("%.*s 3 mnopq", "%.*s %d %s", 3, "mnopq");
+  TEST0("%?", "%?");
+  TEST("%*.4? 2", "%*.4? %d", 1, 2);
+  TEST0("%", "%%");
+  TEST0("", "%");
+  TEST("%7.3s mnopq", "%7.3s %s", "mnopq");
+  TEST("%*.3s mnopq", "%*.3s %s", 7, "mnopq");
+  TEST("%7.*s 3 mnopq", "%7.*s %d %s", 3, "mnopq");
+  TEST("%*.*s 3 mnopq", "%*.*s %d %s", 7, 3, "mnopq");
+  TEST("%.3s (null)", "%.3s %s", NULL);
+  TEST("%.s mno", "%.s %s", "mno");
+  TEST("%.d 123", "%.d %d", 123);
+  TEST("%.d 1", "%.d %d", 1);
+  TEST("%.d 0", "%.d %d", 0);
+  TEST("'%7.3s' mnopq 'mnopq'", "'%7.3s' %s '%s'", "mnopq", "mnopq");
+  /* This is arguably a bug reconstructing the format specifier. */
+  TEST("%.-3s mnopq", "%.-3s %s", "mnopq");
 #endif /* EMBTEXTF_VUPRINTF_ENABLE_PRECISION */
 }
 
-#if EMBTEXTF_VUPRINTF_ENABLE_PRECISION - 0
 void
 test_strprec (void)
 {
   /* Basics */
+#if EMBTEXTF_VUPRINTF_ENABLE_PRECISION - 0
   TEST("    a", "%5.3s", "a");
   TEST("   ab", "%5.3s", "ab");
   TEST("  abc", "%5.3s", "abc");
   TEST("  abc", "%5.3s", "abcd");
   TEST("  abc", "%5.3s", "abcde");
-}
+#else /* EMBTEXTF_VUPRINTF_ENABLE_PRECISION */
+  TEST("%5.3s a", "%5.3s %s", "a");
+  TEST("%5.3s ab", "%5.3s %s", "ab");
+  TEST("%5.3s abc", "%5.3s %s", "abc");
+  TEST("%5.3s abcd", "%5.3s %s", "abcd");
+  TEST("%5.3s abcde", "%5.3s %s", "abcde");
 #endif /* EMBTEXTF_VUPRINTF_ENABLE_PRECISION */
+}
 
 int
 main (int argc,
@@ -252,16 +322,10 @@ main (int argc,
     { "char", test_char },
     { "int 127", test_int_127 },
     { "int -127", test_int_m127 },
-#if EMBTEXTF_VUPRINTF_ENABLE_LONG - 0
     { "long", test_long },
-#endif /* EMBTEXTF_VUPRINTF_ENABLE_LONG */
-#if EMBTEXTF_VUPRINTF_ENABLE_LONGLONG - 0
     { "long long", test_longlong },
-#endif /* EMBTEXTF_VUPRINTF_ENABLE_LONGLONG */
     { "basic", test_basic },
-#if EMBTEXTF_VUPRINTF_ENABLE_PRECISION - 0
     { "strprec", test_strprec },
-#endif /* EMBTEXTF_VUPRINTF_ENABLE_PRECISION */
   };
   const int ntests = sizeof(tests) / sizeof(*tests);
   int i;

@@ -6,8 +6,8 @@ LDFLAGS = -L$(EMBTEXTF_ROOT)/
 LIBS = -lcunit -lembtextf
 CFLAGS = -Wall -Werror -ansi -std=c99 -pedantic $(OPTCFLAGS)
 
-ifeq ($(ENABLE),1)
-CPPFLAGS += -DEMBTEXTF_VUPRINTF_ENABLE_ALL=1
+ifdef DEFAULT
+CPPFLAGS += -DEMBTEXTF_VUPRINTF_ENABLE_DEFAULT=$(DEFAULT)
 endif
 
 SRC = test-basic.c
