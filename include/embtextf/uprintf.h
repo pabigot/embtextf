@@ -34,7 +34,9 @@
 
 #include <stdarg.h>
 
-typedef int (* vuprintf_emitchar_fn) (int);
+/** Type of function required by (v)uprintf.h for emitting characters.
+ * putchar(3) is the template. */
+typedef int (* vuprintf_putchar_fn) (int);
 
 #ifndef EMBTEXTF_VUPRINTF_ENABLE_DEFAULT
 /** Set to a preprocessor true value when the default for vuprintf
@@ -93,8 +95,12 @@ typedef int (* vuprintf_emitchar_fn) (int);
 #define EMBTEXTF_VUPRINTF_ENABLE_ALTERNATE_FORM EMBTEXTF_VUPRINTF_ENABLE_DEFAULT
 #endif /* EMBTEXTF_VUPRINTF_ENABLE_ALTERNATE_FORM */
 
-int vuprintf (vuprintf_emitchar_fn write_char, const char *format, va_list args);
+int
+#if __GNUC__
+__attribute__((format (printf, 2, 3))) 
+#endif /* __GNUC__ */
+uprintf (vuprintf_putchar_fn emit_char, const char *fmt, ...);
 
-int uprintf (vuprintf_emitchar_fn emit_char, const char *fmt, ...);
+int vuprintf (vuprintf_putchar_fn write_char, const char *format, va_list args);
 
 #endif /* EMBTEXTF_VUPRINTF_H */

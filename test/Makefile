@@ -6,6 +6,9 @@ LDFLAGS = -L$(EMBTEXTF_ROOT)/
 LIBS = -lcunit -lembtextf
 CFLAGS = -Wall -Werror -ansi -std=c99 -pedantic $(OPTCFLAGS)
 
+# Explicitly exclude format errors as part of the test includes formats that appear incorrect when certain capabilities are not supported.
+CFLAGS += -Wno-error=format -Wno-error=format-extra-args
+
 ifdef DEFAULT
 CPPFLAGS += -DEMBTEXTF_VUPRINTF_ENABLE_DEFAULT=$(DEFAULT)
 endif

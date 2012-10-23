@@ -7,7 +7,7 @@
  *
  */
 
-#include <embtextf/vuprintf.h>
+#include <embtextf/uprintf.h>
 #include <CUnit/Basic.h>
 #include <stdio.h>
 
@@ -169,7 +169,7 @@ test_basic (void)
   TEST("%o 123", "%o %d", 123);
 #endif /* EMBTEXTF_VUPRINTF_ENABLE_OCTAL */
   TEST("a string", "%s", "a string");
-  TEST("(null)", "%s", NULL);
+  TEST("(null)", "%s", (const char *)NULL);
   TEST("mno", "%c%c%c", 'm', 'n', 'o');
 #if EMBTEXTF_VUPRINTF_ENABLE_ALTERNATE_FORM - 0
   /* Alternative representation */
@@ -229,22 +229,17 @@ test_basic (void)
   TEST(" 0x0ab", "%#*.*x", 6, 3, 0xab);
   TEST("mno", "%.3s", "mnopq");
   TEST("mno", "%.*s", 3, "mnopq");
-  TEST0("%?", "%?");
   TEST("%*.4? 2", "%*.4? %d", 1, 2);
-  TEST0("%", "%%");
-  TEST0("", "%");
   TEST("    mno", "%7.3s", "mnopq");
   TEST("    mno", "%*.3s", 7, "mnopq");
   TEST("    mno", "%7.*s", 3, "mnopq");
   TEST("    mno", "%*.*s", 7, 3, "mnopq");
-  TEST("(nu", "%.3s", NULL);
+  TEST("(nu", "%.3s", (const char *)NULL);
   TEST("", "%.s", "mno");
   TEST("123", "%.d", 123);
   TEST("1", "%.d", 1);
   TEST("0", "%.d", 0);
   TEST("'    mno' 'mnopq'", "'%7.3s' '%s'", "mnopq", "mnopq");
-  /* This is arguably a bug reconstructing the format specifier. */
-  TEST("%.0-3s", "%.-3s", "mnopq");
 #else /* EMBTEXTF_VUPRINTF_ENABLE_PRECISION */
   TEST("%.4d 12", "%.4d %d", 12);
   TEST("%6.4d 12", "%6.4d %d", 12);
@@ -270,23 +265,21 @@ test_basic (void)
 #endif /* EMBTEXTF_VUPRINTF_ENABLE_ALTERNATE_FORM */
   TEST("%.3s mnopq", "%.3s %s", "mnopq");
   TEST("%.*s 3 mnopq", "%.*s %d %s", 3, "mnopq");
-  TEST0("%?", "%?");
   TEST("%*.4? 2", "%*.4? %d", 1, 2);
-  TEST0("%", "%%");
-  TEST0("", "%");
   TEST("%7.3s mnopq", "%7.3s %s", "mnopq");
   TEST("%*.3s mnopq", "%*.3s %s", 7, "mnopq");
   TEST("%7.*s 3 mnopq", "%7.*s %d %s", 3, "mnopq");
   TEST("%*.*s 3 mnopq", "%*.*s %d %s", 7, 3, "mnopq");
-  TEST("%.3s (null)", "%.3s %s", NULL);
+  TEST("%.3s (null)", "%.3s %s", (const char *)NULL);
   TEST("%.s mno", "%.s %s", "mno");
   TEST("%.d 123", "%.d %d", 123);
   TEST("%.d 1", "%.d %d", 1);
   TEST("%.d 0", "%.d %d", 0);
   TEST("'%7.3s' mnopq 'mnopq'", "'%7.3s' %s '%s'", "mnopq", "mnopq");
-  /* This is arguably a bug reconstructing the format specifier. */
-  TEST("%.-3s mnopq", "%.-3s %s", "mnopq");
 #endif /* EMBTEXTF_VUPRINTF_ENABLE_PRECISION */
+  TEST0("%?", "%?");
+  TEST0("%", "%%");
+  TEST0("", "%");
 }
 
 void

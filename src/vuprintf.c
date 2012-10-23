@@ -43,7 +43,7 @@
 #include <string.h>
 #include <stdint.h>
 #include <limits.h>
-#include <embtextf/vuprintf.h>
+#include <embtextf/uprintf.h>
 
 /**
  * Internal state tracking.
@@ -151,7 +151,7 @@ build_numeric_prefix (char *prefix_buffer, flags_t flags)
  * @return the number of characters that were written
  */
 static int
-print_field (vuprintf_emitchar_fn write_char, const char *char_p, unsigned int width,
+print_field (vuprintf_putchar_fn write_char, const char *char_p, unsigned int width,
              flags_t flags)
 {
   int character_count = 0;
@@ -289,7 +289,7 @@ print_field (vuprintf_emitchar_fn write_char, const char *char_p, unsigned int w
  * @return the number of characters that were written
  */
 int
-vuprintf (vuprintf_emitchar_fn write_char, const char *format, va_list args)
+vuprintf (vuprintf_putchar_fn write_char, const char *format, va_list args)
 {
   int character_count = 0;
   enum
@@ -649,4 +649,16 @@ bad_format:
     }
   }
   return character_count;
+}
+
+int
+uprintf (vuprintf_putchar_fn emit_char, const char *fmt, ...)
+{
+  va_list argp;
+  int rc;
+
+  va_start (argp, fmt);
+  rc = vuprintf (emit_char, fmt, argp);
+  va_end (argp);
+  return rc;
 }

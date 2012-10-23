@@ -9,7 +9,7 @@ ifdef DEFAULT
 CPPFLAGS += -DEMBTEXTF_VUPRINTF_ENABLE_DEFAULT=$(DEFAULT)
 endif
 
-SRC = src/vuprintf.c src/uprintf.c
+SRC = src/vuprintf.c
 OBJ = $(SRC:.c=.o)
 DEP = $(SRC:.c=.d)
 
