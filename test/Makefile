@@ -2,8 +2,10 @@ EMBTEXTF_ROOT ?= /opt/embtextf
 
 CPPFLAGS = -I$(EMBTEXTF_ROOT)/include
 OPTCFLAGS = -g
-LDFLAGS = -L$(EMBTEXTF_ROOT)/
+override LDFLAGS += -L$(EMBTEXTF_ROOT)/
 LIBS = -lcunit -lembtextf
+CC = $(CROSS_COMPILE)gcc
+AR = $(CROSS_COMPILE)ar
 CFLAGS = -Wall -Werror -ansi -std=c99 -pedantic $(OPTCFLAGS)
 
 # Explicitly exclude format errors as part of the test includes formats that appear incorrect when certain capabilities are not supported.
