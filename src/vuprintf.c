@@ -1,4 +1,4 @@
-/* Copyright (c) 2006-2011
+/* Copyright (c) 2006-2012
  *     Chris Liechti <cliechti@gmx.net>
  *     Peter A. Bigot <pabigot@users.sourceforge.net>
  * All rights reserved.

@@ -1,4 +1,4 @@
-/* Copyright (c) 2011, Peter A. Bigot
+/* Copyright (c) 2011-2012, Peter A. Bigot
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -31,6 +31,7 @@
 
 #include <stdio.h>
 #include <stdarg.h>
+#include <embtextf/uprintf.h>
 
 int
 printf (const char *fmt, ...)

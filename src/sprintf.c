@@ -1,4 +1,4 @@
-/* Copyright (c) 2011, Peter A. Bigot
+/* Copyright (c) 2011-2012, Peter A. Bigot
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -32,12 +32,14 @@
 #include <stdio.h>
 #include <stdarg.h>
 #include <limits.h>
+#include <embtextf/uprintf.h>
 
 /** Maximum number of characters that can be stored.
  *
- * On the MSP430, generating a string longer than 32767 characters is
- * really not rational. */
-static int available_;
+ * On embedded systems, generating a string longer than 32767
+ * characters is really not rational.  Negative numbers mean
+ * out-of-space and no store is performed. */
+static ssize_t available_;
 
 /** Pointer to the next location into which an output can be stored */
 static char *destination_;
