@@ -1,6 +1,8 @@
 EMBTEXTF_ROOT ?= /opt/embtextf
 OPTCFLAGS = -g -O
-CPPFLAGS = -I$(EMBTEXTF_ROOT)/include $(AUX_CPPFLAGS)
+CPPFLAGS = -I$(EMBTEXTF_ROOT)/include
+CPPFLAGS += -I$(EMBTEXTF_ROOT)/src
+CPPFLAGS += $(AUX_CPPFLAGS)
 CC = $(CROSS_COMPILE)gcc
 AR = $(CROSS_COMPILE)ar
 CFLAGS = -Wall -Werror -ansi -std=c99 -pedantic $(OPTCFLAGS) $(CPPFLAGS)
@@ -9,7 +11,10 @@ ifdef DEFAULT
 CPPFLAGS += -DEMBTEXTF_VUPRINTF_ENABLE_DEFAULT=$(DEFAULT)
 endif
 
-SRC = src/vuprintf.c
+SRC = \
+  src/vuprintf.c \
+  src/itoa.c src/utoa.c \
+  src/ltoa.c src/ultoa.c
 OBJ = $(SRC:.c=.o)
 DEP = $(SRC:.c=.d)
 

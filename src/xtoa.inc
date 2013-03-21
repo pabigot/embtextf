@@ -29,6 +29,8 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include <embtextf/xtoa.h>
+
 char *XTOA(
 #if UNSIGNED - 0
   unsigned

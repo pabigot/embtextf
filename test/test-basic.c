@@ -8,8 +8,14 @@
  */
 
 #include <embtextf/uprintf.h>
+#include <embtextf/xtoa.h>
 #include <CUnit/Basic.h>
 #include <stdio.h>
+
+#define itoa embtextf_itoa
+#define utoa embtextf_utoa
+#define ltoa embtextf_ltoa
+#define ultoa embtextf_ultoa
 
 int init_suite (void)
 {
@@ -301,6 +307,31 @@ test_strprec (void)
 #endif /* EMBTEXTF_VUPRINTF_ENABLE_PRECISION */
 }
 
+void
+test_itoa (void)
+{
+  char buffer[64];
+
+  CU_ASSERT_STRING_EQUAL("12345", itoa(12345, buffer, 10));
+  CU_ASSERT_STRING_EQUAL("3039", itoa(12345, buffer, 16));
+  CU_ASSERT_STRING_EQUAL("11000000111001", itoa(12345, buffer, 2));
+  CU_ASSERT_STRING_EQUAL("9I9", itoa(12321, buffer, 36));
+  CU_ASSERT_STRING_EQUAL("9IA", itoa(12322, buffer, 36));
+  CU_ASSERT_STRING_EQUAL("9IZ", itoa(12347, buffer, 36));
+  CU_ASSERT_STRING_EQUAL("9J0", itoa(12348, buffer, 36));
+  CU_ASSERT_STRING_EQUAL("-12345", itoa(-12345, buffer, 10));
+}
+
+void
+test_utoa (void)
+{
+  char buffer[64];
+
+  CU_ASSERT_STRING_EQUAL("12345", utoa(12345, buffer, 10));
+  CU_ASSERT_STRING_EQUAL("3039", utoa(12345, buffer, 16));
+  CU_ASSERT_STRING_EQUAL("11000000111001", utoa(12345, buffer, 2));
+}
+
 int
 main (int argc,
       char* argv[])
@@ -319,6 +350,8 @@ main (int argc,
     { "long long", test_longlong },
     { "basic", test_basic },
     { "strprec", test_strprec },
+    { "itoa", test_itoa },
+    { "utoa", test_utoa },
   };
   const int ntests = sizeof(tests) / sizeof(*tests);
   int i;
