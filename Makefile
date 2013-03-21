@@ -19,7 +19,9 @@ all: $(TARGET)
 
 libembtextf.a: $(OBJ)
 	$(AR) rv $@ $^
+ifdef SIZE
 	$(SIZE) $@
+endif # SIZE
 doc:
 	doxygen
 
@@ -50,13 +52,7 @@ coverage:
 
 .PHONY: test
 test: all
-	$(MAKE) -C tests test
-
-%.d: %.c
-	@set -e; rm -f $@; \
-	 $(CC) -MM $(CPPFLAGS) $< > $@.$$$$; \
-	 sed 's,\($*\)\.o[ :]*,\1.o $@ : ,g' < $@.$$$$ > $@; \
-	 rm -f $@.$$$$
+	$(MAKE) -C tests realclean test
 
 ifneq ($(MAKECMDGOALS:realclean=clean),clean)
 -include $(DEP)

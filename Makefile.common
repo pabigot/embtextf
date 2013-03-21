@@ -1,3 +1,29 @@
+# Define to nonzero to use Code Composer Studio
+WITH_CCS ?= 0
+
+ifneq ($(WITH_CCS),0)
+CCS_INSTALL_ROOT ?= /usr/local/ccs/ccsv5
+CCS_BASE_ROOT ?= $(CCS_INSTALL_ROOT)/ccs_base
+CCS_TI_VERSION ?= 4.1.1
+CG_TOOL_ROOT ?= $(CCS_INSTALL_ROOT)/tools/compiler/msp430_$(CCS_TI_VERSION)
+CC=cl430
+AR=ar430
+ABI_CFLAGS = --abi=eabi --relaxed_ansi
+CPPFLAGS += -I"$(CCS_BASE_ROOT)/msp430/include"
+CPPFLAGS += -I"$(CG_TOOL_ROOT)/include"
+
+# Full optimization for size
+OPT_CFLAGS ?= -o -mf=0
+
+# CCS recognizes -o in its standard role specifying the output file only
+# when linking, not when compiling, so have to override implicit rule to
+# pass the flag required to rename the output.
+%.o: %.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) -c $^ --output_file $@
+
+else # WITH_CCS
+# Assume GCC
+WITH_GCC = 1
 OPT_CFLAGS = -g -Os -ffunction-sections -fdata-sections
 WARN_CFLAGS = -Wall -Werror -ansi -std=c99 -pedantic 
 CC = $(CROSS_COMPILE)gcc
@@ -5,7 +31,21 @@ AR = $(CROSS_COMPILE)ar
 GCOV = $(CROSS_COMPILE)gcov
 SIZE = $(CROSS_COMPILE)size
 
+%.d: %.c
+	set -e; $(RM) $@; \
+	 $(CC) -MM -MT$*.o $(CPPFLAGS) $< > $@.$$$$; \
+	 sed 's,\($*\)\.o[ :]*,\1.o $@ : ,g' < $@.$$$$ > $@; \
+	 $(RM) $@.$$$$
+
+endif # WITH_CCS
+
+# Common aggregations
+
+CPPFLAGS ?=
 CPPFLAGS += -I$(EMBTEXTF_ROOT)/include
-CPPFLAGS += $(AUX_CPPFLAGS)
-CFLAGS = $(WARN_CFLAGS) $(OPT_CFLAGS) $(AUX_CFLAGS)
-LDFLAGS += $(AUX_LDFLAGS)
+CPPFLAGS += $(AUX_CPPFLAGS) $(EXT_CPPFLAGS)
+CFLAGS ?=
+CFLAGS += $(ABI_CFLAGS) $(TARGET_CFLAGS) $(WARN_CFLAGS) $(OPT_CFLAGS)
+CFLAGS += $(AUX_CFLAGS) $(EXT_CPPFLAGS)
+LDFLAGS ?=
+LDFLAGS += $(AUX_LDFLAGS) $(EXT_CPPFLAGS)
