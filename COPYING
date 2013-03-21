@@ -1,0 +1,10 @@
+All files in this package are released under the BSD-3-Clause license, and
+are so-marked in the source.
+
+Unless otherwise listed below the files in this package are copyright Peter
+A. Bigot.
+
+Exceptions:
+
+src/vuprintf.c is copyright 2006-2011, Chris Liechti, modifications
+copyright 2011-2013, Peter A. Bigot.

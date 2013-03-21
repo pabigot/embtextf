@@ -16,6 +16,7 @@
 #define utoa embtextf_utoa
 #define ltoa embtextf_ltoa
 #define ultoa embtextf_ultoa
+#define uprintf embtextf_uprintf
 
 int init_suite (void)
 {

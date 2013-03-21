@@ -40,7 +40,7 @@ printf (const char *fmt, ...)
   int rc;
 
   va_start (argp, fmt);
-  rc = vuprintf (putchar, fmt, argp);
+  rc = embtextf_vuprintf (putchar, fmt, argp);
   va_end (argp);
   return rc;
 }
@@ -48,5 +48,5 @@ printf (const char *fmt, ...)
 int
 vprintf (const char *fmt, va_list argp)
 {
-  return vuprintf (putchar, fmt, argp);
+  return embtextf_vuprintf (putchar, fmt, argp);
 }

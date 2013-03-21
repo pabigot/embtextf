@@ -1,0 +1,20 @@
+PROJECT_NAME = embtextf
+PROJECT_BRIEF = "Embedded System Text Formatting"
+PROJECT_NUMBER = 20130321
+STRIP_FROM_INC_PATH = include
+ALIASES += homepage="\par<b>Homepage\n"
+ALIASES += copyrightblock="Copyright 2011-2013, Peter A. Bigot.  Portions copyright 2011, Chris Liechti.  Licensed under <a href="http://www.opensource.org/licenses/BSD-3-Clause">BSD-3-Clause</a>\n"
+# Use "#if defined(EMBTEXTF_DOXYGEN)" when providing a stub declaration
+# to which documentation is attached.
+# Use "/* @cond DOXYGEN_EXCLUDE */ ... /* @endcond */" around the real
+# declarations.
+PREDEFINED += EMBTEXTF_DOXYGEN
+TAB_SIZE = 4
+OPTIMIZE_OUTPUT_FOR_C = YES
+INPUT = include/
+EXCLUDE_PATTERNS = */*_.h
+TYPEDEF_HIDES_STRUCT = NO
+GENERATE_LATEX = NO
+ALPHABETICAL_INDEX = YES
+RECURSIVE = YES
+EXTRACT_STATIC = YES

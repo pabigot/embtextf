@@ -32,9 +32,15 @@
 /** @file
  * @brief Utility functions for converting from integer to ASCII representations
  *
- * These are in the embtextf namespace because some vendor C libraries
- * provide itoa or ltoa functions that have different signatures or
- * semantics. */
+ * @section xtoa_intro Mixed-Base Integer to String Conversion Functions
+ *
+ * The routines in this module convert signed and unsigned @c int and
+ * @c long values into text expressed in base 2 through base 36 and
+ * stored a user-provided buffer.
+ *
+ * @homepage http://github.com/pabigot/embtextf
+ * @copyright Copyright 2013, Peter A. Bigot.  Licensed under <a href="http://www.opensource.org/licenses/BSD-3-Clause">BSD-3-Clause</a>
+ */
 
 #ifndef EMBTEXTF_XTOA_H
 #define EMBTEXTF_XTOA_H
