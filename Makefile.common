@@ -1,0 +1,11 @@
+OPT_CFLAGS = -g -Os -ffunction-sections -fdata-sections
+WARN_CFLAGS = -Wall -Werror -ansi -std=c99 -pedantic 
+CC = $(CROSS_COMPILE)gcc
+AR = $(CROSS_COMPILE)ar
+GCOV = $(CROSS_COMPILE)gcov
+SIZE = $(CROSS_COMPILE)size
+
+CPPFLAGS += -I$(EMBTEXTF_ROOT)/include
+CPPFLAGS += $(AUX_CPPFLAGS)
+CFLAGS = $(WARN_CFLAGS) $(OPT_CFLAGS) $(AUX_CFLAGS)
+LDFLAGS += $(AUX_LDFLAGS)
