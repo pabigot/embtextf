@@ -38,8 +38,8 @@
  *
  * @mainpage embtextf: Embedded System Text Formatting
  *
- * embtextf provides functions supporting *printf(3c) and numeric
- * formatting functionality on embedded devices with highly
+ * embtextf is a collection of functions supporting *printf(3c) and
+ * numeric formatting functionality on embedded devices with highly
  * constrained memory:
  *
  * @li The base embtextf_vuprintf() function supports *printf(3c)

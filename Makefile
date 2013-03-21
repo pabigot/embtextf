@@ -1,11 +1,13 @@
 EMBTEXTF_ROOT ?= /opt/embtextf
-OPTCFLAGS = -g -O
+OPT_CFLAGS = -g -Os -ffunction-sections -fdata-sections
+WARN_CFLAGS = -Wall -Werror -ansi -std=c99 -pedantic 
 CPPFLAGS = -I$(EMBTEXTF_ROOT)/include
 CPPFLAGS += -I$(EMBTEXTF_ROOT)/src
 CPPFLAGS += $(AUX_CPPFLAGS)
 CC = $(CROSS_COMPILE)gcc
 AR = $(CROSS_COMPILE)ar
-CFLAGS = -Wall -Werror -ansi -std=c99 -pedantic $(OPTCFLAGS) $(CPPFLAGS)
+GCOV = $(CROSS_COMPILE)gcov
+CFLAGS = $(WARN_CFLAGS) $(OPT_CFLAGS) $(AUX_CFLAGS)
 
 ifdef DEFAULT
 CPPFLAGS += -DEMBTEXTF_VUPRINTF_ENABLE_DEFAULT=$(DEFAULT)
@@ -22,9 +24,6 @@ TARGET = libembtextf.a
 
 all: $(TARGET)
 
-msp430:
-	make CROSS_COMPILE=msp430- clean all
-
 libembtextf.a: $(OBJ)
 	$(AR) rv $@ $^
 	$(CROSS_COMPILE)size $@
@@ -34,7 +33,7 @@ doc:
 .PHONY: astyle
 ASTYLE_ARGS=--options=none --style=1tbs --indent=spaces=2 --indent-switches --pad-header
 astyle:
-	astyle $(ASTYLE_ARGS) -r '*.c' '*.h'
+	astyle $(ASTYLE_ARGS) -r '*.c' '*.h' '*.inc'
 
 clean:
 	-rm -f $(OBJ)
@@ -43,10 +42,18 @@ clean:
 realclean: clean
 	-rm -f $(DEP) $(TARGET)
 	-rm -f *.gcda *.gcno
+	-rm -f src/*.gcda src/*.gcno
+	-rm -f tests/*.gcda tests/*.gcno
 	-rm -rf html
 
-coverage: realclean
-	$(MAKE) OPTCFLAGS='-fprofile-arcs -ftest-coverage' 
+.PHONY: coverage
+coverage:
+	$(MAKE) realclean \
+	&& $(MAKE) -C tests realclean \
+	&& $(MAKE) WITH_COVERAGE=1 EXPOSE_INTERNALS=1 all \
+	&& $(MAKE) -C tests coverage
+	for f in $(SRC:.c=) ; do ln -s $${f}.gcno; ln -s $${f}.gcda ; done
+	$(GCOV) -a $(SRC)
 
 %.d: %.c
 	@set -e; rm -f $@; \
