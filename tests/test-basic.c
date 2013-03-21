@@ -2,7 +2,7 @@
  *
  * Note: Expected results are for a 64-bit host where sizeof(int)=4
  * and sizeof(long int)=8.
- * 
+ *
  * @homepage http://github.com/pabigot/psml
  *
  */
@@ -123,7 +123,7 @@ test_longlong (void)
   long long int v = 0;
   int rc;
   const char * const fmt = "%lld %llx %llu %lli";
-  const char * const expected = 
+  const char * const expected =
 #if EMBTEXTF_VUPRINTF_ENABLE_LONGLONG - 0
     "1 2 3 4"
 #else /* EMBTEXTF_VUPRINTF_ENABLE_LONGLONG */

@@ -35,9 +35,11 @@ int
 puts (const char *s)
 {
   /* NB: <= saves 6 bytes ROM over < */
-  while (*s && (0 <= putchar (*s++)))
+  while (*s && (0 <= putchar (*s++))) {
     ;
-  if (*s)
+  }
+  if (*s) {
     return EOF;
+  }
   return putchar ('\n');
 }

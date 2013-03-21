@@ -1,21 +1,21 @@
 /* Copyright (c) 2012-2013, Peter A. Bigot
- * 
+ *
  * All rights reserved.
- * 
+ *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * * Redistributions of source code must retain the above copyright notice,
  *   this list of conditions and the following disclaimer.
- * 
+ *
  * * Redistributions in binary form must reproduce the above copyright notice,
  *   this list of conditions and the following disclaimer in the documentation
  *   and/or other materials provided with the distribution.
- * 
+ *
  * * Neither the name of the software nor the names of its contributors may be
  *   used to endorse or promote products derived from this software without
  *   specific prior written permission.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -40,14 +40,14 @@
  * provide character-oriented interface.
  *
  * @section uprintf_format vuprintf formatting capabilities
- * 
+ *
  * The formatting capabilities of embtextf_vuprintf() are intended to
  * be compatible with the standard C library format string
  * interpretation, with only a few restrictions, including:
  *
  * @li Floating point values are not supported.
  * @li Wide characters are not supported.
- * 
+ *
  * Within those limitations, all standard format flags are supported:
  *
  * Flag character  | Conditional on                             | Comments
@@ -59,7 +59,7 @@
  * @c +            |                                            | Always emit sign before converted value
  *
  * Field width and (optionally) precision are supported for integer and string conversions:
- * 
+ *
  * Example         | Conditional on                             | Comments
  * :-------------- | :--------------                            | :-------------
  * @c %4d          |                                            | width, pad output to 4 characters
@@ -68,7 +68,7 @@
  * @c %.*d         | #EMBTEXTF_VUPRINTF_ENABLE_PRECISION        | precision, minimum number of digits in conversion passed as argument
  *
  * Some length modifiers are supported for integer conversion:
- * 
+ *
  * Example         | Conditional on                             | Comments
  * :-------------- | :--------------                            | :-------------
  * @c %%d          |                                            | expect input type @c int
@@ -92,8 +92,8 @@
  *
  * @homepage http://github.com/pabigot/embtextf
  * @copyright Copyright 2013, Peter A. Bigot.  Licensed under <a href="http://www.opensource.org/licenses/BSD-3-Clause">BSD-3-Clause</a>
- * @note embtextf_vuprintf() contains material copyright 2006-2011, Chris Liechti.  
- */ 
+ * @note embtextf_vuprintf() contains material copyright 2006-2011, Chris Liechti.
+ */
 
 #ifndef EMBTEXTF_VUPRINTF_H
 #define EMBTEXTF_VUPRINTF_H
@@ -170,7 +170,7 @@ typedef int (* embtextf_putchar_fn) (int);
  *
  * @param args aggregated arguments as collected using the @c stdarg.h
  * macros.
- * 
+ *
  * @return the number of characters passed to the @a emit_char
  * function while generating the formatted string.
  *
@@ -190,7 +190,7 @@ int embtextf_vuprintf (embtextf_putchar_fn write_char, const char *format, va_li
  * @return as with embtextf_vuprintf */
 int
 #if __GNUC__
-__attribute__((format (printf, 2, 3))) 
+__attribute__((format (printf, 2, 3)))
 #endif /* __GNUC__ */
 embtextf_uprintf (embtextf_putchar_fn emit_char, const char *fmt, ...);
 

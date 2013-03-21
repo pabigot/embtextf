@@ -47,8 +47,9 @@ static char *destination_;
 static int
 append (int c)
 {
-  if (available_ <= 0)
+  if (available_ <= 0) {
     return -1;
+  }
   *destination_++ = c;
   --available_;
   return c;
@@ -63,10 +64,11 @@ call_vuprintf (const char *fmt, va_list argp)
 
   rc = vuprintf (append, fmt, argp);
   va_end (argp);
-  if (rc >= available)
+  if (rc >= available) {
     destination[available - 1] = 0;
-  else
+  } else {
     *destination_ = 0;
+  }
   return rc;
 }
 

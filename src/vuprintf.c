@@ -134,9 +134,9 @@ build_numeric_prefix (char *prefix_buffer, flags_t flags)
 #endif /* EMBTEXTF_VUPRINTF_ENABLE_OCTAL */
   } else
 #endif /* EMBTEXTF_VUPRINTF_ENABLE_ALTERNATE_FORM */
-  if (flags.sign_char) {
-    *p++ = flags.sign_char;
-  }
+    if (flags.sign_char) {
+      *p++ = flags.sign_char;
+    }
   return p - prefix_buffer;
 }
 
@@ -237,7 +237,7 @@ print_field (embtextf_putchar_fn write_char, const char *char_p, unsigned int wi
 #if EMBTEXTF_VUPRINTF_ENABLE_PRECISION - 0
          && truncate_precision--
 #endif /* EMBTEXTF_VUPRINTF_ENABLE_PRECISION */
-         ) {
+        ) {
     write_char(*char_p);
     char_p++;
     character_count++;
@@ -435,7 +435,7 @@ write_character:
 #if EMBTEXTF_VUPRINTF_ENABLE_PRECISION - 0
               && !have_precision
 #endif /* EMBTEXTF_VUPRINTF_ENABLE_PRECISION */
-              ) {
+             ) {
             flags.fill_zero = !flags.left_align;
             break;
           }
@@ -461,7 +461,7 @@ write_character:
 #if EMBTEXTF_VUPRINTF_ENABLE_PRECISION - 0
               && ! have_precision
 #endif /* EMBTEXTF_VUPRINTF_ENABLE_PRECISION */
-              ) {
+             ) {
             goto write_character;
           }
           char_p = buffer;
@@ -482,9 +482,9 @@ emit_string:
             flags.precision = wp_value;
           } else
 #endif /* EMBTEXTF_VUPRINTF_ENABLE_PRECISION */
-          if (have_wp_value) {
-            width = wp_value;
-          }
+            if (have_wp_value) {
+              width = wp_value;
+            }
           character_count += print_field(write_char,
                                          (char_p != NULL) ? char_p : "(null)",
                                          width, flags);
@@ -628,9 +628,9 @@ emit_number:
             }
           } else
 #endif /* EMBTEXTF_VUPRINTF_ENABLE_PRECISION */
-          if (have_wp_value) {
-            width = wp_value;
-          }
+            if (have_wp_value) {
+              width = wp_value;
+            }
           character_count += print_field(write_char, 1 + char_p, width, flags);
           mode = DIRECT;
           break;
