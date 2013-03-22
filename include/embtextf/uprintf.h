@@ -163,10 +163,10 @@ typedef int (* embtextf_putchar_fn) (int);
 
 /** Format text collected by a variadic function.
  *
- * @param emit_char the function used to emit formatted characters.
+ * @param write_char the function used to emit formatted characters.
  * The interface supports using @c putchar for this.
  *
- * @param fmt a standard C format string
+ * @param format a standard C format string
  *
  * @param args aggregated arguments as collected using the @c stdarg.h
  * macros.

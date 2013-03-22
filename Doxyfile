@@ -1,6 +1,6 @@
 PROJECT_NAME = embtextf
 PROJECT_BRIEF = "Embedded System Text Formatting"
-PROJECT_NUMBER = 20130321
+PROJECT_NUMBER = 20130322
 STRIP_FROM_INC_PATH = include
 ALIASES += homepage="\par<b>Homepage\n"
 ALIASES += copyrightblock="Copyright 2011-2013, Peter A. Bigot.  Portions copyright 2011, Chris Liechti.  Licensed under <a href="http://www.opensource.org/licenses/BSD-3-Clause">BSD-3-Clause</a>\n"

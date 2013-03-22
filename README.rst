@@ -1,18 +1,22 @@
-Release: 20130321
+Release: 20130322
 
 Embtextf ("Embedded System Text Formatting") is a collection of functions
 supporting \*printf(3c) and numeric formatting functionality on embedded
-devices with highly constrained memory
+devices with highly constrained memory.  It derives from functions
+originally provided in msp430-libc from the `MSPGCC`_ project.
 
 Embtextf features:
 
-* Output generation without large internal buffers by using a callback
-  function to process the generated text;
+* Output is generated using a callback function to produce the generated
+  text, eliminating large memory buffers on the heap or stack;
 
 * Most standard printf(3c) format string expressions are supported;
 
 * Additional functions for generating base-2 through base-36 representations
   of standard C integer types;
+
+* Highly space-efficient implementation (between 1KB and 2.5KB for the
+  entire family of \*printf() functions, depending on feature selection)
 
 Each provided function is prefixed with ``embtextf_`` to isolate it from both
 the toolchain and application namespaces.  This allows embtextf to co-exist
@@ -22,9 +26,10 @@ named functions but with different semantics or interfaces.  The application
 program can use the preprocessor to redirect unqualified names to the
 embtextf implementations.
 
-  **WARNING** This should be considered a beta release of embtextf.  While the
-  functionality is complete and reliable, interfaces and the build approach
-  may change in a future release.
+  **WARNING** This should be considered a beta release of embtextf.  The
+  functionality is complete and reliable.  However, public function names,
+  the set of available wrappers, and the build approach may change in a
+  future release.
 
 Please see the `documentation`_, `issue tracker`_, and
 `homepage`_ on github.  Get a copy using git::

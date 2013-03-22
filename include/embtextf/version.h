@@ -70,7 +70,7 @@
  * implementations.
  *
  * @homepage http://github.com/pabigot/embtextf
- * @copyright Copyright 2011-2013, Peter A. Bigot.  embtextf_vuprintf() contains material copyright 2011, Chris Liechti.  Licensed under <a href="http://www.opensource.org/licenses/BSD-3-Clause">BSD-3-Clause</a>
+ * @copyright Copyright 2011-2013, Peter A. Bigot.  embtextf_vuprintf() contains material copyright 2006-2011, Chris Liechti.  Licensed under <a href="http://www.opensource.org/licenses/BSD-3-Clause">BSD-3-Clause</a>
  */
 
 #ifndef EMBTEXTF_VERSION_H
@@ -78,6 +78,6 @@
 
 /** Version of the embtextf library.  This is a monotonically
  * non-decreasing integer value suitable for ordinal comparisons. */
-#define EMBTEXTF_VERSION 20130321
+#define EMBTEXTF_VERSION 20130322
 
 #endif /* EMBTEXTF_VERSION_H */
