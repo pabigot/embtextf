@@ -40,21 +40,29 @@
  *
  * embtextf is a collection of functions supporting *printf(3c) and
  * numeric formatting functionality on embedded devices with highly
- * constrained memory:
+ * constrained memory.  It derives from functions originally provided
+ * in msp430-libc from the <a
+ * href="http://sourceforge.net/projects/mspgcc/">MSPGCC project</a>.
+ *
+ * Features include:
  *
  * @li The base embtextf_vuprintf() function supports *printf(3c)
- * functions through a caller-provided callback function that handles
- * each formatted character as it is produced.  This approach
+ * compatible output through a caller-provided callback function that
+ * handles each formatted character as it is produced.  This approach
  * eliminates the need for large internal buffers to hold the
- * constructed data.
+ * constructed data;
  *
  * @li The supported @ref uprintf_format "format-string capabilities"
  * cover most non-floating-point format specifiers and modifiers, with
  * some compile-time control to mediate between features and required
- * code space.
+ * code space;
  *
  * @li @ref xtoa_intro format @c int and @c long values into a
- * caller-provided buffer in any radix from base 2 to base 36.
+ * caller-provided buffer in any radix from base 2 to base 36;
+ *
+ * @li The entire family of *printf(3c) functions takes between 1KB
+ * and 2.5KB of code depending on target processor and feature
+ * selection.
  *
  * The conversions operate on native C types, abstracting away from
  * word size and byte order.  The module has been tested on both 16-

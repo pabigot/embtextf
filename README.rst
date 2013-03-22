@@ -7,24 +7,30 @@ originally provided in msp430-libc from the `MSPGCC`_ project.
 
 Embtextf features:
 
-* Output is generated using a callback function to produce the generated
-  text, eliminating large memory buffers on the heap or stack;
+* The base embtextf_vuprintf() function supports *printf(3c)
+  compatible output through a caller-provided callback function that
+  handles each formatted character as it is produced.  This approach
+  eliminates the need for large internal buffers to hold the
+  constructed data;
 
-* Most standard printf(3c) format string expressions are supported;
+* The format-string capabilities cover most non-floating-point format
+  specifiers and modifiers, with some compile-time control to mediate
+  between features and required code space;
 
 * Additional functions for generating base-2 through base-36 representations
   of standard C integer types;
 
-* Highly space-efficient implementation (between 1KB and 2.5KB for the
-  entire family of \*printf() functions, depending on feature selection)
+* The entire family of *printf(3c) functions takes between 1KB
+  and 2.5KB of code depending on target processor and feature
+  selection.
 
-Each provided function is prefixed with ``embtextf_`` to isolate it from both
-the toolchain and application namespaces.  This allows embtextf to co-exist
-with toolchains like `mspgcc`_, which provide the same functionality in a
-compatible way, and others like Code Composer Studio which provide similarly
-named functions but with different semantics or interfaces.  The application
-program can use the preprocessor to redirect unqualified names to the
-embtextf implementations.
+Each provided function is prefixed with ``embtextf_`` to isolate it from
+both the toolchain and application namespaces.  This allows embtextf to
+co-exist with toolchains like `mspgcc`_, which provide the same
+functionality in a compatible way, and others like Code Composer Studio
+which provide similarly named functions but with different semantics or
+interfaces.  The application program can use the preprocessor to redirect
+unqualified names to the embtextf implementations.
 
   **WARNING** This should be considered a beta release of embtextf.  The
   functionality is complete and reliable.  However, public function names,
