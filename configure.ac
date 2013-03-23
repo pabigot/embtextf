@@ -12,6 +12,17 @@ AC_CANONICAL_BUILD
 
 AM_INIT_AUTOMAKE([-Wall -Werror foreign no-define no-dist])
 
+# Doxygen
+DX_HTML_FEATURE(ON)
+DX_CHM_FEATURE(OFF)
+DX_CHI_FEATURE(OFF)
+DX_MAN_FEATURE(OFF)
+DX_RTF_FEATURE(OFF)
+DX_XML_FEATURE(OFF)
+DX_PDF_FEATURE(OFF)
+DX_PS_FEATURE(OFF)
+DX_INIT_DOXYGEN(embtextf, [\$\(top_builddir\)/doc/doxygen.cfg], [generated])
+
 # Need a C compiler.  We're building a library, and for some targets
 # we may not be providing the options (like -mmcu= on msp430) that are
 # required to be able to do a non-relocatable link.  So don't ask
@@ -118,9 +129,16 @@ OPT_ARG_ENABLE(provide, libc, [Provide libc-compatible wrappers for *printf])
 AM_CONDITIONAL([EMBTEXTF_PROVIDE_LIBC], [test "$use_provide_libc" = "yes"])
 
 # Makefiles
-AC_CONFIG_FILES([Makefile include/embtextf/Makefile src/Makefile tests/Makefile])
+AC_CONFIG_FILES([Makefile \
+                 include/embtextf/Makefile \
+		 src/Makefile \
+		 tests/Makefile \
+		 doc/Makefile ])
 
 # Feature files
 AC_CONFIG_FILES([include/embtextf/config.h])
+
+# Other files
+AC_CONFIG_FILES([doc/doxygen.cfg])
 
 AC_OUTPUT

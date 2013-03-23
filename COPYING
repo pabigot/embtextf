@@ -1,10 +1,12 @@
-All files in this package are released under the BSD-3-Clause license, and
-are so-marked in the source.
-
-Unless otherwise listed below the files in this package are copyright Peter
-A. Bigot.
+Unless otherwise listed below all files in this package are released under
+the BSD-3-Clause license, are copyright Peter A. Bigot, and are so-marked in
+the source.
 
 Exceptions:
 
 src/vuprintf.c is copyright 2006-2011, Chris Liechti, modifications
-copyright 2011-2013, Peter A. Bigot.
+copyright 2011-2013, Peter A. Bigot.  The content is licensed under
+BSD-3-Clause
+
+m4/ax_prog_doxygen.m4 and doc/doxygen.am are copyright 2009 Oren Ben-Kiki,
+under an open license defined in those files.

@@ -32,14 +32,11 @@
 /** @file
  * @brief Build-time configuration options
  *
- * This header declares the configuration options that control feature availability.
- *
- * It should not be included by end-user programs, because it gives
- * the false impression that the defaults can be overridden to change
- * the behavior of the library or that they reflect the capabilities
- * of the library.  This may not be true when using an archive file
- * for which settings might have been overridden when the compilation
- * occurred.
+ * This header defines the configuration options that control feature
+ * availability.  The values for these flags are set when the header
+ * is created by running @c ./configure; see @ref install.  Be aware
+ * that the values in generated documentation may not match the values
+ * in the installed header.
  *
  * @homepage http://github.com/pabigot/embtextf
  * @copyright Copyright 2013, Peter A. Bigot.  Licensed under <a href="http://www.opensource.org/licenses/BSD-3-Clause">BSD-3-Clause</a>
@@ -52,19 +49,27 @@
  * provide implementations for standard libc functions related to its
  * domain.
  *
+ * This feature is controlled at configuration time by @c --enable-provide-libc.
+ *
  * @see <embtextf/stdio.h>, <embtextf/stdarg.h>
  */
 #define EMBTEXTF_ENABLE_PROVIDE_LIBC @EMBTEXTF_ENABLE_PROVIDE_LIBC@
 
 /** Set to a preprocessor true value to allow the @c %p conversion
  * specification to support printing pointer values.  If false, the
- * conversion specification will be passed through as text. */
+ * conversion specification will be passed through as text.
+ *
+ * This feature is controlled at configuration time by @c --enable-vuprintf-intptr.
+ */
 #define EMBTEXTF_ENABLE_VUPRINTF_INTPTR @EMBTEXTF_ENABLE_VUPRINTF_INTPTR@
 
 /** Set to a preprocessor true value to allow the @c l length modifier
  * to be recognized supporting long integer parameters.  If false, the
  * @c l length modifier will be unrecognized and its containing
- * conversion specification passed through as text. */
+ * conversion specification passed through as text. 
+ *
+ * This feature is controlled at configuration time by @c --enable-vuprintf-long.
+ */
 #define EMBTEXTF_ENABLE_VUPRINTF_LONG @EMBTEXTF_ENABLE_VUPRINTF_LONG@
 
 /** Set to a preprocessor true value to allow two @c l length
@@ -73,6 +78,8 @@
  * unrecognized and its containing conversion specification passed
  * through as text.
  *
+ * This feature is controlled at configuration time by @c --enable-vuprintf-longlong.
+ *
  * @note Use of this option requires use of
  * #EMBTEXTF_ENABLE_VUPRINTF_LONG. */
 #define EMBTEXTF_ENABLE_VUPRINTF_LONGLONG @EMBTEXTF_ENABLE_VUPRINTF_LONGLONG@
@@ -80,18 +87,33 @@
 /** Set to a preprocessor true value to allow precision to be
  * recognized in conversion specifications.  If false, a precision
  * specification will be unrecognized and its containing conversion
- * specification passed through as text. */
+ * specification passed through as text. 
+ *
+ * This feature is controlled at configuration time by @c --enable-vuprintf-precision.
+ */
 #define EMBTEXTF_ENABLE_VUPRINTF_PRECISION @EMBTEXTF_ENABLE_VUPRINTF_PRECISION@
 
 /** Set to a preprocessor true value to allow the @c %o conversion
  * specifier to be recognized.  If false, an octal conversion
- * specifier will be unrecognized and passed through as text. */
+ * specifier will be unrecognized and passed through as text. 
+ *
+ * This feature is controlled at configuration time by @c --enable-vuprintf-octal.
+ */
 #define EMBTEXTF_ENABLE_VUPRINTF_OCTAL @EMBTEXTF_ENABLE_VUPRINTF_OCTAL@
 
 /** Set to a preprocessor true value to allow the @c # alternate form
  * flag to be recognized for @c x and @c o conversions.  If false, the
  * alternate form flag will be unrecognized and its containing
- * conversion specification passed through as text. */
+ * conversion specification passed through as text. 
+ *
+ * This feature is controlled at configuration time by @c --enable-vuprintf-alternate-form.
+ */
 #define EMBTEXTF_ENABLE_VUPRINTF_ALTERNATE_FORM @EMBTEXTF_ENABLE_VUPRINTF_ALTERNATE_FORM@
 
 #endif /* EMBTEXTF_CONFIG_H */
+
+/*
+ * Local Variables:
+ * mode:c
+ * End:
+ */

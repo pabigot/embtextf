@@ -1,6 +1,7 @@
-PROJECT_NAME = embtextf
+PROJECT_NAME = @PACKAGE@
 PROJECT_BRIEF = "Embedded System Text Formatting"
-PROJECT_NUMBER = 20130326
+PROJECT_NUMBER = @VERSION@
+OUTPUT_DIRECTORY = $(DOCDIR)
 STRIP_FROM_INC_PATH = include
 ALIASES += homepage="\par<b>Homepage\n"
 # Use "#if defined(EMBTEXTF_DOXYGEN)" when providing a stub declaration
@@ -10,7 +11,8 @@ ALIASES += homepage="\par<b>Homepage\n"
 PREDEFINED += EMBTEXTF_DOXYGEN
 TAB_SIZE = 4
 OPTIMIZE_OUTPUT_FOR_C = YES
-INPUT = include/
+INPUT = $(SRCDIR)/mainpage.dox \
+      $(SRCDIR)/../include/
 EXCLUDE_PATTERNS = */*_.h
 TYPEDEF_HIDES_STRUCT = NO
 GENERATE_LATEX = NO
