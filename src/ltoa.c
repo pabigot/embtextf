@@ -1,3 +1,4 @@
-#define XTOA embtextf_ltoa
 #define INT_T long
+#define STOA embtextf_ltoa
+#define UTOA embtextf_ultoa
 #include "embtextf/xtoa.inc"

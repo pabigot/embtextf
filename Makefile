@@ -7,8 +7,8 @@ endif
 
 SRC = \
   src/vuprintf.c \
-  src/itoa.c src/utoa.c \
-  src/ltoa.c src/ultoa.c
+  src/itoa.c \
+  src/ltoa.c
 OBJ = $(SRC:.c=.o)
 DEP = $(SRC:.c=.d)
 

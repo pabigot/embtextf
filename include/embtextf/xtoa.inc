@@ -31,24 +31,23 @@
 
 #include <embtextf/xtoa.h>
 
-char *XTOA(
-#if UNSIGNED - 0
-  unsigned
-#endif
-  INT_T num, char *str, int radix)
+static char *
+xtoa (INT_T sval,
+      char * str,
+      int radix,
+      int signedp)
 {
   unsigned INT_T value;
   char *sp = str;
   char *sp2;
 
-  value = num;
-#if ! (UNSIGNED - 0)
-  /* Store sign at start of buffer for negative base-10 values */
-  if (10 == radix && 0 > num) {
+  /* Store sign at start of buffer for signed negative base-10 values */
+  if (signedp && (10 == radix) && (0 > sval)) {
     *sp++ = '-';
-    value = -num;
+    value = -sval;
+  } else {
+    value = sval;
   }
-#endif
   sp2 = sp;
 
   do {
@@ -72,6 +71,18 @@ char *XTOA(
   }
 
   return str;
+}
+
+char *
+STOA(INT_T num, char *str, int radix)
+{
+  return xtoa(num, str, radix, 1);
+}
+
+char *
+UTOA(unsigned INT_T num, char *str, int radix)
+{
+  return xtoa((INT_T)num, str, radix, 0);
 }
 
 /*
