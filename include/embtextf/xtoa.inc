@@ -29,36 +29,34 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <embtextf/xtoa.h>
-
 static char *
 xtoa (INT_T sval,
       char * str,
       int radix,
       int signedp)
 {
-  unsigned INT_T value;
+  unsigned INT_T uval;
   char *sp = str;
   char *sp2;
 
-  /* Store sign at start of buffer for signed negative base-10 values */
+  /* If signed, store sign at start of buffer for negative base-10 values */
   if (signedp && (10 == radix) && (0 > sval)) {
     *sp++ = '-';
-    value = -sval;
+    uval = -sval;
   } else {
-    value = sval;
+    uval = sval;
   }
   sp2 = sp;
 
   do {
-    char rem = value % radix;
-    value /= radix;
+    char rem = uval % radix;
+    uval /= radix;
     if (10 > rem) {
       *sp++ = '0' + rem;
     } else {
       *sp++ = 'A' + rem - 10;
     }
-  } while (0 < value);
+  } while (0 < uval);
 
   /* Mark end of string */
   *sp-- = 0;

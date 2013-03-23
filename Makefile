@@ -8,7 +8,8 @@ endif
 SRC = \
   src/vuprintf.c \
   src/itoa.c \
-  src/ltoa.c
+  src/ltoa.c \
+  src/lltoa.c
 OBJ = $(SRC:.c=.o)
 DEP = $(SRC:.c=.d)
 
@@ -19,7 +20,7 @@ all: $(TARGET)
 libembtextf.a: $(OBJ)
 	$(AR) rv $@ $^
 ifdef SIZE
-	$(SIZE) $@
+	$(SIZE) -A $@ | grep '^.text'
 endif # SIZE
 doc:
 	doxygen

@@ -78,4 +78,25 @@ char * embtextf_ltoa (long value, char * str, int radix);
 /** As with itoa() but for unsigned long integers. */
 char * embtextf_ultoa (unsigned long value, char * str, int radix);
 
+#ifndef EMBTEXTF_XTOA_ENABLE_LONGLONG
+/** Set to a preprocessor true value to generate conversion for @c
+ * long @c long integer types.
+ *
+ * @c long @clong is a non-standard extension prior to C99.  If false,
+ * the conversion specification will be passed through as text. */
+#define EMBTEXTF_XTOA_ENABLE_LONGLONG 1
+#endif /* EMBTEXTF_XTOA_ENABLE_LONGLONG */
+
+#if defined(EMBTEXTF_DOXYGEN) || (EMBTEXTF_XTOA_ENABLE_LONGLONG - 0)
+/** As with itoa() but for long long integers.
+ *
+ * Conditional on #EMBTEXTF_XTOA_ENABLE_LONGLONG. */
+char * embtextf_lltoa (long long value, char * str, int radix);
+
+/** As with itoa() but for unsigned long long integers. 
+ *
+ * Conditional on #EMBTEXTF_XTOA_ENABLE_LONGLONG. */
+char * embtextf_ulltoa (unsigned long long value, char * str, int radix);
+#endif /* EMBTEXTF_XTOA_ENABLE_LONGLONG */
+
 #endif /* EMBTEXTF_XTOA_H */

@@ -16,6 +16,8 @@
 #define utoa embtextf_utoa
 #define ltoa embtextf_ltoa
 #define ultoa embtextf_ultoa
+#define lltoa embtextf_lltoa
+#define ulltoa embtextf_ulltoa
 #define uprintf embtextf_uprintf
 
 int init_suite (void)
@@ -333,6 +335,18 @@ test_utoa (void)
   CU_ASSERT_STRING_EQUAL("11000000111001", utoa(12345, buffer, 2));
 }
 
+#if (EMBTEXTF_XTOA_ENABLE_LONGLONG - 0)
+void
+test_lltoa (void)
+{
+  char buffer[64];
+
+  CU_ASSERT_STRING_EQUAL("-12345", lltoa(-12345, buffer, 10));
+  CU_ASSERT_STRING_EQUAL("123456789ABCDEF0", lltoa(0x123456789abcdef0LL, buffer, 16));
+  CU_ASSERT_STRING_EQUAL("FEDCBA9876543210", lltoa(0xfedcba9876543210LL, buffer, 16));
+}
+#endif /* EMBTEXTF_XTOA_ENABLE_LONGLONG */
+
 int
 main (int argc,
       char* argv[])
@@ -353,6 +367,9 @@ main (int argc,
     { "strprec", test_strprec },
     { "itoa", test_itoa },
     { "utoa", test_utoa },
+#if (EMBTEXTF_XTOA_ENABLE_LONGLONG - 0)
+    { "lltoa", test_lltoa },
+#endif /* EMBTEXTF_XTOA_ENABLE_LONGLONG */
   };
   const int ntests = sizeof(tests) / sizeof(*tests);
   int i;
