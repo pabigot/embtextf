@@ -54,6 +54,8 @@ coverage:
 test: all
 	$(MAKE) -C tests realclean test
 
+ifeq ($(WITH_DEP),1)
 ifneq ($(MAKECMDGOALS:realclean=clean),clean)
 -include $(DEP)
 endif # make [real]clean
+endif # WITH_DEP

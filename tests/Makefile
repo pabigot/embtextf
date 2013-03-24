@@ -32,6 +32,8 @@ realclean: clean
 coverage: realclean
 	$(MAKE) AUX_CFLAGS='-fprofile-arcs -ftest-coverage' AUX_LDFLAGS=-fprofile-arcs
 
+ifeq ($(WITH_DEP),1)
 ifneq ($(MAKECMDGOALS:realclean=clean),clean)
 -include $(DEP)
 endif # make [real]clean
+endif # WITH_DEP

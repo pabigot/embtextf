@@ -1,16 +1,38 @@
 # Define to nonzero to use Code Composer Studio
 WITH_CCS ?= 0
 
+WITH_DEP ?= 1
+
 ifneq ($(WITH_CCS),0)
 CCS_INSTALL_ROOT ?= /usr/local/ccs/ccsv5
+
+# Target of the compilation; like CROSS_COMPILE for GCC.  Should be the name
+# of a TI compiler target like msp340 or tms470.
+CCS_TARGET ?= msp430
+
+# CCS_BASE_ROOT is the name used in CCS Eclipse project files for the
+# code-generator--independent files such as MCU-specific headers
 CCS_BASE_ROOT ?= $(CCS_INSTALL_ROOT)/ccs_base
-CCS_TI_VERSION ?= 4.1.1
-CG_TOOL_ROOT ?= $(CCS_INSTALL_ROOT)/tools/compiler/msp430_$(CCS_TI_VERSION)
+
+# CG_TOOL_ROOT is the name used in CCS Eclipse project files for the
+# compiler toolchain root
+ifndef CG_TOOL_ROOT
+CG_TOOL_ROOT := $(shell ls -d $(CCS_INSTALL_ROOT)/tools/compiler/$(CCS_TARGET)_*)
+endif # CG_TOOL_ROOT
+
+ifeq ($(CCS_TARGET),msp430)
 CC=cl430
 AR=ar430
+else
+CC=unknown
+AR=unknown
+endif # CCS_TARGET
+
 ABI_CFLAGS = --abi=eabi --relaxed_ansi
-CPPFLAGS += -I"$(CCS_BASE_ROOT)/msp430/include"
+CPPFLAGS += -I"$(CCS_BASE_ROOT)/$(CCS_TARGET)/include"
 CPPFLAGS += -I"$(CG_TOOL_ROOT)/include"
+
+WITH_DEP=0
 
 # Full optimization for size
 OPT_CFLAGS ?= -o -mf=0
@@ -19,7 +41,7 @@ OPT_CFLAGS ?= -o -mf=0
 # when linking, not when compiling, so have to override implicit rule to
 # pass the flag required to rename the output.
 %.o: %.c
-	$(CC) $(CPPFLAGS) $(CFLAGS) -c $^ --output_file $@
+	$(CC) $(CPPFLAGS) $(CFLAGS) -c $< --output_file $@
 
 else # WITH_CCS
 # Assume GCC
