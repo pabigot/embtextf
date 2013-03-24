@@ -36,11 +36,12 @@ xtoa (INT_T sval,
       int signedp)
 {
   unsigned INT_T uval;
+  unsigned int uradix = radix;
   char *sp = str;
   char *sp2;
 
   /* If signed, store sign at start of buffer for negative base-10 values */
-  if (signedp && (10 == radix) && (0 > sval)) {
+  if (signedp && (10 == uradix) && (0 > sval)) {
     *sp++ = '-';
     uval = -sval;
   } else {
@@ -49,8 +50,8 @@ xtoa (INT_T sval,
   sp2 = sp;
 
   do {
-    char rem = uval % radix;
-    uval /= radix;
+    unsigned int rem = uval % uradix;
+    uval /= uradix;
     if (10 > rem) {
       *sp++ = '0' + rem;
     } else {
