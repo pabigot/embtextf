@@ -13,11 +13,12 @@ SRC = \
 OBJ = $(SRC:.c=.o)
 DEP = $(SRC:.c=.d)
 
-TARGET = libembtextf.a
+TARGET = lib/libembtextf.a
 
 all: $(TARGET)
 
-libembtextf.a: $(OBJ)
+$(TARGET): $(OBJ)
+	mkdir -p $(dir $@)
 	$(AR) rv $@ $^
 ifdef SIZE
 	$(SIZE) -A $@ | grep '^.text'

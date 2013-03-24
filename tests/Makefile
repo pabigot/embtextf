@@ -1,7 +1,7 @@
 EMBTEXTF_ROOT ?= /opt/embtextf
 include $(EMBTEXTF_ROOT)/Makefile.common
 
-LDFLAGS += -L$(EMBTEXTF_ROOT)/
+LDFLAGS += -L$(EMBTEXTF_ROOT)/lib
 LIBS = -lcunit -lembtextf
 
 ifneq ($(WITH_GCC),0)
@@ -18,7 +18,7 @@ TESTS = $(SRC:.c=)
 test: $(TESTS)
 	@for f in $(TESTS); do ./$$f ; done
 
-test-basic: test-basic.o $(PSML_LIB)
+test-basic: test-basic.o
 	$(CC) $(LDFLAGS) -o $@ $< $(LIBS)
 
 clean:
