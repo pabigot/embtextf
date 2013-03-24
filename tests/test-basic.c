@@ -12,6 +12,8 @@
 #include <CUnit/Basic.h>
 #include <stdio.h>
 
+#include <embtextf/buildconf.h>
+
 #define itoa embtextf_itoa
 #define utoa embtextf_utoa
 #define ltoa embtextf_ltoa
@@ -106,11 +108,11 @@ test_long (void)
   int rc;
   const char * const fmt = "%ld %lx %lu %li";
   const char * const expected =
-#if EMBTEXTF_VUPRINTF_ENABLE_LONG - 0
+#if ENABLE_VUPRINTF_LONG - 0
     "1 2 3 4"
-#else /* EMBTEXTF_VUPRINTF_ENABLE_LONG */
+#else /* ENABLE_VUPRINTF_LONG */
     fmt
-#endif /* EMBTEXTF_VUPRINTF_ENABLE_LONG */
+#endif /* ENABLE_VUPRINTF_LONG */
     ;
 
   resetBuffer(expected);
@@ -126,11 +128,11 @@ test_longlong (void)
   int rc;
   const char * const fmt = "%lld %llx %llu %lli";
   const char * const expected =
-#if EMBTEXTF_VUPRINTF_ENABLE_LONGLONG - 0
+#if ENABLE_VUPRINTF_LONGLONG - 0
     "1 2 3 4"
-#else /* EMBTEXTF_VUPRINTF_ENABLE_LONGLONG */
+#else /* ENABLE_VUPRINTF_LONGLONG */
     fmt
-#endif /* EMBTEXTF_VUPRINTF_ENABLE_LONGLONG */
+#endif /* ENABLE_VUPRINTF_LONGLONG */
     ;
 
   resetBuffer(expected);
@@ -172,29 +174,29 @@ test_basic (void)
   TEST("4294967173", "%u", -123);
   TEST("ffffff85", "%x", -123);
   TEST("FFFFFF85", "%X", -123);
-#if EMBTEXTF_VUPRINTF_ENABLE_OCTAL - 0
+#if ENABLE_VUPRINTF_OCTAL - 0
   TEST("173", "%o", 123);
-#else /* EMBTEXTF_VUPRINTF_ENABLE_OCTAL */
+#else /* ENABLE_VUPRINTF_OCTAL */
   TEST("%o 123", "%o %d", 123);
-#endif /* EMBTEXTF_VUPRINTF_ENABLE_OCTAL */
+#endif /* ENABLE_VUPRINTF_OCTAL */
   TEST("a string", "%s", "a string");
   TEST("(null)", "%s", (const char *)NULL);
   TEST("mno", "%c%c%c", 'm', 'n', 'o');
-#if EMBTEXTF_VUPRINTF_ENABLE_ALTERNATE_FORM - 0
+#if ENABLE_VUPRINTF_ALTERNATE_FORM - 0
   /* Alternative representation */
-#if EMBTEXTF_VUPRINTF_ENABLE_OCTAL - 0
+#if ENABLE_VUPRINTF_OCTAL - 0
   TEST("0173", "%#o", 123);
   TEST("0", "%#o", 0);
-#else /* EMBTEXTF_VUPRINTF_ENABLE_OCTAL */
+#else /* ENABLE_VUPRINTF_OCTAL */
   TEST("%#o 123", "%#o %d", 123);
   TEST("%#o 0", "%#o %d", 0);
-#endif /* EMBTEXTF_VUPRINTF_ENABLE_OCTAL */
+#endif /* ENABLE_VUPRINTF_OCTAL */
   TEST("0xffffff85", "%#x", -123);
-#else /* EMBTEXTF_VUPRINTF_ENABLE_ALTERNATE_FORM */
+#else /* ENABLE_VUPRINTF_ALTERNATE_FORM */
   TEST("%#o", "%#o", 123);
   TEST("%#o", "%#o", 0);
   TEST("%#x -123", "%#x %d", -123);
-#endif /* EMBTEXTF_VUPRINTF_ENABLE_ALTERNATE_FORM */
+#endif /* ENABLE_VUPRINTF_ALTERNATE_FORM */
 
   /* Sign modifiers */
   TEST(" 12", "% d", 12);
@@ -212,14 +214,14 @@ test_basic (void)
   TEST("    ab", "%*x", 6, 0xab);
   TEST("ab    ", "%*x", -6, 0xab);
   TEST("  a string", "%10s", "a string");
-#if EMBTEXTF_VUPRINTF_ENABLE_INTPTR - 0
+#if ENABLE_VUPRINTF_INTPTR - 0
   TEST("0", "%p", NULL);
-#else /* EMBTEXTF_VUPRINTF_ENABLE_INTPTR */
+#else /* ENABLE_VUPRINTF_INTPTR */
   TEST("%p", "%p", NULL);
-#endif /* EMBTEXTF_VUPRINTF_ENABLE_INTPTR */
+#endif /* ENABLE_VUPRINTF_INTPTR */
   TEST("   r", "%4c", 'r');
   TEST("l   ", "%-4c", 'l');
-#if EMBTEXTF_VUPRINTF_ENABLE_PRECISION - 0
+#if ENABLE_VUPRINTF_PRECISION - 0
   /* Precision */
   TEST("0012", "%.4d", 12);
   TEST("  0012", "%6.4d", 12);
@@ -249,7 +251,7 @@ test_basic (void)
   TEST("1", "%.d", 1);
   TEST("0", "%.d", 0);
   TEST("'    mno' 'mnopq'", "'%7.3s' '%s'", "mnopq", "mnopq");
-#else /* EMBTEXTF_VUPRINTF_ENABLE_PRECISION */
+#else /* ENABLE_VUPRINTF_PRECISION */
   TEST("%.4d 12", "%.4d %d", 12);
   TEST("%6.4d 12", "%6.4d %d", 12);
   TEST("%4.2d 12345", "%4.2d %u", 12345);
@@ -263,15 +265,15 @@ test_basic (void)
   TEST("%6.*x 3 ab", "%6.*x %d %x", 3, 0xab);
   TEST("%*.*x 3 ab", "%*.*x %d %x", 6, 3, 0xab);
   TEST("%#6.3x ab", "%#6.3x %x", 0xab);
-#if EMBTEXTF_VUPRINTF_ENABLE_ALTERNATE_FORM - 0
+#if ENABLE_VUPRINTF_ALTERNATE_FORM - 0
   TEST("%#*.3x ab", "%#*.3x %x", 6, 0xab);
   TEST("%#6.*x 3 ab", "%#6.*x %d %x", 3, 0xab);
   TEST("%#*.*x 3 ab", "%#*.*x %d %x", 6, 3, 0xab);
-#else /* EMBTEXTF_VUPRINTF_ENABLE_ALTERNATE_FORM */
+#else /* ENABLE_VUPRINTF_ALTERNATE_FORM */
   TEST("%#*.3x 6 ab", "%#*.3x %d %x", 6, 0xab);
   TEST("%#6.*x 3 ab", "%#6.*x %d %x", 3, 0xab);
   TEST("%#*.*x 6 3 ab", "%#*.*x %d %d %x", 6, 3, 0xab);
-#endif /* EMBTEXTF_VUPRINTF_ENABLE_ALTERNATE_FORM */
+#endif /* ENABLE_VUPRINTF_ALTERNATE_FORM */
   TEST("%.3s mnopq", "%.3s %s", "mnopq");
   TEST("%.*s 3 mnopq", "%.*s %d %s", 3, "mnopq");
   TEST("%*.4? 2", "%*.4? %d", 1, 2);
@@ -285,7 +287,7 @@ test_basic (void)
   TEST("%.d 1", "%.d %d", 1);
   TEST("%.d 0", "%.d %d", 0);
   TEST("'%7.3s' mnopq 'mnopq'", "'%7.3s' %s '%s'", "mnopq", "mnopq");
-#endif /* EMBTEXTF_VUPRINTF_ENABLE_PRECISION */
+#endif /* ENABLE_VUPRINTF_PRECISION */
   TEST0("%?", "%?");
   TEST0("%", "%%");
   TEST0("", "%");
@@ -295,19 +297,19 @@ void
 test_strprec (void)
 {
   /* Basics */
-#if EMBTEXTF_VUPRINTF_ENABLE_PRECISION - 0
+#if ENABLE_VUPRINTF_PRECISION - 0
   TEST("    a", "%5.3s", "a");
   TEST("   ab", "%5.3s", "ab");
   TEST("  abc", "%5.3s", "abc");
   TEST("  abc", "%5.3s", "abcd");
   TEST("  abc", "%5.3s", "abcde");
-#else /* EMBTEXTF_VUPRINTF_ENABLE_PRECISION */
+#else /* ENABLE_VUPRINTF_PRECISION */
   TEST("%5.3s a", "%5.3s %s", "a");
   TEST("%5.3s ab", "%5.3s %s", "ab");
   TEST("%5.3s abc", "%5.3s %s", "abc");
   TEST("%5.3s abcd", "%5.3s %s", "abcd");
   TEST("%5.3s abcde", "%5.3s %s", "abcde");
-#endif /* EMBTEXTF_VUPRINTF_ENABLE_PRECISION */
+#endif /* ENABLE_VUPRINTF_PRECISION */
 }
 
 void
@@ -335,7 +337,7 @@ test_utoa (void)
   CU_ASSERT_STRING_EQUAL("11000000111001", utoa(12345, buffer, 2));
 }
 
-#if (EMBTEXTF_XTOA_ENABLE_LONGLONG - 0)
+#if (ENABLE_XTOA_LONGLONG - 0)
 void
 test_lltoa (void)
 {
@@ -345,7 +347,7 @@ test_lltoa (void)
   CU_ASSERT_STRING_EQUAL("123456789ABCDEF0", lltoa(0x123456789abcdef0LL, buffer, 16));
   CU_ASSERT_STRING_EQUAL("FEDCBA9876543210", lltoa(0xfedcba9876543210LL, buffer, 16));
 }
-#endif /* EMBTEXTF_XTOA_ENABLE_LONGLONG */
+#endif /* ENABLE_XTOA_LONGLONG */
 
 int
 main (int argc,
@@ -367,9 +369,9 @@ main (int argc,
     { "strprec", test_strprec },
     { "itoa", test_itoa },
     { "utoa", test_utoa },
-#if (EMBTEXTF_XTOA_ENABLE_LONGLONG - 0)
+#if (ENABLE_XTOA_LONGLONG - 0)
     { "lltoa", test_lltoa },
-#endif /* EMBTEXTF_XTOA_ENABLE_LONGLONG */
+#endif /* ENABLE_XTOA_LONGLONG */
   };
   const int ntests = sizeof(tests) / sizeof(*tests);
   int i;

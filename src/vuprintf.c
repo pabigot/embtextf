@@ -44,39 +44,40 @@
 #include <stdint.h>
 #include <limits.h>
 #include <embtextf/uprintf.h>
+#include <embtextf/buildconf.h>
 
 /**
  * Internal state tracking.
  * Saves memory and parameters when compacted in a bit field.
  */
 typedef struct {
-#if EMBTEXTF_VUPRINTF_ENABLE_LONG - 0
+#if ENABLE_VUPRINTF_LONG - 0
   unsigned int is_long:1;            /**< emit as long */
-#if EMBTEXTF_VUPRINTF_ENABLE_LONGLONG - 0
+#if ENABLE_VUPRINTF_LONGLONG - 0
   unsigned int is_longlong:1;        /**< emit as long long */
-#endif /* EMBTEXTF_VUPRINTF_ENABLE_LONG */
-#endif /* EMBTEXTF_VUPRINTF_ENABLE_LONGLONG */
+#endif /* ENABLE_VUPRINTF_LONG */
+#endif /* ENABLE_VUPRINTF_LONGLONG */
   unsigned int is_signed:1;          /**< process a signed number */
-#if EMBTEXTF_VUPRINTF_ENABLE_ALTERNATE_FORM - 0
+#if ENABLE_VUPRINTF_ALTERNATE_FORM - 0
   unsigned int is_alternate_form:1;  /**< alternate output */
-#endif /* EMBTEXTF_VUPRINTF_ENABLE_ALTERNATE_FORM */
+#endif /* ENABLE_VUPRINTF_ALTERNATE_FORM */
   unsigned int left_align:1;         /**< if != 0 pad on right side, else on left side */
-#if EMBTEXTF_VUPRINTF_ENABLE_ALTERNATE_FORM - 0
-#if EMBTEXTF_VUPRINTF_ENABLE_OCTAL - 0
+#if ENABLE_VUPRINTF_ALTERNATE_FORM - 0
+#if ENABLE_VUPRINTF_OCTAL - 0
   unsigned int emit_octal_prefix:1;  /**< emit a prefix 0 */
-#endif /* EMBTEXTF_VUPRINTF_ENABLE_OCTAL */
+#endif /* ENABLE_VUPRINTF_OCTAL */
   unsigned int emit_hex_prefix:1;    /**< emit a prefix 0x */
-#endif /* EMBTEXTF_VUPRINTF_ENABLE_ALTERNATE_FORM */
+#endif /* ENABLE_VUPRINTF_ALTERNATE_FORM */
   unsigned int fill_zero:1;          /**< pad left with zero instead of space */
   unsigned int uppercase:1;          /**< print hex digits in upper case */
-#if EMBTEXTF_VUPRINTF_ENABLE_PRECISION - 0
+#if ENABLE_VUPRINTF_PRECISION - 0
   unsigned int zero_pad_precision:1; /**< add precision zeros before text */
   unsigned int truncate_precision:1; /**< limit text to precision characters */
-#endif /* EMBTEXTF_VUPRINTF_ENABLE_PRECISION */
+#endif /* ENABLE_VUPRINTF_PRECISION */
   char sign_char;                    /**< character to emit as sign (NUL no emit) */
-#if EMBTEXTF_VUPRINTF_ENABLE_PRECISION - 0
+#if ENABLE_VUPRINTF_PRECISION - 0
   uint8_t precision;                 /**< value related to format precision specifier */
-#endif /* EMBTEXTF_VUPRINTF_ENABLE_PRECISION */
+#endif /* ENABLE_VUPRINTF_PRECISION */
 } flags_t;
 
 /** Maximum number of characters in any (numeric) prefix.  That would
@@ -85,27 +86,27 @@ typedef struct {
 
 /** Size of the largest integer type, in octets.  We know short <= int
  * <= long <= long long. */
-#if EMBTEXTF_VUPRINTF_ENABLE_LONGLONG - 0
+#if ENABLE_VUPRINTF_LONGLONG - 0
 #define SIZEOF_LARGEINT sizeof(long long int)
-#elif EMBTEXTF_VUPRINTF_ENABLE_LONG - 0
+#elif ENABLE_VUPRINTF_LONG - 0
 #define SIZEOF_LARGEINT sizeof(long int)
-#else /* EMBTEXTF_VUPRINTF_ENABLE_LONG */
+#else /* ENABLE_VUPRINTF_LONG */
 #define SIZEOF_LARGEINT sizeof(int)
-#endif /* EMBTEXTF_VUPRINTF_ENABLE_* */
+#endif /* ENABLE_VUPRINTF_* */
 
 /** If intptr_t is enabled, its size.  We have no idea where it lies
  * relative to other integral types. */
-#if EMBTEXTF_VUPRINTF_ENABLE_INTPTR - 0
+#if ENABLE_VUPRINTF_INTPTR - 0
 #define SIZEOF_INTPTR sizeof(intptr_t)
-#else /* EMBTEXTF_VUPRINTF_ENABLE_INTPTR */
+#else /* ENABLE_VUPRINTF_INTPTR */
 #define SIZEOF_INTPTR 0
-#endif /* EMBTEXTF_VUPRINTF_ENABLE_INTPTR */
+#endif /* ENABLE_VUPRINTF_INTPTR */
 
-#if EMBTEXTF_VUPRINTF_ENABLE_OCTAL - 0
+#if ENABLE_VUPRINTF_OCTAL - 0
 #define CHARS_FOR_SIZEOF(so_) ((CHAR_BIT * (so_) + 2) / 3)
-#else /* EMBTEXTF_VUPRINTF_ENABLE_OCTAL */
+#else /* ENABLE_VUPRINTF_OCTAL */
 #define CHARS_FOR_SIZEOF(so_) ((CHAR_BIT * (so_) + 2) / 3)
-#endif /* EMBTEXTF_VUPRINTF_ENABLE_OCTAL */
+#endif /* ENABLE_VUPRINTF_OCTAL */
 
 /** Maximum number of characters for formatted numbers, including sign
  * and EOS but excluding prefix.  The longest representation will be
@@ -124,16 +125,16 @@ static int
 build_numeric_prefix (char *prefix_buffer, flags_t flags)
 {
   char *p = prefix_buffer;
-#if EMBTEXTF_VUPRINTF_ENABLE_ALTERNATE_FORM - 0
+#if ENABLE_VUPRINTF_ALTERNATE_FORM - 0
   if (flags.emit_hex_prefix) {
     *p++ = '0';
     *p++ = (flags.uppercase ? 'X' : 'x');
-#if EMBTEXTF_VUPRINTF_ENABLE_OCTAL - 0
+#if ENABLE_VUPRINTF_OCTAL - 0
   } else if (flags.emit_octal_prefix) {
     *p++ = '0';
-#endif /* EMBTEXTF_VUPRINTF_ENABLE_OCTAL */
+#endif /* ENABLE_VUPRINTF_OCTAL */
   } else
-#endif /* EMBTEXTF_VUPRINTF_ENABLE_ALTERNATE_FORM */
+#endif /* ENABLE_VUPRINTF_ALTERNATE_FORM */
     if (flags.sign_char) {
       *p++ = flags.sign_char;
     }
@@ -157,12 +158,12 @@ print_field (embtextf_putchar_fn write_char, const char *char_p, unsigned int wi
   int character_count = 0;
   char prefix_buffer[MAX_PREFIX_CHARS];
   int prefix_idx = 0;
-#if EMBTEXTF_VUPRINTF_ENABLE_PRECISION - 0
+#if ENABLE_VUPRINTF_PRECISION - 0
   unsigned int truncate_precision;
-#endif /* EMBTEXTF_VUPRINTF_ENABLE_PRECISION */
+#endif /* ENABLE_VUPRINTF_PRECISION */
   int prefix_len = build_numeric_prefix(prefix_buffer, flags);
 
-#if EMBTEXTF_VUPRINTF_ENABLE_PRECISION - 0
+#if ENABLE_VUPRINTF_PRECISION - 0
   /* Set the number of characters of precision we should output.  If
    * truncation by precision is not specified, use -1 as an
    * approximation of "infinity". */
@@ -170,7 +171,7 @@ print_field (embtextf_putchar_fn write_char, const char *char_p, unsigned int wi
   if (!flags.truncate_precision) {
     truncate_precision = (unsigned int)-1;
   }
-#endif /* EMBTEXTF_VUPRINTF_ENABLE_PRECISION */
+#endif /* ENABLE_VUPRINTF_PRECISION */
 
   /*  if right aligned, pad */
   if (!flags.left_align) {
@@ -184,7 +185,7 @@ print_field (embtextf_putchar_fn write_char, const char *char_p, unsigned int wi
       width = 0;
     }
 
-#if EMBTEXTF_VUPRINTF_ENABLE_PRECISION - 0
+#if ENABLE_VUPRINTF_PRECISION - 0
     /*  Account for leading zeros required by a numeric precision specifier */
     if (flags.zero_pad_precision) {
       if (flags.precision <= width) {
@@ -198,7 +199,7 @@ print_field (embtextf_putchar_fn write_char, const char *char_p, unsigned int wi
     if (truncate_precision < len) {
       len = truncate_precision;
     }
-#endif /* EMBTEXTF_VUPRINTF_ENABLE_PRECISION */
+#endif /* ENABLE_VUPRINTF_PRECISION */
 
     /*  emit numeric prefix prior to padded zeros */
     if (flags.fill_zero) {
@@ -222,7 +223,7 @@ print_field (embtextf_putchar_fn write_char, const char *char_p, unsigned int wi
     write_char(prefix_buffer[prefix_idx++]);
   }
 
-#if EMBTEXTF_VUPRINTF_ENABLE_PRECISION - 0
+#if ENABLE_VUPRINTF_PRECISION - 0
   /*  emit zeros to meet precision requirements */
   if (flags.zero_pad_precision) {
     while (flags.precision--) {
@@ -230,13 +231,13 @@ print_field (embtextf_putchar_fn write_char, const char *char_p, unsigned int wi
       character_count++;
     }
   }
-#endif /* EMBTEXTF_VUPRINTF_ENABLE_PRECISION */
+#endif /* ENABLE_VUPRINTF_PRECISION */
 
   /*  output the buffer contents up to the maximum length */
   while (*char_p
-#if EMBTEXTF_VUPRINTF_ENABLE_PRECISION - 0
+#if ENABLE_VUPRINTF_PRECISION - 0
          && truncate_precision--
-#endif /* EMBTEXTF_VUPRINTF_ENABLE_PRECISION */
+#endif /* ENABLE_VUPRINTF_PRECISION */
         ) {
     write_char(*char_p);
     char_p++;
@@ -302,22 +303,22 @@ embtextf_vuprintf (embtextf_putchar_fn write_char, const char *format, va_list a
   char character;
   int radix;
   char have_wp_value = 0;
-#if EMBTEXTF_VUPRINTF_ENABLE_PRECISION - 0
+#if ENABLE_VUPRINTF_PRECISION - 0
   char have_precision = 0;
-#endif /* EMBTEXTF_VUPRINTF_ENABLE_PRECISION */
+#endif /* ENABLE_VUPRINTF_PRECISION */
   char is_zero = 0;
   char is_negative = 0;
   union {
     int i;
-#if EMBTEXTF_VUPRINTF_ENABLE_INTPTR - 0
+#if ENABLE_VUPRINTF_INTPTR - 0
     intptr_t ptr;
-#endif /* EMBTEXTF_VUPRINTF_ENABLE_INTPTR */
-#if EMBTEXTF_VUPRINTF_ENABLE_LONG - 0
+#endif /* ENABLE_VUPRINTF_INTPTR */
+#if ENABLE_VUPRINTF_LONG - 0
     long int li;
-#if EMBTEXTF_VUPRINTF_ENABLE_LONGLONG - 0
+#if ENABLE_VUPRINTF_LONGLONG - 0
     long long int lli;
-#endif /* EMBTEXTF_VUPRINTF_ENABLE_LONGLONG */
-#endif /* EMBTEXTF_VUPRINTF_ENABLE_LONG */
+#endif /* ENABLE_VUPRINTF_LONGLONG */
+#endif /* ENABLE_VUPRINTF_LONG */
   } number;
   char buffer[MAX_FORMAT_LENGTH];       /*  used to print numbers */
 
@@ -330,9 +331,9 @@ embtextf_vuprintf (embtextf_putchar_fn write_char, const char *format, va_list a
         width = wp_value = 0;
         memset(&flags, 0, sizeof(flags));
         have_wp_value = is_zero = is_negative = 0;
-#if EMBTEXTF_VUPRINTF_ENABLE_PRECISION - 0
+#if ENABLE_VUPRINTF_PRECISION - 0
         have_precision = 0;
-#endif /* EMBTEXTF_VUPRINTF_ENABLE_PRECISION */
+#endif /* ENABLE_VUPRINTF_PRECISION */
         specifier = format - 1;
         mode = FORMATING;
       } else {
@@ -349,24 +350,24 @@ write_character:
         case '%':
           goto write_character; /*  character is already the % */
 
-#if EMBTEXTF_VUPRINTF_ENABLE_ALTERNATE_FORM - 0
+#if ENABLE_VUPRINTF_ALTERNATE_FORM - 0
           /*  alternate form flag */
         case '#':
           flags.is_alternate_form = 1;
           break;
-#endif /* EMBTEXTF_VUPRINTF_ENABLE_ALTERNATE_FORM */
+#endif /* ENABLE_VUPRINTF_ALTERNATE_FORM */
 
-#if EMBTEXTF_VUPRINTF_ENABLE_LONG - 0
+#if ENABLE_VUPRINTF_LONG - 0
           /*  interpret next number as long integer */
         case 'l':
-#if EMBTEXTF_VUPRINTF_ENABLE_LONGLONG - 0
+#if ENABLE_VUPRINTF_LONGLONG - 0
           if (flags.is_longlong) {
             goto bad_format;
           } else if (flags.is_long) {
             flags.is_long = 0;
             flags.is_longlong = 1;
           } else
-#endif /* EMBTEXTF_VUPRINTF_ENABLE_LONGLONG */
+#endif /* ENABLE_VUPRINTF_LONGLONG */
           {
             if (flags.is_long) {
               goto bad_format;
@@ -374,7 +375,7 @@ write_character:
             flags.is_long = 1;
           }
           break;
-#endif /* EMBTEXTF_VUPRINTF_ENABLE_LONG */
+#endif /* ENABLE_VUPRINTF_LONG */
 
           /*  left align instead of right align */
         case '-':
@@ -394,7 +395,7 @@ write_character:
           }
           break;
 
-#if EMBTEXTF_VUPRINTF_ENABLE_PRECISION - 0
+#if ENABLE_VUPRINTF_PRECISION - 0
         case '.':
           /*  explicit precision is present */
           if (have_wp_value) {
@@ -404,7 +405,7 @@ write_character:
           }
           have_precision = 1;
           break;
-#endif /* EMBTEXTF_VUPRINTF_ENABLE_PRECISION */
+#endif /* ENABLE_VUPRINTF_PRECISION */
           /*  fetch length from argument list instead of the format */
           /*  string itself */
         case '*': {
@@ -412,10 +413,10 @@ write_character:
 
           if (val >= 0) {
             wp_value = val;
-#if EMBTEXTF_VUPRINTF_ENABLE_PRECISION - 0
+#if ENABLE_VUPRINTF_PRECISION - 0
           } else if (have_precision) {
             wp_value = 0;
-#endif /* EMBTEXTF_VUPRINTF_ENABLE_PRECISION */
+#endif /* ENABLE_VUPRINTF_PRECISION */
           } else {
             flags.left_align = 1;
             wp_value = -val;
@@ -432,9 +433,9 @@ write_character:
           /*  it must be a leading zero if 'width' is zero */
           /*  otherwise it is in a number as in "10" */
           if (wp_value == 0
-#if EMBTEXTF_VUPRINTF_ENABLE_PRECISION - 0
+#if ENABLE_VUPRINTF_PRECISION - 0
               && !have_precision
-#endif /* EMBTEXTF_VUPRINTF_ENABLE_PRECISION */
+#endif /* ENABLE_VUPRINTF_PRECISION */
              ) {
             flags.fill_zero = !flags.left_align;
             break;
@@ -458,9 +459,9 @@ write_character:
         case 'c':
           character = va_arg(args, int);
           if (! have_wp_value
-#if EMBTEXTF_VUPRINTF_ENABLE_PRECISION - 0
+#if ENABLE_VUPRINTF_PRECISION - 0
               && ! have_precision
-#endif /* EMBTEXTF_VUPRINTF_ENABLE_PRECISION */
+#endif /* ENABLE_VUPRINTF_PRECISION */
              ) {
             goto write_character;
           }
@@ -476,12 +477,12 @@ write_character:
 emit_string:
           /* Note: Zero-padding on strings is undefined; it
            * is legitimate to zero-pad */
-#if EMBTEXTF_VUPRINTF_ENABLE_PRECISION - 0
+#if ENABLE_VUPRINTF_PRECISION - 0
           if (have_precision) {
             flags.truncate_precision = 1;
             flags.precision = wp_value;
           } else
-#endif /* EMBTEXTF_VUPRINTF_ENABLE_PRECISION */
+#endif /* ENABLE_VUPRINTF_PRECISION */
             if (have_wp_value) {
               width = wp_value;
             }
@@ -491,7 +492,7 @@ emit_string:
           mode = DIRECT;
           break;
 
-#if EMBTEXTF_VUPRINTF_ENABLE_INTPTR - 0
+#if ENABLE_VUPRINTF_INTPTR - 0
           /*  placeholder for an address */
           /*  addresses are automatically in alternate form and */
           /*  hexadecimal. */
@@ -499,11 +500,11 @@ emit_string:
           number.ptr = (intptr_t) va_arg(args, void *);
           number.ptr &= UINTPTR_MAX;
           radix = 16;
-#if EMBTEXTF_VUPRINTF_ENABLE_ALTERNATE_FORM - 0
+#if ENABLE_VUPRINTF_ALTERNATE_FORM - 0
           flags.is_alternate_form = (0 != number.ptr);
-#endif /* EMBTEXTF_VUPRINTF_ENABLE_ALTERNATE_FORM */
+#endif /* ENABLE_VUPRINTF_ALTERNATE_FORM */
           goto emit_number;
-#endif /* EMBTEXTF_VUPRINTF_ENABLE_INTPTR */
+#endif /* ENABLE_VUPRINTF_INTPTR */
 
           /* hexadecimal output */
         case 'X':
@@ -513,12 +514,12 @@ emit_string:
           radix = 16;
           goto fetch_number;
 
-#if EMBTEXTF_VUPRINTF_ENABLE_OCTAL - 0
+#if ENABLE_VUPRINTF_OCTAL - 0
           /* octal output */
         case 'o':
           radix = 8;
           goto fetch_number;
-#endif /* EMBTEXTF_VUPRINTF_ENABLE_OCTAL */
+#endif /* ENABLE_VUPRINTF_OCTAL */
 
           /* decimal signed numbers */
         case 'd':
@@ -530,20 +531,20 @@ emit_string:
           radix = 10;
           /*  label for number outputs including argument fetching */
 fetch_number:
-#if EMBTEXTF_VUPRINTF_ENABLE_LONG - 0
-#if EMBTEXTF_VUPRINTF_ENABLE_LONGLONG - 0
+#if ENABLE_VUPRINTF_LONG - 0
+#if ENABLE_VUPRINTF_LONGLONG - 0
           if (flags.is_longlong) {
             number.lli = va_arg(args, long long int);
             is_zero = (number.lli == 0);
             is_negative = (number.lli < 0);
           } else
-#endif /* EMBTEXTF_VUPRINTF_ENABLE_LONGLONG */
+#endif /* ENABLE_VUPRINTF_LONGLONG */
             if (flags.is_long) {
               number.li = va_arg(args, long int);
               is_zero = (number.li == 0);
               is_negative = (number.li < 0);
             } else
-#endif /* EMBTEXTF_VUPRINTF_ENABLE_LONG */
+#endif /* ENABLE_VUPRINTF_LONG */
             {
               number.i = va_arg(args, int);
               is_zero = (number.i == 0);
@@ -553,31 +554,31 @@ fetch_number:
           /*  'number' already contains the value */
           goto emit_number;
 emit_number:
-#if EMBTEXTF_VUPRINTF_ENABLE_ALTERNATE_FORM - 0
+#if ENABLE_VUPRINTF_ALTERNATE_FORM - 0
           /*  only non-zero numbers get hex/octal alternate form */
           if (flags.is_alternate_form && !is_zero) {
             if (radix == 16) {
               flags.emit_hex_prefix = 1;
-#if EMBTEXTF_VUPRINTF_ENABLE_OCTAL - 0
+#if ENABLE_VUPRINTF_OCTAL - 0
             } else if (radix == 8) {
               flags.emit_octal_prefix = 1;
-#endif /* EMBTEXTF_VUPRINTF_ENABLE_OCTAL */
+#endif /* ENABLE_VUPRINTF_OCTAL */
             }
           }
-#endif /* EMBTEXTF_VUPRINTF_ENABLE_ALTERNATE_FORM */
+#endif /* ENABLE_VUPRINTF_ALTERNATE_FORM */
           if (flags.is_signed && is_negative) {
             /*  save sign for radix 10 conversion */
             flags.sign_char = '-';
-#if EMBTEXTF_VUPRINTF_ENABLE_LONG - 0
-#if EMBTEXTF_VUPRINTF_ENABLE_LONGLONG - 0
+#if ENABLE_VUPRINTF_LONG - 0
+#if ENABLE_VUPRINTF_LONGLONG - 0
             if (flags.is_longlong) {
               number.lli = -number.lli;
             } else
-#endif /* EMBTEXTF_VUPRINTF_ENABLE_LONGLONG */
+#endif /* ENABLE_VUPRINTF_LONGLONG */
               if (flags.is_long) {
                 number.li = -number.li;
               } else
-#endif /* EMBTEXTF_VUPRINTF_ENABLE_LONG */
+#endif /* ENABLE_VUPRINTF_LONG */
                 number.i = -number.i;
           }
 
@@ -599,16 +600,16 @@ emit_number:
             }                                                           \
           while ((_unsigned) _number > 0)
 
-#if EMBTEXTF_VUPRINTF_ENABLE_LONG - 0
-#if EMBTEXTF_VUPRINTF_ENABLE_LONGLONG - 0
+#if ENABLE_VUPRINTF_LONG - 0
+#if ENABLE_VUPRINTF_LONGLONG - 0
           if (flags.is_longlong) {
             CONVERT_LOOP(unsigned long long int, number.lli);
           } else
-#endif /* EMBTEXTF_VUPRINTF_ENABLE_LONGLONG */
+#endif /* ENABLE_VUPRINTF_LONGLONG */
             if (flags.is_long) {
               CONVERT_LOOP(unsigned long int, number.li);
             } else
-#endif /* EMBTEXTF_VUPRINTF_ENABLE_LONG */
+#endif /* ENABLE_VUPRINTF_LONG */
               CONVERT_LOOP(unsigned int, number.i);
 
 #undef CONVERT_LOOP
@@ -619,7 +620,7 @@ emit_number:
           }
 
           /*  write padded result */
-#if EMBTEXTF_VUPRINTF_ENABLE_PRECISION - 0
+#if ENABLE_VUPRINTF_PRECISION - 0
           if (have_precision) {
             int number_width = buffer + sizeof(buffer) - char_p - 2;
             if (number_width < wp_value) {
@@ -627,7 +628,7 @@ emit_number:
               flags.precision = wp_value - number_width;
             }
           } else
-#endif /* EMBTEXTF_VUPRINTF_ENABLE_PRECISION */
+#endif /* ENABLE_VUPRINTF_PRECISION */
             if (have_wp_value) {
               width = wp_value;
             }
@@ -636,9 +637,9 @@ emit_number:
           break;
 
         default:
-#if EMBTEXTF_VUPRINTF_ENABLE_LONG - 0
+#if ENABLE_VUPRINTF_LONG - 0
 bad_format:
-#endif /* EMBTEXTF_VUPRINTF_ENABLE_LONG */
+#endif /* ENABLE_VUPRINTF_LONG */
           while (specifier < format) {
             write_char(*specifier++);
             ++character_count;
