@@ -105,13 +105,4 @@
 #define ENABLE_VUPRINTF_ALTERNATE_FORM ENABLE_VUPRINTF_DEFAULT
 #endif /* ENABLE_VUPRINTF_ALTERNATE_FORM */
 
-#ifndef ENABLE_XTOA_LONGLONG
-/** Set to a preprocessor true value to generate conversion for @c
- * long @c long integer types.
- *
- * @c long @c long is a non-standard extension prior to C99.  If false,
- * the conversion specification will be passed through as text. */
-#define ENABLE_XTOA_LONGLONG 1
-#endif /* ENABLE_XTOA_LONGLONG */
-
 #endif /* EMBTEXTF_BUILDCONF_H */

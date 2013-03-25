@@ -78,14 +78,10 @@ char * embtextf_ltoa (long value, char * str, int radix);
 /** As with itoa() but for unsigned long integers. */
 char * embtextf_ultoa (unsigned long value, char * str, int radix);
 
-/** As with itoa() but for long long integers.
- *
- * Availability conditional on #ENABLE_XTOA_LONGLONG. */
+/** As with itoa() but for long long integers. */
 char * embtextf_lltoa (long long value, char * str, int radix);
 
-/** As with itoa() but for unsigned long long integers. 
- *
- * Availability conditional on #ENABLE_XTOA_LONGLONG. */
+/** As with itoa() but for unsigned long long integers. */
 char * embtextf_ulltoa (unsigned long long value, char * str, int radix);
 
 #endif /* EMBTEXTF_XTOA_H */

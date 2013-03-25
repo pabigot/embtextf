@@ -337,7 +337,6 @@ test_utoa (void)
   CU_ASSERT_STRING_EQUAL("11000000111001", utoa(12345, buffer, 2));
 }
 
-#if (ENABLE_XTOA_LONGLONG - 0)
 void
 test_lltoa (void)
 {
@@ -347,7 +346,6 @@ test_lltoa (void)
   CU_ASSERT_STRING_EQUAL("123456789ABCDEF0", lltoa(0x123456789abcdef0LL, buffer, 16));
   CU_ASSERT_STRING_EQUAL("FEDCBA9876543210", lltoa(0xfedcba9876543210LL, buffer, 16));
 }
-#endif /* ENABLE_XTOA_LONGLONG */
 
 int
 main (int argc,
