@@ -34,7 +34,7 @@
  * @brief Version data and documentation for embtextf library
  *
  * @homepage http://github.com/pabigot/embtextf
- * @copyright @copyrightblock
+ * @copyright Copyright 2013, Peter A. Bigot.  Licensed under <a href="http://www.opensource.org/licenses/BSD-3-Clause">BSD-3-Clause</a>
  *
  * @mainpage embtextf: Embedded System Text Formatting
  *
@@ -61,7 +61,7 @@
  * caller-provided buffer in any radix from base 2 to base 36;
  *
  * @li The entire family of *printf(3c) functions takes between 1KB
- * and 2.5KB of code depending on target processor and feature
+ * and 3KB of code depending on target processor and feature
  * selection.
  *
  * The conversions operate on native C types, abstracting away from
@@ -72,9 +72,11 @@
  * from both the toolchain and application namespaces.  This allows
  * embtextf to co-exist with toolchains like mspgcc, which provide the
  * same functionality in a compatible way, and others like Code
- * Composer Studio which provide similarly named functions but with
- * different semantics or interfaces.  The application program can use
- * the preprocessor to redirect unqualified names to the embtextf
+ * Composer Studio or toolchains using <a
+ * href="http://sourceware.org/newlib/">newlib</a> which provide
+ * similarly named functions with different semantics, interfaces, or
+ * memory expectations.  The application program can use the
+ * preprocessor to redirect unqualified names to the embtextf
  * implementations.
  *
  * @homepage http://github.com/pabigot/embtextf
@@ -86,6 +88,6 @@
 
 /** Version of the embtextf library.  This is a monotonically
  * non-decreasing integer value suitable for ordinal comparisons. */
-#define EMBTEXTF_VERSION 20130322
+#define EMBTEXTF_VERSION 20130325
 
 #endif /* EMBTEXTF_VERSION_H */
