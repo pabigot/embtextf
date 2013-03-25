@@ -22,7 +22,7 @@
  <tr style="height: 56px;">
   <td style="padding-left: 0.5em;">
    <div id="projectname">embtextf
-   &#160;<span id="projectnumber">20130322</span>
+   &#160;<span id="projectnumber">20130325</span>
    </div>
    <div id="projectbrief">Embedded System Text Formatting</div>
   </td>
@@ -77,24 +77,28 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="title">embtextf: Embedded System Text Formatting </div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><p>embtextf is a collection of functions supporting *printf(3c) and numeric formatting functionality on embedded devices with highly constrained memory:</p>
+<div class="textblock"><p>embtextf is a collection of functions supporting *printf(3c) and numeric formatting functionality on embedded devices with highly constrained memory. It derives from functions originally provided in msp430-libc from the <a href="http://sourceforge.net/projects/mspgcc/">MSPGCC project</a>.</p>
+<p>Features include:</p>
 <ul>
-<li>The base <a class="el" href="uprintf_8h.html#adcc1a1b08e8d172b8d30523d76b53d6f">embtextf_vuprintf()</a> function supports *printf(3c) functions through a caller-provided callback function that handles each formatted character as it is produced. This approach eliminates the need for large internal buffers to hold the constructed data.</li>
+<li>The base <a class="el" href="uprintf_8h.html#adcc1a1b08e8d172b8d30523d76b53d6f">embtextf_vuprintf()</a> function supports *printf(3c) compatible output through a caller-provided callback function that handles each formatted character as it is produced. This approach eliminates the need for large internal buffers to hold the constructed data;</li>
 </ul>
 <ul>
-<li>The supported <a class="el" href="uprintf_8h.html#uprintf_format">format-string capabilities</a> cover most non-floating-point format specifiers and modifiers, with some compile-time control to mediate between features and required code space.</li>
+<li>The supported <a class="el" href="uprintf_8h.html#uprintf_format">format-string capabilities</a> cover most non-floating-point format specifiers and modifiers, with some compile-time control to mediate between features and required code space;</li>
 </ul>
 <ul>
-<li><a class="el" href="xtoa_8h.html#xtoa_intro">Mixed-Base Integer to String Conversion Functions</a> format <code>int</code> and <code>long</code> values into a caller-provided buffer in any radix from base 2 to base 36.</li>
+<li><a class="el" href="xtoa_8h.html#xtoa_intro">Mixed-Base Integer to String Conversion Functions</a> format <code>int</code> and <code>long</code> values into a caller-provided buffer in any radix from base 2 to base 36;</li>
+</ul>
+<ul>
+<li>The entire family of *printf(3c) functions takes between 1KB and 3KB of code depending on target processor and feature selection.</li>
 </ul>
 <p>The conversions operate on native C types, abstracting away from word size and byte order. The module has been tested on both 16- and 32-bit microcontrollers.</p>
-<p>Each provided function is prefixed with <code>embtextf_</code> to isolate it from both the toolchain and application namespaces. This allows embtextf to co-exist with toolchains like mspgcc, which provide the same functionality in a compatible way, and others like Code Composer Studio which provide similarly named functions but with different semantics or interfaces. The application program can use the preprocessor to redirect unqualified names to the embtextf implementations.</p>
+<p>Each provided function is prefixed with <code>embtextf_</code> to isolate it from both the toolchain and application namespaces. This allows embtextf to co-exist with toolchains like mspgcc, which provide the same functionality in a compatible way, and others like Code Composer Studio or toolchains using <a href="http://sourceware.org/newlib/">newlib</a> which provide similarly named functions with different semantics, interfaces, or memory expectations. The application program can use the preprocessor to redirect unqualified names to the embtextf implementations.</p>
 <dl class="section user"><dt>Homepage</dt><dd><a href="http://github.com/pabigot/embtextf">http://github.com/pabigot/embtextf</a> </dd></dl>
 <dl class="section copyright"><dt>Copyright</dt><dd>Copyright 2011-2013, Peter A. Bigot. <a class="el" href="uprintf_8h.html#adcc1a1b08e8d172b8d30523d76b53d6f">embtextf_vuprintf()</a> contains material copyright 2006-2011, Chris Liechti. Licensed under <a href="http://www.opensource.org/licenses/BSD-3-Clause">BSD-3-Clause</a> </dd></dl>
 </div></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Mar 22 2013 17:08:36 for embtextf by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Mon Mar 25 2013 06:35:13 for embtextf by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.2
 </small></address>

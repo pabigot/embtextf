@@ -1,7 +1,9 @@
 var searchData=
 [
   ['embtextf_5fitoa',['embtextf_itoa',['../xtoa_8h.html#a19bbdf2a3b531b9c9cc4d284b726ff54',1,'xtoa.h']]],
+  ['embtextf_5flltoa',['embtextf_lltoa',['../xtoa_8h.html#ad2c4e26697a73faae9a1ffac239a2e98',1,'xtoa.h']]],
   ['embtextf_5fltoa',['embtextf_ltoa',['../xtoa_8h.html#a16d81d629a2c6762075a2784bb07129a',1,'xtoa.h']]],
+  ['embtextf_5fulltoa',['embtextf_ulltoa',['../xtoa_8h.html#a7e19b019ae67074d82e162e974cbaf78',1,'xtoa.h']]],
   ['embtextf_5fultoa',['embtextf_ultoa',['../xtoa_8h.html#a0e4e7ab6556faead85ccfa786c1c8c51',1,'xtoa.h']]],
   ['embtextf_5fuprintf',['embtextf_uprintf',['../uprintf_8h.html#a48e324c23b94e3a7a92cea85a2b75a51',1,'uprintf.h']]],
   ['embtextf_5futoa',['embtextf_utoa',['../xtoa_8h.html#a3a9a80060611fa1112575592eb2693c2',1,'xtoa.h']]],

@@ -3,7 +3,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
-<title>embtextf: include/embtextf/xtoa.h Source File</title>
+<title>embtextf: include/embtextf/buildconf.h Source File</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -84,10 +84,10 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><!-- top -->
 <div class="header">
   <div class="headertitle">
-<div class="title">xtoa.h</div>  </div>
+<div class="title">buildconf.h</div>  </div>
 </div><!--header-->
 <div class="contents">
-<a href="xtoa_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="comment">/* Copyright (c) 2013, Peter A. Bigot</span></div>
+<a href="buildconf_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="comment">/* Copyright (c) 2012-2013, Peter A. Bigot</span></div>
 <div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="comment"> *</span></div>
 <div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="comment"> * All rights reserved.</span></div>
 <div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="comment"> *</span></div>
@@ -118,22 +118,45 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;<span class="comment"> * POSSIBILITY OF SUCH DAMAGE.</span></div>
 <div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;<span class="comment"> */</span></div>
 <div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;</div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;<span class="preprocessor">#ifndef EMBTEXTF_XTOA_H</span></div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define EMBTEXTF_XTOA_H</span></div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;<span class="preprocessor"></span></div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;<span class="keywordtype">char</span> * <a class="code" href="xtoa_8h.html#a19bbdf2a3b531b9c9cc4d284b726ff54">embtextf_itoa</a> (<span class="keywordtype">int</span> value, <span class="keywordtype">char</span> * str, <span class="keywordtype">int</span> radix);</div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;</div>
-<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;<span class="keywordtype">char</span> * <a class="code" href="xtoa_8h.html#a3a9a80060611fa1112575592eb2693c2">embtextf_utoa</a> (<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> value, <span class="keywordtype">char</span> * str, <span class="keywordtype">int</span> radix);</div>
-<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;</div>
-<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;<span class="keywordtype">char</span> * <a class="code" href="xtoa_8h.html#a16d81d629a2c6762075a2784bb07129a">embtextf_ltoa</a> (<span class="keywordtype">long</span> value, <span class="keywordtype">char</span> * str, <span class="keywordtype">int</span> radix);</div>
-<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;</div>
-<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;<span class="keywordtype">char</span> * <a class="code" href="xtoa_8h.html#a0e4e7ab6556faead85ccfa786c1c8c51">embtextf_ultoa</a> (<span class="keywordtype">unsigned</span> <span class="keywordtype">long</span> value, <span class="keywordtype">char</span> * str, <span class="keywordtype">int</span> radix);</div>
-<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;</div>
-<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;<span class="keywordtype">char</span> * <a class="code" href="xtoa_8h.html#ad2c4e26697a73faae9a1ffac239a2e98">embtextf_lltoa</a> (<span class="keywordtype">long</span> <span class="keywordtype">long</span> value, <span class="keywordtype">char</span> * str, <span class="keywordtype">int</span> radix);</div>
-<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;</div>
-<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;<span class="keywordtype">char</span> * <a class="code" href="xtoa_8h.html#a7e19b019ae67074d82e162e974cbaf78">embtextf_ulltoa</a> (<span class="keywordtype">unsigned</span> <span class="keywordtype">long</span> <span class="keywordtype">long</span> value, <span class="keywordtype">char</span> * str, <span class="keywordtype">int</span> radix);</div>
-<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;</div>
-<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;<span class="preprocessor">#endif </span><span class="comment">/* EMBTEXTF_XTOA_H */</span><span class="preprocessor"></span></div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;<span class="preprocessor">#ifndef EMBTEXTF_BUILDCONF_H</span></div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define EMBTEXTF_BUILDCONF_H</span></div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;<span class="preprocessor"></span></div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;<span class="preprocessor">#ifndef ENABLE_VUPRINTF_DEFAULT</span></div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;<span class="preprocessor"></span></div>
+<div class="line"><a name="l00055"></a><span class="lineno"><a class="code" href="buildconf_8h.html#add2f0e72b40a84ffc13bbc894a61de97">   55</a></span>&#160;<span class="preprocessor">#define ENABLE_VUPRINTF_DEFAULT 1</span></div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#endif </span><span class="comment">/* ENABLE_VUPRINTF_DEFAULT */</span><span class="preprocessor"></span></div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;<span class="preprocessor"></span></div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;<span class="preprocessor">#ifndef ENABLE_VUPRINTF_INTPTR</span></div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;<span class="preprocessor"></span></div>
+<div class="line"><a name="l00062"></a><span class="lineno"><a class="code" href="buildconf_8h.html#a45f81d09121d5a074041d53d8dc1ac0f">   62</a></span>&#160;<span class="preprocessor">#define ENABLE_VUPRINTF_INTPTR ENABLE_VUPRINTF_DEFAULT</span></div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#endif </span><span class="comment">/* ENABLE_VUPRINTF_INTPTR */</span><span class="preprocessor"></span></div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;<span class="preprocessor"></span></div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;<span class="preprocessor">#ifndef ENABLE_VUPRINTF_LONG</span></div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;<span class="preprocessor"></span></div>
+<div class="line"><a name="l00070"></a><span class="lineno"><a class="code" href="buildconf_8h.html#a3a0f9674297d31e170ae1672dfa5a4bd">   70</a></span>&#160;<span class="preprocessor">#define ENABLE_VUPRINTF_LONG ENABLE_VUPRINTF_DEFAULT</span></div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#endif </span><span class="comment">/* ENABLE_VUPRINTF_LONG */</span><span class="preprocessor"></span></div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;<span class="preprocessor"></span></div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;<span class="preprocessor">#ifndef ENABLE_VUPRINTF_LONGLONG</span></div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;<span class="preprocessor"></span></div>
+<div class="line"><a name="l00082"></a><span class="lineno"><a class="code" href="buildconf_8h.html#a8b50c6deec1a690c8df1bf5b06359333">   82</a></span>&#160;<span class="preprocessor">#define ENABLE_VUPRINTF_LONGLONG ENABLE_VUPRINTF_DEFAULT</span></div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#endif </span><span class="comment">/* ENABLE_VUPRINTF_LONGLONG */</span><span class="preprocessor"></span></div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;<span class="preprocessor"></span></div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;<span class="preprocessor">#ifndef ENABLE_VUPRINTF_PRECISION</span></div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;<span class="preprocessor"></span></div>
+<div class="line"><a name="l00090"></a><span class="lineno"><a class="code" href="buildconf_8h.html#ab8ad44df30001599e173b222c99746e1">   90</a></span>&#160;<span class="preprocessor">#define ENABLE_VUPRINTF_PRECISION ENABLE_VUPRINTF_DEFAULT</span></div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#endif </span><span class="comment">/* ENABLE_VUPRINTF_PRECISION */</span><span class="preprocessor"></span></div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;<span class="preprocessor"></span></div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;<span class="preprocessor">#ifndef ENABLE_VUPRINTF_OCTAL</span></div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;<span class="preprocessor"></span></div>
+<div class="line"><a name="l00097"></a><span class="lineno"><a class="code" href="buildconf_8h.html#a5a5a769a95f799052699a5e67589bcdb">   97</a></span>&#160;<span class="preprocessor">#define ENABLE_VUPRINTF_OCTAL ENABLE_VUPRINTF_DEFAULT</span></div>
+<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#endif </span><span class="comment">/* ENABLE_VUPRINTF_OCTAL */</span><span class="preprocessor"></span></div>
+<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;<span class="preprocessor"></span></div>
+<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;<span class="preprocessor">#ifndef ENABLE_VUPRINTF_ALTERNATE_FORM</span></div>
+<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;<span class="preprocessor"></span></div>
+<div class="line"><a name="l00105"></a><span class="lineno"><a class="code" href="buildconf_8h.html#a071cffe2d383fbc35cff005be70ab560">  105</a></span>&#160;<span class="preprocessor">#define ENABLE_VUPRINTF_ALTERNATE_FORM ENABLE_VUPRINTF_DEFAULT</span></div>
+<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#endif </span><span class="comment">/* ENABLE_VUPRINTF_ALTERNATE_FORM */</span><span class="preprocessor"></span></div>
+<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;<span class="preprocessor"></span></div>
+<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;<span class="preprocessor">#endif </span><span class="comment">/* EMBTEXTF_BUILDCONF_H */</span><span class="preprocessor"></span></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
