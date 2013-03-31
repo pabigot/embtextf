@@ -7,6 +7,7 @@ endif
 
 SRC = \
   src/vuprintf.c \
+  src/libc.c \
   src/itoa.c \
   src/ltoa.c \
   src/lltoa.c

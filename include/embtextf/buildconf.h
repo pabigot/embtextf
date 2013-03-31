@@ -48,6 +48,16 @@
 #ifndef EMBTEXTF_BUILDCONF_H
 #define EMBTEXTF_BUILDCONF_H
 
+#ifndef PROVIDE_LIBC
+/** Set to a preprocessor true value when embtextf's library should
+ * provide implementations for standard libc functions related to its
+ * domain.
+ *
+ * @see <embtextf/stdio.h>, <embtextf/stdarg.h>
+ */
+#define PROVIDE_LIBC 0
+#endif /* PROVIDE_LIBC */
+
 #ifndef ENABLE_VUPRINTF_DEFAULT
 /** Set to a preprocessor true value when the default for vuprintf
  * features is to enable them.  Set to a preprocessor false value when

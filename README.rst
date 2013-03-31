@@ -20,6 +20,10 @@ Embtextf features:
 * Additional functions for generating base-2 through base-36 representations
   of standard C integer types;
 
+* Option to build ISO C-compatible wrappers that replace libc functionality
+  with embtextf implementations, saving up to 20KB of relative to other libc
+  implementations;
+
 * The entire family of \*printf(3c) functions takes between 1KB and 3KB of
   code depending on target processor and feature selection.
 

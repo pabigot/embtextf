@@ -347,6 +347,51 @@ test_lltoa (void)
   CU_ASSERT_STRING_EQUAL("FEDCBA9876543210", lltoa(0xfedcba9876543210LL, buffer, 16));
 }
 
+#if PROVIDE_LIBC
+#include <embtextf/stdio.h>
+
+void
+test_sprintf (void)
+{
+  static const int FILL = 0x7f;
+  static const int ONE = 1;
+  char buffer[64];
+  int rc;
+  
+  memset(buffer, FILL, sizeof(buffer));
+  CU_ASSERT_EQUAL(buffer[2], FILL);
+  rc = sprintf(buffer, "%c", ONE);
+  CU_ASSERT_EQUAL(rc, 1);
+  CU_ASSERT_EQUAL(buffer[0], ONE);
+  CU_ASSERT_EQUAL(buffer[1], 0);
+  CU_ASSERT_EQUAL(buffer[2], FILL);
+}
+
+void
+test_snprintf (void)
+{
+  static const int FILL = 0x7f;
+  static const int ONE = 1;
+  char buffer[64];
+  int rc;
+  
+  memset(buffer, FILL, sizeof(buffer));
+  CU_ASSERT_EQUAL(buffer[2], FILL);
+  rc = snprintf(buffer, 0, "%c", ONE);
+  CU_ASSERT_EQUAL(rc, 1);
+  CU_ASSERT_EQUAL(buffer[0], FILL);
+  rc = snprintf(buffer, 1, "%c", ONE);
+  CU_ASSERT_EQUAL(rc, 1);
+  CU_ASSERT_EQUAL(buffer[0], 0);
+  rc = snprintf(buffer, 2, "%c", ONE);
+  CU_ASSERT_EQUAL(rc, 1);
+  CU_ASSERT_EQUAL(buffer[0], ONE);
+  CU_ASSERT_EQUAL(buffer[1], 0);
+  CU_ASSERT_EQUAL(buffer[2], FILL);
+}
+
+#endif /* PROVIDE_LIBC */
+
 int
 main (int argc,
       char* argv[])
@@ -368,6 +413,10 @@ main (int argc,
     { "itoa", test_itoa },
     { "utoa", test_utoa },
     { "lltoa", test_lltoa },
+#if PROVIDE_LIBC
+    { "sprintf", test_sprintf },
+    { "snprintf", test_snprintf },
+#endif /* PROVIDE_LIBC */
   };
   const int ntests = sizeof(tests) / sizeof(*tests);
   int i;
