@@ -367,9 +367,7 @@ main (int argc,
     { "strprec", test_strprec },
     { "itoa", test_itoa },
     { "utoa", test_utoa },
-#if (ENABLE_XTOA_LONGLONG - 0)
     { "lltoa", test_lltoa },
-#endif /* ENABLE_XTOA_LONGLONG */
   };
   const int ntests = sizeof(tests) / sizeof(*tests);
   int i;
