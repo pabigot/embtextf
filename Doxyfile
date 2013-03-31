@@ -1,6 +1,6 @@
 PROJECT_NAME = embtextf
 PROJECT_BRIEF = "Embedded System Text Formatting"
-PROJECT_NUMBER = 20130325
+PROJECT_NUMBER = 20130326
 STRIP_FROM_INC_PATH = include
 ALIASES += homepage="\par<b>Homepage\n"
 # Use "#if defined(EMBTEXTF_DOXYGEN)" when providing a stub declaration
