@@ -44,7 +44,7 @@
 #include <stdint.h>
 #include <limits.h>
 #include <embtextf/uprintf.h>
-#include <embtextf/buildconf.h>
+#include <embtextf/config.h>
 
 /**
  * Internal state tracking.

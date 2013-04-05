@@ -40,7 +40,7 @@
  * use the thing. */
 #undef putchar
 
-#include <embtextf/buildconf.h>
+#include <embtextf/config.h>
 #include <embtextf/stdio.h>
 #include <embtextf/stdarg.h>
 #include <embtextf/uprintf.h>

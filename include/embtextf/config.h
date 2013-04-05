@@ -45,8 +45,8 @@
  * @copyright Copyright 2013, Peter A. Bigot.  Licensed under <a href="http://www.opensource.org/licenses/BSD-3-Clause">BSD-3-Clause</a>
  */
 
-#ifndef EMBTEXTF_BUILDCONF_H
-#define EMBTEXTF_BUILDCONF_H
+#ifndef EMBTEXTF_CONFIG_H
+#define EMBTEXTF_CONFIG_H
 
 #ifndef PROVIDE_LIBC
 /** Set to a preprocessor true value when embtextf's library should
@@ -115,4 +115,4 @@
 #define ENABLE_VUPRINTF_ALTERNATE_FORM ENABLE_VUPRINTF_DEFAULT
 #endif /* ENABLE_VUPRINTF_ALTERNATE_FORM */
 
-#endif /* EMBTEXTF_BUILDCONF_H */
+#endif /* EMBTEXTF_CONFIG_H */

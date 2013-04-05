@@ -12,7 +12,7 @@
 #include <CUnit/Basic.h>
 #include <stdio.h>
 
-#include <embtextf/buildconf.h>
+#include <embtextf/config.h>
 
 #define itoa embtextf_itoa
 #define utoa embtextf_utoa
