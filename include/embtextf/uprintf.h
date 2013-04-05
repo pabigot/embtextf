@@ -50,42 +50,42 @@
  *
  * Within those limitations, all standard format flags are supported:
  *
- * Flag character  | Conditional on                    | Comments
- * :-------------- | :--------------                   | :-------------
- * @c #            | #ENABLE_VUPRINTF_ALTERNATE_FORM   | Emit prefix for octal and hex values
- * @c 0            |                                   | Zero pad output
- * @c -            |                                   | Left justify
- * (space)         |                                   | Leave blank before positive number
- * @c +            |                                   | Always emit sign before converted value
+ * Flag character  | Conditional on                           | Comments
+ * :-------------- | :--------------                          | :-------------
+ * @c #            | #EMBTEXTF_ENABLE_VUPRINTF_ALTERNATE_FORM | Emit prefix for octal and hex values
+ * @c 0            |                                          | Zero pad output
+ * @c -            |                                          | Left justify
+ * (space)         |                                          | Leave blank before positive number
+ * @c +            |                                          | Always emit sign before converted value
  *
  * Field width and (optionally) precision are supported for integer and string conversions:
  *
- * Example         | Conditional on                    | Comments
- * :-------------- | :--------------                   | :-------------
- * @c %4d          |                                   | width, pad output to 4 characters
- * @c %*d          |                                   | width, pad output to width passed as argument
- * @c %.3d         | #ENABLE_VUPRINTF_PRECISION        | precision, minimum 3 number of digits in conversion
- * @c %.*d         | #ENABLE_VUPRINTF_PRECISION        | precision, minimum number of digits in conversion passed as argument
+ * Example         | Conditional on                      | Comments
+ * :-------------- | :--------------                     | :-------------
+ * @c %4d          |                                     | width, pad output to 4 characters
+ * @c %*d          |                                     | width, pad output to width passed as argument
+ * @c %.3d         | #EMBTEXTF_ENABLE_VUPRINTF_PRECISION | precision, minimum 3 number of digits in conversion
+ * @c %.*d         | #EMBTEXTF_ENABLE_VUPRINTF_PRECISION | precision, minimum number of digits in conversion passed as argument
  *
  * Some length modifiers are supported for integer conversion:
  *
- * Example         | Conditional on                    | Comments
- * :-------------- | :--------------                   | :-------------
- * @c %%d          |                                   | expect input type @c int
- * @c %%ld         | #ENABLE_VUPRINTF_LONG             | expect input type @c long
- * @c %%lld        | #ENABLE_VUPRINTF_LONGLONG         | expect input type @c long @c long
+ * Example         | Conditional on                     | Comments
+ * :-------------- | :--------------                    | :-------------
+ * @c %%d          |                                    | expect input type @c int
+ * @c %%ld         | #EMBTEXTF_ENABLE_VUPRINTF_LONG     | expect input type @c long
+ * @c %%lld        | #EMBTEXTF_ENABLE_VUPRINTF_LONGLONG | expect input type @c long @c long
  *
  * Many conversion specifiers, excluding floating point, are supported:
  *
  * Example         | Conditional on                    | Comments
  * :-------------- | :--------------                   | :-------------
  * @c d @c i       |                                   | Signed decimal
- * @c o            | #ENABLE_VUPRINTF_OCTAL            | Octal
+ * @c o            | #EMBTEXTF_ENABLE_VUPRINTF_OCTAL   | Octal
  * @c u            |                                   | Unsigned decimal
  * @c x @c X       |                                   | Hexadecimal (lower or upper case alphabetics)
  * @c s            |                                   | Null-terminated text input
  * @c c            |                                   | Character value of @c int
- * @c p            | #ENABLE_VUPRINTF_INTPTR           | Pointer output
+ * @c p            | #EMBTEXTF_ENABLE_VUPRINTF_INTPTR  | Pointer output
  *
  * When format specifiers are not recognized by the infrastructure the
  * unrecognized characters are emitted as output.

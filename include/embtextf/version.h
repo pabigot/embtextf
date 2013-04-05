@@ -60,7 +60,7 @@
  * @li @ref xtoa_intro format @c int and @c long values into a
  * caller-provided buffer in any radix from base 2 to base 36;
  *
- * @li Option (via #PROVIDE_LIBC) to build ISO C-compatible wrappers
+ * @li Option (via #EMBTEXTF_PROVIDE_LIBC) to build ISO C-compatible wrappers
  * that replace libc functionality with embtextf implementations,
  * saving up to 20KB of relative to other libc implementations;
  *

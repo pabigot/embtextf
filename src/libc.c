@@ -45,7 +45,7 @@
 #include <embtextf/stdarg.h>
 #include <embtextf/uprintf.h>
 
-#if PROVIDE_LIBC - 0
+#if EMBTEXTF_PROVIDE_LIBC - 0
 
 int setvbuf (void * stream, char * buf, int mode, size_t size)
 {
@@ -157,4 +157,4 @@ snprintf (char *buf, size_t size, const char *fmt, ...)
   return rc;
 }
 
-#endif /* PROVIDE_LIBC */
+#endif /* EMBTEXTF_PROVIDE_LIBC */

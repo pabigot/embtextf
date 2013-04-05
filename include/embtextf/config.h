@@ -48,39 +48,39 @@
 #ifndef EMBTEXTF_CONFIG_H
 #define EMBTEXTF_CONFIG_H
 
-#ifndef PROVIDE_LIBC
+#ifndef EMBTEXTF_PROVIDE_LIBC
 /** Set to a preprocessor true value when embtextf's library should
  * provide implementations for standard libc functions related to its
  * domain.
  *
  * @see <embtextf/stdio.h>, <embtextf/stdarg.h>
  */
-#define PROVIDE_LIBC 0
-#endif /* PROVIDE_LIBC */
+#define EMBTEXTF_PROVIDE_LIBC 0
+#endif /* EMBTEXTF_PROVIDE_LIBC */
 
-#ifndef ENABLE_VUPRINTF_DEFAULT
+#ifndef EMBTEXTF_ENABLE_VUPRINTF_DEFAULT
 /** Set to a preprocessor true value when the default for vuprintf
  * features is to enable them.  Set to a preprocessor false value when
  * the default for vuprintf features is to disable them. */
-#define ENABLE_VUPRINTF_DEFAULT 1
-#endif /* ENABLE_VUPRINTF_DEFAULT */
+#define EMBTEXTF_ENABLE_VUPRINTF_DEFAULT 1
+#endif /* EMBTEXTF_ENABLE_VUPRINTF_DEFAULT */
 
-#ifndef ENABLE_VUPRINTF_INTPTR
+#ifndef EMBTEXTF_ENABLE_VUPRINTF_INTPTR
 /** Set to a preprocessor true value to allow the @c %p conversion
  * specification to support printing pointer values.  If false, the
  * conversion specification will be passed through as text. */
-#define ENABLE_VUPRINTF_INTPTR ENABLE_VUPRINTF_DEFAULT
-#endif /* ENABLE_VUPRINTF_INTPTR */
+#define EMBTEXTF_ENABLE_VUPRINTF_INTPTR EMBTEXTF_ENABLE_VUPRINTF_DEFAULT
+#endif /* EMBTEXTF_ENABLE_VUPRINTF_INTPTR */
 
-#ifndef ENABLE_VUPRINTF_LONG
+#ifndef EMBTEXTF_ENABLE_VUPRINTF_LONG
 /** Set to a preprocessor true value to allow the @c l length modifier
  * to be recognized supporting long integer parameters.  If false, the
  * @c l length modifier will be unrecognized and its containing
  * conversion specification passed through as text. */
-#define ENABLE_VUPRINTF_LONG ENABLE_VUPRINTF_DEFAULT
-#endif /* ENABLE_VUPRINTF_LONG */
+#define EMBTEXTF_ENABLE_VUPRINTF_LONG EMBTEXTF_ENABLE_VUPRINTF_DEFAULT
+#endif /* EMBTEXTF_ENABLE_VUPRINTF_LONG */
 
-#ifndef ENABLE_VUPRINTF_LONGLONG
+#ifndef EMBTEXTF_ENABLE_VUPRINTF_LONGLONG
 /** Set to a preprocessor true value to allow two @c l length
  * modifiers to be recognized for a <c>long long</c> integer
  * parameter.  If false, the second @c l length modifier will be
@@ -88,31 +88,31 @@
  * through as text.
  *
  * @note Use of this option requires use of
- * #ENABLE_VUPRINTF_LONG. */
-#define ENABLE_VUPRINTF_LONGLONG ENABLE_VUPRINTF_DEFAULT
-#endif /* ENABLE_VUPRINTF_LONGLONG */
+ * #EMBTEXTF_ENABLE_VUPRINTF_LONG. */
+#define EMBTEXTF_ENABLE_VUPRINTF_LONGLONG EMBTEXTF_ENABLE_VUPRINTF_DEFAULT
+#endif /* EMBTEXTF_ENABLE_VUPRINTF_LONGLONG */
 
-#ifndef ENABLE_VUPRINTF_PRECISION
+#ifndef EMBTEXTF_ENABLE_VUPRINTF_PRECISION
 /** Set to a preprocessor true value to allow precision to be
  * recognized in conversion specifications.  If false, a precision
  * specification will be unrecognized and its containing conversion
  * specification passed through as text. */
-#define ENABLE_VUPRINTF_PRECISION ENABLE_VUPRINTF_DEFAULT
-#endif /* ENABLE_VUPRINTF_PRECISION */
+#define EMBTEXTF_ENABLE_VUPRINTF_PRECISION EMBTEXTF_ENABLE_VUPRINTF_DEFAULT
+#endif /* EMBTEXTF_ENABLE_VUPRINTF_PRECISION */
 
-#ifndef ENABLE_VUPRINTF_OCTAL
+#ifndef EMBTEXTF_ENABLE_VUPRINTF_OCTAL
 /** Set to a preprocessor true value to allow the @c %o conversion
  * specifier to be recognized.  If false, an octal conversion
  * specifier will be unrecognized and passed through as text. */
-#define ENABLE_VUPRINTF_OCTAL ENABLE_VUPRINTF_DEFAULT
-#endif /* ENABLE_VUPRINTF_OCTAL */
+#define EMBTEXTF_ENABLE_VUPRINTF_OCTAL EMBTEXTF_ENABLE_VUPRINTF_DEFAULT
+#endif /* EMBTEXTF_ENABLE_VUPRINTF_OCTAL */
 
-#ifndef ENABLE_VUPRINTF_ALTERNATE_FORM
+#ifndef EMBTEXTF_ENABLE_VUPRINTF_ALTERNATE_FORM
 /** Set to a preprocessor true value to allow the @c # alternate form
  * flag to be recognized for @c x and @c o conversions.  If false, the
  * alternate form flag will be unrecognized and its containing
  * conversion specification passed through as text. */
-#define ENABLE_VUPRINTF_ALTERNATE_FORM ENABLE_VUPRINTF_DEFAULT
-#endif /* ENABLE_VUPRINTF_ALTERNATE_FORM */
+#define EMBTEXTF_ENABLE_VUPRINTF_ALTERNATE_FORM EMBTEXTF_ENABLE_VUPRINTF_DEFAULT
+#endif /* EMBTEXTF_ENABLE_VUPRINTF_ALTERNATE_FORM */
 
 #endif /* EMBTEXTF_CONFIG_H */
