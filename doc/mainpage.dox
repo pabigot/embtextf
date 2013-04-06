@@ -46,6 +46,8 @@ memory expectations.  The application program can use the
 preprocessor to redirect unqualified names to the embtextf
 implementations.
 
+See \ref install.
+
 \homepage http://github.com/pabigot/embtextf
 
 \copyright Copyright 2011-2013, Peter A. Bigot.  embtextf_vuprintf() contains material copyright 2006-2011, Chris Liechti.  Licensed under <a href="http://www.opensource.org/licenses/BSD-3-Clause">BSD-3-Clause</a>

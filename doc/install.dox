@@ -1,0 +1,110 @@
+/*! @page install Installation
+@tableofcontents
+
+embtextf uses the <a
+href="http://www.gnu.org/savannah-checkouts/gnu/autoconf/manual/autoconf-2.69/html_node/The-GNU-Build-System.html">
+GNU Build System</a> to simplify configuration, compilation, library
+building, and installation.  The general process is:
+
+\code
+./configure --host=target --prefix=install-path
+make
+make install
+\endcode
+
+Most users of embtextf will want to cross-compile it for an embedded system,
+which is indicated by using the @c --host flag to @c configure to tell it to
+cross-compile.  Be aware that with most versions of autoconf released since
+the year 2000 you will get the following message:
+
+\verbatim
+configure: WARNING: if you wanted to set the --build type, don't use --host.
+    If a cross compiler is detected then cross compile mode will be used
+\endverbatim
+
+There is nothing wrong here except the expectations of the maintainers and
+most users of autoconf.  You don't want to set the @c --build type, you do
+want to cross-compile, and you did exactly what you were supposed to do.
+Ignore the warning.
+
+You can run:
+
+\code
+./configure --help
+\endcode
+
+to see what the various options mean and how you can influence the
+configuration and compilation process.  In particular, there are options to
+disable features such as support for <tt>long long</tt> types.  See
+<embtextf/config.h> for descriptions of features that can be enabled or
+disabled based on specific needs.
+
+\section install_config Configuration Options
+
+By default, all features of embtextf are enabled, but in some cases the
+features may be unnecessary and support for them might increase the size of
+the library.  As an example, the following turns off embtextf_vuprintf()
+support for 64-bit values (#EMBTEXTF_ENABLE_VUPRINTF_LONGLONG) and format
+precision (#EMBTEXTF_ENABLE_VUPRINTF_PRECISION) on the MSP430, resulting in
+a significantly smaller library:
+
+\code
+./configure \
+   --host=msp430 --prefix=/usr/local/mspgcc \
+   --disable-vuprintf-longlong \
+   --disable-vuprintf-precision
+\endcode
+
+\section install_mspgcc Installation using mspgcc
+
+The following can be used to produce an embtextf installation suitable for
+use with <a href="http://www.ti.com/msp430">Texas Instruments MSP430</a>
+devices when using the <a
+href="http://sourceforge.net/projects/mspgcc/">mspgcc</a> GNU-based
+toolchain:
+
+\code
+./configure \
+   --host=msp430 --prefix=/usr/local/mspgcc
+\endcode
+
+Because autoconf does not nicely support multilibs, if you want to control
+the <a href="http://sourceforge.net/apps/mediawiki/mspgcc/index.php?title=Gcc47:20-Bit_Design#memmodel">memory
+model</a> or assume certain capabilities of the target chip you'll need to
+do that through @c TARGET_CFLAGS:
+
+\code
+./configure \
+   --host=msp430 --prefix=/usr/local/mspgccx \
+   TARGET_CFLAGS='-mcpu=430x -mmemory-model=medium'
+\endcode
+
+Memory model information for an object file can be displayed using @c
+msp430-readelf with the @c -A flag:
+
+\verbatim
+
+llc% msp430-readelf -A /usr/local/mspgccx/lib/libembtextf.a
+File: /tmp/msp430x/lib/libembtextf.a(vuprintf.o)
+Attribute Section: gnu
+File Attributes
+  Tag_GNU_MSP430_CPUX_TARGET: c20,sr20
+
+\endverbatim
+
+
+\section install_efm32 Installation for Energy Micro Devices
+
+The following can be used to produce an embtextf installation suitable for
+use with <a href="http://www.energymicro.com/">Energy Micro</a> and probably
+other Cortex-M3 devices when using the <a
+href="http://www.mentor.com/embedded-software/codesourcery">CodeSourcery</a>
+toolchain:
+
+\code
+./configure \
+   --host=arm-none-eabi --prefix=/usr/local/efm32 \
+   TARGET_CFLAGS='-mcpu=cortex-m3 -mthumb -mfix-cortex-m3-ldrd'
+\endcode
+
+*/

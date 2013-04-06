@@ -1,5 +1,6 @@
 ACLOCAL_AMFLAGS = -I m4
 AM_CPPFLAGS = -I${top_srcdir}/include
+AM_CFLAGS = $(TARGET_CFLAGS)
 
 @WITH_GCC_TRUE@ AM_LDFLAGS += -gc-sections
 

@@ -1,5 +1,6 @@
 ACLOCAL_AMFLAGS = -I m4
 AM_CPPFLAGS = -I${top_srcdir}/include
+AM_CFLAGS = $(TARGET_CFLAGS)
 
 # If GCC and not GCOV, pass flag to optimize for size
 @WITH_GCC_TRUE@@WITH_GCOV_FALSE@ AM_CFLAGS += -Os

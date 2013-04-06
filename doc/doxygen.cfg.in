@@ -12,6 +12,7 @@ PREDEFINED += EMBTEXTF_DOXYGEN
 TAB_SIZE = 4
 OPTIMIZE_OUTPUT_FOR_C = YES
 INPUT = $(SRCDIR)/mainpage.dox \
+      $(SRCDIR)/install.dox \
       $(SRCDIR)/../include/
 EXCLUDE_PATTERNS = */*_.h
 TYPEDEF_HIDES_STRUCT = NO
