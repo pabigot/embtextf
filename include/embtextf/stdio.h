@@ -32,9 +32,10 @@
 /** @file
  * @brief Declarations for functions implementing libc stdio functions
  *
- * Using #EMBTEXTF_PROVIDE_LIBC embtextf can provide implementations for
- * standard libc functions such as printf(), puts(), etc. based on an
- * application-provided putchar() implementation.
+ * Using #EMBTEXTF_ENABLE_PROVIDE_LIBC embtextf can provide
+ * implementations for standard libc functions such as printf(),
+ * puts(), etc. based on an application-provided putchar()
+ * implementation.
  *
  * These functions are provided: printf(), sprintf(), snprintf(), setvbuf()
  *
@@ -98,7 +99,7 @@ int setvbuf (void * stream, char * buf, int mode, size_t size);
  * any error return from putchar(). */
 extern int putchar (int c);
 
-/** ISO C standard function based on putchar() dependent on #EMBTEXTF_PROVIDE_LIBC.
+/** ISO C standard function based on putchar() dependent on #EMBTEXTF_ENABLE_PROVIDE_LIBC.
  *
  * @param s the string to be written.  The terminating NUL is not
  * emitted.
@@ -107,21 +108,21 @@ extern int putchar (int c);
  * encountered. */
 int puts (const char * s);
 
-/** ISO C standard function based on embtextf_vuprintf() dependent on #EMBTEXTF_PROVIDE_LIBC. */
+/** ISO C standard function based on embtextf_vuprintf() dependent on #EMBTEXTF_ENABLE_PROVIDE_LIBC. */
 int
 #if __GNUC__
 __attribute__((format (printf, 1, 2)))
 #endif /* __GNUC__ */
 printf (const char *fmt, ...);
 
-/** ISO C standard function based on embtextf_vuprintf() dependent on #EMBTEXTF_PROVIDE_LIBC. */
+/** ISO C standard function based on embtextf_vuprintf() dependent on #EMBTEXTF_ENABLE_PROVIDE_LIBC. */
 int
 #if __GNUC__
 __attribute__((format (printf, 2, 3)))
 #endif /* __GNUC__ */
 sprintf (char * s, const char * fmt, ...);
 
-/** ISO C standard function based on embtextf_vuprintf() dependent on #EMBTEXTF_PROVIDE_LIBC. */
+/** ISO C standard function based on embtextf_vuprintf() dependent on #EMBTEXTF_ENABLE_PROVIDE_LIBC. */
 int
 #if __GNUC__
 __attribute__((format (printf, 3, 4)))

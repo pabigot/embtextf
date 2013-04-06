@@ -1,1 +1,18 @@
-*.d
+# Directories and files supporting autoconf
+/build-aux/
+/m4/
+/autom4te.cache/
+.deps/
+/configure
+/libtool
+/include/embtextf/stamp-h1
+/aclocal.m4
+/config.*
+# Files created by substitution
+Makefile.in
+Makefile
+/include/embtextf/config.h
+# Libtool build output
+.libs/
+*.lo
+*.la

@@ -32,9 +32,9 @@
 /** @file
  * @brief Declarations for functions implementing libc stdarg functions
  *
- * Using #EMBTEXTF_PROVIDE_LIBC embtextf can provide implementations for
- * standard libc functions such as vprintf(), etc. based on an
- * application-provided putchar() implementation.
+ * Using #EMBTEXTF_ENABLE_PROVIDE_LIBC embtextf can provide
+ * implementations for standard libc functions such as vprintf(),
+ * etc. based on an application-provided putchar() implementation.
  *
  * These functions are provided: vprintf(), vsprintf(), vsnprintf()
  *
@@ -59,13 +59,13 @@
 
 #include <stdarg.h>
 
-/** ISO C standard function based on embtextf_vuprintf() dependent on #EMBTEXTF_PROVIDE_LIBC. */
+/** ISO C standard function based on embtextf_vuprintf() dependent on #EMBTEXTF_ENABLE_PROVIDE_LIBC. */
 int vprintf(const char * fmt, va_list argp);
 
-/** ISO C standard function based on embtextf_vuprintf() dependent on #EMBTEXTF_PROVIDE_LIBC. */
+/** ISO C standard function based on embtextf_vuprintf() dependent on #EMBTEXTF_ENABLE_PROVIDE_LIBC. */
 int vsprintf(char * s, const char * fmt, va_list argp);
 
-/** ISO C standard function based on embtextf_vuprintf() dependent on #EMBTEXTF_PROVIDE_LIBC. */
+/** ISO C standard function based on embtextf_vuprintf() dependent on #EMBTEXTF_ENABLE_PROVIDE_LIBC. */
 int vsnprintf(char * s, size_t size, const char * fmt, va_list argp);
 
 #endif /* EMBTEXTF_STDARG_H */
