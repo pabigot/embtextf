@@ -357,7 +357,7 @@ test_sprintf (void)
   static const int ONE = 1;
   char buffer[64];
   int rc;
-  
+
   memset(buffer, FILL, sizeof(buffer));
   CU_ASSERT_EQUAL(buffer[2], FILL);
   rc = sprintf(buffer, "%c", ONE);
@@ -374,7 +374,7 @@ test_snprintf (void)
   static const int ONE = 1;
   char buffer[64];
   int rc;
-  
+
   memset(buffer, FILL, sizeof(buffer));
   CU_ASSERT_EQUAL(buffer[2], FILL);
   rc = snprintf(buffer, 0, "%c", ONE);
