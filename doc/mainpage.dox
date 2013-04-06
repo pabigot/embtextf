@@ -46,7 +46,20 @@ memory expectations.  The application program can use the
 preprocessor to redirect unqualified names to the embtextf
 implementations.
 
-See \ref install.
+For installation instructions see \ref install.
+
+The project page is at http://github.com/pabigot/embtextf.  Releases can be
+obtained by cloning the git repository:
+
+@code
+git clone git://github.com/pabigot/embtextf.git
+@endcode
+
+or by downloading a <a href="http://github.com/pabigot/embtextf/tarball/master">tar
+file</a> of the complete source.
+
+Please file support requests and bug reports on the <a
+href="http://github.com/pabigot/embtextf/issues">issue tracker</a>.
 
 \homepage http://github.com/pabigot/embtextf
 

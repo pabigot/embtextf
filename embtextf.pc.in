@@ -1,0 +1,15 @@
+# HOST_ALIAS=@host_alias@
+prefix=@prefix@
+exec_prefix=@exec_prefix@
+libdir=@libdir@
+includedir=@includedir@
+
+Name: @PACKAGE@
+Description: Embedded System Text Formatting library
+URL: @PACKAGE_URL@
+Version: @PACKAGE_VERSION@
+# -lembtextf-libc is optional and must be added externally if needed.
+# For -L only: Use pkg-config --libs-only-L embtextf
+Libs: -L${libdir} -lembtextf
+# For -I only: Use pkg-config --cflags-only-I embtextf
+Cflags: -I${includedir} @TARGET_CFLAGS@ @CFLAGS@

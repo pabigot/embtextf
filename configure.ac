@@ -144,6 +144,7 @@ AC_CONFIG_FILES([Makefile \
 AC_CONFIG_FILES([include/embtextf/config.h])
 
 # Other files
-AC_CONFIG_FILES([doc/doxygen.cfg])
+AC_CONFIG_FILES([doc/doxygen.cfg
+		 embtextf.pc ])
 
 AC_OUTPUT

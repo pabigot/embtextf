@@ -1,4 +1,4 @@
-/*! @page install Installation
+/*! @page install Installation and Use
 @tableofcontents
 
 embtextf uses the <a
@@ -55,7 +55,9 @@ a significantly smaller library:
    --disable-vuprintf-precision
 \endcode
 
-\section install_mspgcc Installation using mspgcc
+\section install_target Installation for Specific Platforms
+
+\subsection install_target_mspgcc Installation using mspgcc
 
 The following can be used to produce an embtextf installation suitable for
 use with <a href="http://www.ti.com/msp430">Texas Instruments MSP430</a>
@@ -92,8 +94,7 @@ File Attributes
 
 \endverbatim
 
-
-\section install_efm32 Installation for Energy Micro Devices
+\subsection install_target_efm32 Installation for Energy Micro Devices
 
 The following can be used to produce an embtextf installation suitable for
 use with <a href="http://www.energymicro.com/">Energy Micro</a> and probably
@@ -106,5 +107,31 @@ toolchain:
    --host=arm-none-eabi --prefix=/usr/local/efm32 \
    TARGET_CFLAGS='-mcpu=cortex-m3 -mthumb -mfix-cortex-m3-ldrd'
 \endcode
+
+\section install_pkgconfig pkg-config support from embtextf
+
+embtextf constructs and installs a <a
+href="http://www.freedesktop.org/wiki/Software/pkg-config">pkg-config</a>
+file that can be used to obtain the flags necessary to build applications to
+link with an installed embtextf system.  Use the tool this way:
+
+\code
+PKG_CONFIG_PATH=/usr/local/efm32/lib/pkgconfig pkg-config --cflags --libs embtextf
+\endcode
+
+which will produce output like:
+\verbatim
+-mcpu=cortex-m3 -mthumb -mfix-cortex-m3-ldrd -g -O2 -Os -I/usr/local/efm32/include  -L/usr/local/efm32/lib -lembtextf
+\endverbatim
+
+pkg-config assumes you combine CPPFLAGS into CFLAGS (and LDFLAGS into LIBS),
+so though you can obtain the include path using @c --cflags-only-I there is
+no general way to extract only the specific pieces that belong in CFLAGS and
+LDFLAGS.
+
+pkg-config also does not have a concept of optional libraries within a
+package, so for simplicity @c -lembtextf-libc is excluded from LIBS and must
+be added if the libc wrappers enabled by #EMBTEXTF_ENABLE_PROVIDE_LIBC are
+desired.
 
 */
