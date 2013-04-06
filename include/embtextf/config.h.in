@@ -47,13 +47,19 @@
 
 /** Set to a preprocessor true value when embtextf's library should
  * provide implementations for standard libc functions related to its
- * domain.
+ * domain.  If false, these implementations are not present.
+ *
+ * @note Because these functions intrude on the C compiler's
+ * namespace, they are not part of the standard embtextf library.  To
+ * use them in your program you must also link in @c
+ * libembtextf-libc.a (normally done by adding @c -lembtextf-libc
+ * before @c -lembtextf when linking).
  *
  * This feature is controlled at configuration time by @c --enable-provide-libc.
  *
  * @see <embtextf/stdio.h>, <embtextf/stdarg.h>
  */
-#define EMBTEXTF_ENABLE_PROVIDE_LIBC @EMBTEXTF_ENABLE_PROVIDE_LIBC@
+#define EMBTEXTF_PROVIDE_LIBC @EMBTEXTF_PROVIDE_LIBC@
 
 /** Set to a preprocessor true value to allow the @c %p conversion
  * specification to support printing pointer values.  If false, the

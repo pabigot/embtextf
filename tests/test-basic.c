@@ -347,7 +347,7 @@ test_lltoa (void)
   CU_ASSERT_STRING_EQUAL("FEDCBA9876543210", lltoa(0xfedcba9876543210LL, buffer, 16));
 }
 
-#if EMBTEXTF_ENABLE_PROVIDE_LIBC
+#if EMBTEXTF_PROVIDE_LIBC
 #include <embtextf/stdio.h>
 
 void
@@ -390,7 +390,7 @@ test_snprintf (void)
   CU_ASSERT_EQUAL(buffer[2], FILL);
 }
 
-#endif /* EMBTEXTF_ENABLE_PROVIDE_LIBC */
+#endif /* EMBTEXTF_PROVIDE_LIBC */
 
 int
 main (int argc,
@@ -413,10 +413,10 @@ main (int argc,
     { "itoa", test_itoa },
     { "utoa", test_utoa },
     { "lltoa", test_lltoa },
-#if EMBTEXTF_ENABLE_PROVIDE_LIBC
+#if EMBTEXTF_PROVIDE_LIBC
     { "sprintf", test_sprintf },
     { "snprintf", test_snprintf },
-#endif /* EMBTEXTF_ENABLE_PROVIDE_LIBC */
+#endif /* EMBTEXTF_PROVIDE_LIBC */
   };
   const int ntests = sizeof(tests) / sizeof(*tests);
   int i;

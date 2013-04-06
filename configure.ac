@@ -75,12 +75,13 @@ if test -z "${WITH_GCOV_TRUE}" ; then
   CFLAGS=`AS_ECHO(${CFLAGS}) | ${SED} -e 's/-O[[0-9]]*//g'`
 fi
 
-# OPT_ARG_ENABLE(flag,help,default)
+# OPT_ARG_ENABLE(section,flag,help,default,prefix)
 #   section -- section in which option appears, lower case with underscore separators
 #   feature -- feature within section, lower case with underscore separators
 #   help -- contents of help string
 #   default -- value to use as default (defaults to yes)
 #   help for default -- string to emit as default
+#   prefix -- CPP prefix for flag, defaults to EMBTEXTF_ENABLE_{section}
 #
 # Given section and feature this will create an enable option
 # --enable-(section)-(feature).  It will also create a substitution
@@ -90,12 +91,13 @@ fi
 AC_DEFUN([OPT_ARG_ENABLE],[
   define([_SECTION],[$1])dnl
   define([_FEATURE],[$2])dnl
-  define([_FLAG],[_SECTION[_]_FEATURE])dnl
-  define([_FLAG_],[--enable-][m4_translit(_FLAG, [_], [-])])dnl
-  define([_CPPFLAG],[EMBTEXTF_ENABLE_[]m4_translit(_SECTION, [-a-z], [_A-Z])[_]m4_translit(_FEATURE,[-a-z],[_A-Z])])dnl
   define([_HELP],[$3])dnl
   define([_DEFAULT],m4_default([$4],yes))dnl
   define([_DEFAULT_HELP],m4_default([$5],[_DEFAULT]))dnl
+  define([_FLAG],[_SECTION[_]_FEATURE])dnl
+  define([_FLAG_],[--enable-][m4_translit(_FLAG, [_], [-])])dnl
+  define([_PREFIX],m4_default([$6],[EMBTEXTF_ENABLE_[]m4_translit(_SECTION, [-a-z], [_A-Z])]))dnl
+  define([_CPPFLAG],[_PREFIX[_]m4_translit(_FEATURE,[-a-z],[_A-Z])])dnl
   AC_REQUIRE([AC_PROG_FGREP])
   AC_MSG_CHECKING(_FLAG)
   AC_ARG_ENABLE(_FLAG,
@@ -129,7 +131,7 @@ if test "$use_vuprintf_longlong" = "yes" -a "$use_vuprintf_long" != "yes" ; then
 fi
 OPT_ARG_ENABLE(vuprintf, precision, [Support field precision as with "%.4d"])
 OPT_ARG_ENABLE(vuprintf, alternate_form, [Support alternate form flag as with "%@%:@x"])
-OPT_ARG_ENABLE(provide, libc, [Provide libc-compatible wrappers for *printf])
+OPT_ARG_ENABLE(provide, libc, [Provide libc-compatible wrappers for *printf], [], [], [EMBTEXTF_PROVIDE])
 
 AM_CONDITIONAL([EMBTEXTF_PROVIDE_LIBC], [test "$use_provide_libc" = "yes"])
 

@@ -131,7 +131,7 @@ LDFLAGS.
 
 pkg-config also does not have a concept of optional libraries within a
 package, so for simplicity @c -lembtextf-libc is excluded from LIBS and must
-be added if the libc wrappers enabled by #EMBTEXTF_ENABLE_PROVIDE_LIBC are
+be added if the libc wrappers enabled by #EMBTEXTF_PROVIDE_LIBC are
 desired.
 
 */
