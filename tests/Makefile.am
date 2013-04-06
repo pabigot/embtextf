@@ -2,6 +2,12 @@ ACLOCAL_AMFLAGS = -I m4
 AM_CPPFLAGS = -I${top_srcdir}/include
 AM_CFLAGS = $(TARGET_CFLAGS)
 
+# If GCC, force all available checks...
+@WITH_GCC_TRUE@ AM_CFLAGS += -Wall -Werror -ansi -std=c99 -pedantic
+# ...except these
+@WITH_GCC_TRUE@ AM_CFLAGS += -Wno-error=format -Wno-error=format-extra-args
+
+# If GCC, support -gc-sections at link time
 @WITH_GCC_TRUE@ AM_LDFLAGS += -gc-sections
 
 # If GCOV, add required flags
