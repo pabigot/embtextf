@@ -42,6 +42,6 @@
 
 /** Version of the embtextf library.  This is a monotonically
  * non-decreasing integer value suitable for ordinal comparisons. */
-#define EMBTEXTF_VERSION 20130407
+#define EMBTEXTF_VERSION 20130408
 
 #endif /* EMBTEXTF_VERSION_H */
