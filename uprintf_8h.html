@@ -3,7 +3,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
-<title>embtextf: include/embtextf/uprintf.h File Reference</title>
+<title>embtextf: /opt/embtextf/include/embtextf/uprintf.h File Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -22,7 +22,7 @@
  <tr style="height: 56px;">
   <td style="padding-left: 0.5em;">
    <div id="projectname">embtextf
-   &#160;<span id="projectnumber">20130325</span>
+   &#160;<span id="projectnumber">20130407</span>
    </div>
    <div id="projectbrief">Embedded System Text Formatting</div>
   </td>
@@ -38,6 +38,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div id="navrow1" class="tabs">
     <ul class="tablist">
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
+      <li><a href="pages.html"><span>Related&#160;Pages</span></a></li>
       <li class="current"><a href="files.html"><span>Files</span></a></li>
       <li>
         <div id="MSearchBox" class="MSearchBoxInactive">
@@ -93,7 +94,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 
 <p>Declarations for core functions supporting <code>printf(3c)</code> and related capabilities.  
 <a href="#details">More...</a></p>
-<div class="textblock"><code>#include &lt;stdarg.h&gt;</code><br/>
+<div class="textblock"><code>#include &lt;<a class="el" href="stdarg_8h_source.html">stdarg.h</a>&gt;</code><br/>
 </div>
 <p><a href="uprintf_8h_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
@@ -124,7 +125,7 @@ vuprintf formatting capabilities</h1>
 <tr>
 <th align="left">Flag character </th><th align="left">Conditional on </th><th align="left">Comments</th></tr>
 <tr>
-<td align="left"><code>#</code> </td><td align="left"><a class="el" href="buildconf_8h.html#a071cffe2d383fbc35cff005be70ab560">ENABLE_VUPRINTF_ALTERNATE_FORM</a> </td><td align="left">Emit prefix for octal and hex values </td></tr>
+<td align="left"><code>#</code> </td><td align="left"><a class="el" href="config_8h.html#aae0d0aecdd86cd24b8135000aac88311">EMBTEXTF_ENABLE_VUPRINTF_ALTERNATE_FORM</a> </td><td align="left">Emit prefix for octal and hex values </td></tr>
 <tr>
 <td align="left"><code>0</code> </td><td align="left"></td><td align="left">Zero pad output </td></tr>
 <tr>
@@ -143,9 +144,9 @@ vuprintf formatting capabilities</h1>
 <tr>
 <td align="left"><code>%*d</code> </td><td align="left"></td><td align="left">width, pad output to width passed as argument </td></tr>
 <tr>
-<td align="left"><code>%</code>.3d </td><td align="left"><a class="el" href="buildconf_8h.html#ab8ad44df30001599e173b222c99746e1">ENABLE_VUPRINTF_PRECISION</a> </td><td align="left">precision, minimum 3 number of digits in conversion </td></tr>
+<td align="left"><code>%</code>.3d </td><td align="left"><a class="el" href="config_8h.html#a9a71904acf8f497edec3bcceb81691ae">EMBTEXTF_ENABLE_VUPRINTF_PRECISION</a> </td><td align="left">precision, minimum 3 number of digits in conversion </td></tr>
 <tr>
-<td align="left"><code>%</code>.*d </td><td align="left"><a class="el" href="buildconf_8h.html#ab8ad44df30001599e173b222c99746e1">ENABLE_VUPRINTF_PRECISION</a> </td><td align="left">precision, minimum number of digits in conversion passed as argument </td></tr>
+<td align="left"><code>%</code>.*d </td><td align="left"><a class="el" href="config_8h.html#a9a71904acf8f497edec3bcceb81691ae">EMBTEXTF_ENABLE_VUPRINTF_PRECISION</a> </td><td align="left">precision, minimum number of digits in conversion passed as argument </td></tr>
 </table>
 <p>Some length modifiers are supported for integer conversion:</p>
 <table class="doxtable">
@@ -154,9 +155,9 @@ vuprintf formatting capabilities</h1>
 <tr>
 <td align="left"><code>%d</code> </td><td align="left"></td><td align="left">expect input type <code>int</code> </td></tr>
 <tr>
-<td align="left"><code>%ld</code> </td><td align="left"><a class="el" href="buildconf_8h.html#a3a0f9674297d31e170ae1672dfa5a4bd">ENABLE_VUPRINTF_LONG</a> </td><td align="left">expect input type <code>long</code> </td></tr>
+<td align="left"><code>%ld</code> </td><td align="left"><a class="el" href="config_8h.html#aac62efa1facecb22ee601b11b406ef8a">EMBTEXTF_ENABLE_VUPRINTF_LONG</a> </td><td align="left">expect input type <code>long</code> </td></tr>
 <tr>
-<td align="left"><code>%lld</code> </td><td align="left"><a class="el" href="buildconf_8h.html#a8b50c6deec1a690c8df1bf5b06359333">ENABLE_VUPRINTF_LONGLONG</a> </td><td align="left">expect input type <code>long</code> <code>long</code> </td></tr>
+<td align="left"><code>%lld</code> </td><td align="left"><a class="el" href="config_8h.html#ab6a156659793c761893bc3d9bfd8dea7">EMBTEXTF_ENABLE_VUPRINTF_LONGLONG</a> </td><td align="left">expect input type <code>long</code> <code>long</code> </td></tr>
 </table>
 <p>Many conversion specifiers, excluding floating point, are supported:</p>
 <table class="doxtable">
@@ -165,7 +166,7 @@ vuprintf formatting capabilities</h1>
 <tr>
 <td align="left"><code>d</code> <code>i</code> </td><td align="left"></td><td align="left">Signed decimal </td></tr>
 <tr>
-<td align="left"><code>o</code> </td><td align="left"><a class="el" href="buildconf_8h.html#a5a5a769a95f799052699a5e67589bcdb">ENABLE_VUPRINTF_OCTAL</a> </td><td align="left">Octal </td></tr>
+<td align="left"><code>o</code> </td><td align="left"><a class="el" href="config_8h.html#add8d3e861db7acc4235824efb72edeb4">EMBTEXTF_ENABLE_VUPRINTF_OCTAL</a> </td><td align="left">Octal </td></tr>
 <tr>
 <td align="left"><code>u</code> </td><td align="left"></td><td align="left">Unsigned decimal </td></tr>
 <tr>
@@ -175,7 +176,7 @@ vuprintf formatting capabilities</h1>
 <tr>
 <td align="left"><code>c</code> </td><td align="left"></td><td align="left">Character value of <code>int</code> </td></tr>
 <tr>
-<td align="left"><code>p</code> </td><td align="left"><a class="el" href="buildconf_8h.html#a45f81d09121d5a074041d53d8dc1ac0f">ENABLE_VUPRINTF_INTPTR</a> </td><td align="left">Pointer output </td></tr>
+<td align="left"><code>p</code> </td><td align="left"><a class="el" href="config_8h.html#a8b5c1feccf0a4be4033ae45cb5e6bc5a">EMBTEXTF_ENABLE_VUPRINTF_INTPTR</a> </td><td align="left">Pointer output </td></tr>
 </table>
 <p>When format specifiers are not recognized by the infrastructure the unrecognized characters are emitted as output.</p>
 <dl class="section user"><dt>Homepage</dt><dd><a href="http://github.com/pabigot/embtextf">http://github.com/pabigot/embtextf</a> </dd></dl>
@@ -272,7 +273,7 @@ vuprintf formatting capabilities</h1>
   <table class="params">
     <tr><td class="paramname">write_char</td><td>the function used to emit formatted characters. The interface supports using <code>putchar</code> for this.</td></tr>
     <tr><td class="paramname">format</td><td>a standard C format string</td></tr>
-    <tr><td class="paramname">args</td><td>aggregated arguments as collected using the <code>stdarg.h</code> macros.</td></tr>
+    <tr><td class="paramname">args</td><td>aggregated arguments as collected using the <code><a class="el" href="stdarg_8h.html" title="Declarations for functions implementing libc stdarg functions.">stdarg.h</a></code> macros.</td></tr>
   </table>
   </dd>
 </dl>
@@ -284,7 +285,7 @@ vuprintf formatting capabilities</h1>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Mar 25 2013 06:35:13 for embtextf by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sun Apr 7 2013 10:59:01 for embtextf by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.2
 </small></address>
