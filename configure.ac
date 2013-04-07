@@ -23,11 +23,73 @@ DX_PDF_FEATURE(OFF)
 DX_PS_FEATURE(OFF)
 DX_INIT_DOXYGEN(embtextf, [\$\(top_builddir\)/doc/doxygen.cfg], [generated])
 
+AC_PROG_SED
+
+AC_ARG_WITH([ccs-target],
+            [AS_HELP_STRING([--with-ccs-target],[select target for TI Code Composer Studio toolchain (msp430,tms470,...)])],
+	    [cross_compiling=yes     dnl force cross-compile
+	     host_os=none            dnl stop libtool from trying to do anything
+	     ccs_target=$withval],
+	    [])
+
+AM_CONDITIONAL([WITH_CCS], [test -n "${ccs_target+set}"])
+
+if test -z "${WITH_CCS_TRUE}" ; then
+  case "$ccs_target" in
+  msp430)
+    ccs_suffix=430
+    ;;
+  tms470)
+    ccs_suffix=470
+    ;;
+  *)
+    AC_MSG_ERROR([unrecogized --with-ccs-target=$with_ccs_target])
+    ;;
+  esac
+  AC_MSG_NOTICE(ccs target is $ccs_target with suffix $ccs_suffix)
+  CCS_INSTALL_ROOT=${CCS_INSTALL_ROOT:-${with_ccs}}
+  AC_MSG_NOTICE(CCS set ${with_ccs} at ${CCS_INSTALL_ROOT})
+  AC_ARG_VAR([CCS_INSTALL_ROOT],[Root for TI Code Composer Studio installation (for --with-ccs-target)])
+  AC_ARG_VAR([CG_TOOL_ROOT],[Where target-specific CCS code generator tools are installed (for --with-ccs-target)])
+  if test -z "${CG_TOOL_ROOT+set}" ; then
+    tool_root=${CCS_INSTALL_ROOT}/tools/compiler
+    AC_MSG_CHECKING([for ${ccs_target} in ${tool_root}])
+    CG_TOOL_ROOT=`ls -rd ${tool_root}/${ccs_target}_* | ${SED} -e 1q` \
+      || AC_MSG_ERROR([no support for ${ccs_target} in ${CCS_INSTALL_ROOT}])
+    AC_MSG_RESULT([${CG_TOOL_ROOT}])
+  fi
+
+  # Define ${host}-${tool} where a CC substitute exists, and prevent
+  # discovery of the wrong toolchain when it doesn't.
+  CC="${CG_TOOL_ROOT}/bin/cl$ccs_suffix"
+  CPP="${CC} --preproc_only"
+  LD="${CG_TOOL_ROOT}/bin/ld$ccs_suffix"
+  AR="${CG_TOOL_ROOT}/bin/ar$ccs_suffix"
+  OBJDUMP=false
+  RANLIB=false
+  ac_cv_prog_STRIP=false
+  NM=false
+
+  # CCS does not know where to find its include files unless you tell it
+  CPPFLAGS=${CPPFLAGS:--I${CG_TOOL_ROOT}/include}
+
+  # Match GCC default of optimized debug, plus flags that support the
+  # ABI that correctly initializes static variables.  DO NOT add
+  # --relaxed_ansi: the TI compiler lies and claims it's GCC when that
+  # flag is used.
+  CFLAGS=${CFLAGS:---abi=eabi -g -o}
+fi
+
 # Need a C compiler.  We're building a library, and for some targets
 # we may not be providing the options (like -mmcu= on msp430) that are
 # required to be able to do a non-relocatable link.  So don't ask
 # AC_PROG_CC to check whether executables can be built.
 AC_LANG(C)
+if test -z "${WITH_CCS_TRUE}" ; then
+  # Override how-to-build commands for the TI compiler toolchain
+  ac_compile='$CC -c $CFLAGS $CPPFLAGS -z -o conftest.$ac_ext >&AS_MESSAGE_LOG_FD'
+  ac_link='$CC -z -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&AS_MESSAGE_LOG_FD'
+fi
 AC_NO_EXECUTABLES
 AC_PROG_CC
 AM_CONDITIONAL([WITH_GCC], [test "${GCC}" = "yes"])
@@ -37,16 +99,21 @@ AM_CONDITIONAL([WITH_GCC], [test "${GCC}" = "yes"])
 AC_ARG_VAR([TARGET_CFLAGS],
            [Target-specific flags added before standard CFLAGS variable])
 
-AC_PROG_SED
-
 # Use libtool; no shared libraries for embedded platforms
 LT_INIT([disable-shared])
+
+# Non-GNU toolchains probably don't really use libtool
+AM_CONDITIONAL([WITH_LIBTOOL], [test -z "$WITH_GCC_TRUE"])
 
 # Feature capabilities
 if test -z "${WITH_GCC_TRUE}" ; then
   # gcc always supports long long.  Set that explicitly because
   # AC_NO_EXECUTABLES prevents msp430 from successfully running the
   # test below.
+  ac_cv_type_long_long_int=yes
+elif test -z "${WITH_CCS_TRUE}" ; then
+  # CCS 5.3 supports long long.  Maybe earlier versions too.  Not
+  # going to try to figure out which version we have.
   ac_cv_type_long_long_int=yes
 fi
 AC_TYPE_LONG_LONG_INT

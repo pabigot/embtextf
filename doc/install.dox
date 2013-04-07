@@ -72,8 +72,8 @@ toolchain:
 
 Because autoconf does not nicely support multilibs, if you want to control
 the <a href="http://sourceforge.net/apps/mediawiki/mspgcc/index.php?title=Gcc47:20-Bit_Design#memmodel">memory
-model</a> or assume certain capabilities of the target chip you'll need to
-do that through @c TARGET_CFLAGS:
+model</a> or take advantage of CPU/MPY capabilities of the target chip
+you'll need to do that through @c TARGET_CFLAGS:
 
 \code
 ./configure \
@@ -107,6 +107,24 @@ toolchain:
    --host=arm-none-eabi --prefix=/usr/local/efm32 \
    TARGET_CFLAGS='-mcpu=cortex-m3 -mthumb -mfix-cortex-m3-ldrd'
 \endcode
+
+\subsection install_target_ccs Installation using Code Composer Studio
+
+The following can be used to produce an embtextf installation built with the
+<a href="http://www.ti.com/ccs">Texas Instruments Code Composer Studio</a>
+compiler toolchain:
+
+\code
+./configure \
+   CCS_INSTALL_ROOT=/usr/local/ccs-5.2.1/ccsv5 \
+   --with-ccs-target=msp430 \
+   --prefix=/usr/local/ccs-msp430 
+\endcode
+
+The @c --with-ccs-target option should specify the target platform, such as
+@c msp430 or @c tms470.  The installation root of the TI compiler toolchain
+should be specified in the @c CCS_INSTALL_ROOT environment variable or on
+the configure command line.
 
 \section install_pkgconfig pkg-config support from embtextf
 
