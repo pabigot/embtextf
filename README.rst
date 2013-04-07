@@ -1,4 +1,4 @@
-Release: 20130326
+Release: 20130407
 
 Embtextf ("Embedded System Text Formatting") is a collection of functions
 supporting \*printf(3c) and numeric formatting functionality on embedded

@@ -3,7 +3,7 @@
 # For most subsequent changes it is sufficient to run:
 #   autoreconf
 
-AC_INIT([embtextf],[20130326],[https://github.com/pabigot/embtextf/issues],[],[http://pabigot.github.com/embtextf/])
+AC_INIT([embtextf],[20130407],[https://github.com/pabigot/embtextf/issues],[],[http://pabigot.github.com/embtextf/])
 AC_CONFIG_SRCDIR([include/embtextf/version.h])
 AC_CONFIG_MACRO_DIR([m4])
 AC_CONFIG_AUX_DIR([build-aux])
