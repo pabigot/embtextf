@@ -10,7 +10,7 @@ AC_CONFIG_AUX_DIR([build-aux])
 AC_CANONICAL_HOST
 AC_CANONICAL_BUILD
 
-AM_INIT_AUTOMAKE([-Wall -Werror foreign no-define no-dist])
+AM_INIT_AUTOMAKE([-Wall -Werror foreign no-define])
 
 # Doxygen
 DX_HTML_FEATURE(ON)

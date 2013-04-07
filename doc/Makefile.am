@@ -1,7 +1,7 @@
 # http://www.gnu.org/software/autoconf-archive/ax_prog_doxygen.html
 include doxygen.am
 
-DOC_SRC = mainpage.dox
+DOC_SRC = mainpage.dox install.dox
 EXTRA_DIST = $(DOC_SRC)
 
 # All the files have extensions, so this pattern excludes the search subdir

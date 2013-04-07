@@ -1,5 +1,7 @@
 ACLOCAL_AMFLAGS = -I m4
 
+EXTRA_DIST = xtoa.inc
+
 # Public headers are put into a embtextf subdirectory so they only
 # conflict with other project namespaces if somebody includes distinct
 # headers that use the same multiple-include symbol.
