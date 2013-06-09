@@ -37,9 +37,12 @@
  * puts(), etc. based on an application-provided putchar()
  * implementation.
  *
- * These functions are provided: printf(), sprintf(), snprintf(), setvbuf()
+ * These functions are provided: printf(), sprintf(), snprintf()
  *
  * These functions are required: putchar()
+ *
+ * These functions may be provided:
+ * @li setvbuf() if #EMBTEXTF_ENABLE_LIBC_SETVBUF
  *
  * These functions are not provided: fprintf(), fputc(), fputs(), putc()
  *
@@ -75,8 +78,12 @@
  * This function is defined at the link-level because some BSPs
  * (e.g. for Energy Micro's chips) assume it is available when using
  * GCC and newlib.  Since a major purpose of this module is to bypass
- * newlib's bloated i/o infrastructure we stub the function so that
- * it's ignored.
+ * newlib's bloated i/o infrastructure we allow to stub the function
+ * so that it's ignored.
+ *
+ * The stub breaks the use of newlib for input, though, so is
+ * conditional on #EMBTEXTF_ENABLE_LIBC_SETVBUF and is normally
+ * excluded.
  *
  * Note that because the real function prototype depends on @c FILE
  * and we don't know that type we're describing the corresponding

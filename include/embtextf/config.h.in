@@ -61,6 +61,20 @@
  */
 #define EMBTEXTF_PROVIDE_LIBC @EMBTEXTF_PROVIDE_LIBC@
 
+/** Set to a preprocessor true value to include a stub implementation
+ * of <tt>setvbuf(3)</tt> in the wrapper library enabled by
+ * #EMBTEXTF_PROVIDE_LIBC.  If false (default), the stub
+ * implementation is excluded.
+ *
+ * @note The stub implementation decreases the amount of newlib code
+ * linked in when an application only generates output.  When newlib
+ * is used for input via <tt>getchar(3)</tt> the stub fails to
+ * configure buffers properly and input is corrupted.
+ *
+ * This feature is controlled at configuration time by @c --enable-libc-setvbuf.
+ */
+#define EMBTEXTF_ENABLE_LIBC_SETVBUF @EMBTEXTF_ENABLE_LIBC_SETVBUF@
+
 /** Set to a preprocessor true value to allow the @c %p conversion
  * specification to support printing pointer values.  If false, the
  * conversion specification will be passed through as text.

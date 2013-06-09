@@ -3,7 +3,7 @@
 # For most subsequent changes it is sufficient to run:
 #   autoreconf
 
-AC_INIT([embtextf],[20130408],[https://github.com/pabigot/embtextf/issues],[],[http://pabigot.github.com/embtextf/])
+AC_INIT([embtextf],[20130609],[https://github.com/pabigot/embtextf/issues],[],[http://pabigot.github.com/embtextf/])
 AC_CONFIG_SRCDIR([include/embtextf/version.h])
 AC_CONFIG_MACRO_DIR([m4])
 AC_CONFIG_AUX_DIR([build-aux])
@@ -199,6 +199,7 @@ fi
 OPT_ARG_ENABLE(vuprintf, precision, [Support field precision as with "%.4d"])
 OPT_ARG_ENABLE(vuprintf, alternate_form, [Support alternate form flag as with "%@%:@x"])
 OPT_ARG_ENABLE(provide, libc, [Provide libc-compatible wrappers for *printf], [], [], [EMBTEXTF_PROVIDE])
+OPT_ARG_ENABLE(libc, setvbuf, [Provide setvbuf() stub in libc-compatible wrappers], [no])
 
 AM_CONDITIONAL([EMBTEXTF_PROVIDE_LIBC], [test "$use_provide_libc" = "yes"])
 

@@ -47,10 +47,12 @@
 
 #if EMBTEXTF_PROVIDE_LIBC - 0
 
+#if (EMBTEXTF_ENABLE_LIBC_SETVBUF - 0)
 int setvbuf (void * stream, char * buf, int mode, size_t size)
 {
   return EOF;
 }
+#endif /* EMBTEXTF_ENABLE_LIBC_SETVBUF */
 
 int
 printf (const char *fmt, ...)
