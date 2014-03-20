@@ -94,18 +94,32 @@ File Attributes
 
 \endverbatim
 
-\subsection install_target_efm32 Installation for Energy Micro Devices
+\subsection install_target_efm32 Installation for Silicon Labs EFM32&trade; Devices
 
-The following can be used to produce an embtextf installation suitable for
-use with <a href="http://www.energymicro.com/">Energy Micro</a> and probably
-other Cortex-M3 devices when using the <a
+The following can be used to produce an embtextf installation suitable
+for use with <a
+href="http://www.silabs.com/products/mcu/lowpower/Pages/default.aspx">EFM32&trade;</a>
+and probably other Cortex-M3 devices when using the <a
 href="http://www.mentor.com/embedded-software/codesourcery">CodeSourcery</a>
-toolchain:
+or <a href="https://launchpad.net/gcc-arm-embedded">gcc-arm</a>
+toolchains:
 
 \code
 ./configure \
-   --host=arm-none-eabi --prefix=/usr/local/efm32 \
+   --host=arm-none-eabi --prefix=/usr/local/arm-none-eabi/efm32 \
    TARGET_CFLAGS='-mcpu=cortex-m3 -mthumb -mfix-cortex-m3-ldrd'
+\endcode
+
+\subsection install_target_tm4c Installation for Tiva&trade; C Series
+
+Similarly, these options build for the <a
+href="http://www.ti.com/lsds/ti/microcontroller/tiva_arm_cortex/c_series/overview.page">Tiva&trade;
+C Series</a>:
+
+\code
+./configure \
+   --host=arm-none-eabi --prefix=/usr/local/arm-none-eabi/tivac \
+   TARGET_CFLAGS='-mcpu=cortex-m4 -mthumb -mfpu=fpv4-sp-d16 -mfloat-abi=softfp'
 \endcode
 
 \subsection install_target_ccs Installation using Code Composer Studio
