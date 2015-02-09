@@ -99,6 +99,9 @@ AM_CONDITIONAL([WITH_GCC], [test "${GCC}" = "yes"])
 AC_ARG_VAR([TARGET_CFLAGS],
            [Target-specific flags added before standard CFLAGS variable])
 
+# Need AM_PROG_AR for libtool
+AM_PROG_AR
+
 # Use libtool; no shared libraries for embedded platforms
 LT_INIT([disable-shared])
 
