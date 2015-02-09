@@ -113,11 +113,13 @@ if test -z "${WITH_GCC_TRUE}" ; then
   # gcc always supports long long.  Set that explicitly because
   # AC_NO_EXECUTABLES prevents msp430 from successfully running the
   # test below.
-  ac_cv_type_long_long_int=yes
+  AC_CACHE_VAL([ac_cv_type_long_long_int],[ac_cv_type_long_long_int=yes])
+  AC_CACHE_VAL([ac_cv_type_unsigned_long_long_int],[ac_cv_type_unsigned_long_long_int=yes])
 elif test -z "${WITH_CCS_TRUE}" ; then
   # CCS 5.3 supports long long.  Maybe earlier versions too.  Not
   # going to try to figure out which version we have.
-  ac_cv_type_long_long_int=yes
+  AC_CACHE_VAL([ac_cv_type_long_long_int],[ac_cv_type_long_long_int=yes])
+  AC_CACHE_VAL([ac_cv_type_unsigned_long_long_int],[ac_cv_type_unsigned_long_long_int=yes])
 fi
 AC_TYPE_LONG_LONG_INT
 if test ${ac_cv_type_long_long_int} = yes; then
